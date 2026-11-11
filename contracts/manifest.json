@@ -1,0 +1,809 @@
+{
+  "formatVersion": 1,
+  "checkedAt": "2026-11-12",
+  "backend": {
+    "repo": "BA7IEE/srvf-nest-api",
+    "sha": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+    "mainObserved": "fcf4e5d5802c42a1503b205751f737e3badd6ffc"
+  },
+  "brand": {
+    "repo": "BA7IEE/srvf-admin-web",
+    "sha": "eaed861acae8fe18b1d12b093c9077060815678b",
+    "blob": "7295d168e2a15e140c5a522456246a6a4736f88d"
+  },
+  "extraction": {
+    "method": "GitHub connector fetch_file at fixed SHA; local line slices; trailing newline normalized",
+    "toolVersion": "GitHub connector version not exposed; Python 3 stdlib slicing",
+    "generator": "none; source DTO/controller slices, not OpenAPI",
+    "liveApi": "NOT_RUN"
+  },
+  "files": [
+    {
+      "file": "contracts/backend/src/common/interceptors/response.interceptor.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/common/interceptors/response.interceptor.ts",
+      "sourceBlob": "a0ce9d26713b41c546d1c9d4095fa5e73dfe81df",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/common/interceptors/response.interceptor.ts",
+      "sha256": "dfa19f83a1ec85eb31c633b74756148bde674933e384479fc5777a5e9689d083",
+      "sourceSha256": "dfa19f83a1ec85eb31c633b74756148bde674933e384479fc5777a5e9689d083",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/common/exceptions/biz-code.constant.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/common/exceptions/biz-code.constant.ts",
+      "sourceBlob": "2b42b49d6b05701ae5e39ecd3af146dd665553d1",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/common/exceptions/biz-code.constant.ts",
+      "sha256": "38ce318734794179dd041f23885676f7239cceee105c167f044751b418c47149",
+      "sourceSha256": "43518af0c7ed099593b9e8ebc8e69c7bf1195839249b58910f1dab69a7ad2766",
+      "ranges": [
+        [
+          62,
+          80
+        ],
+        [
+          124,
+          173
+        ],
+        [
+          2320,
+          2387
+        ],
+        [
+          2530,
+          2620
+        ],
+        [
+          2796,
+          2844
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/auth/auth.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/auth/auth.controller.ts",
+      "sourceBlob": "2133feab29c85bafadc26a2b79845e46b57e3449",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/auth/auth.controller.ts",
+      "sha256": "19c438ecfcfee3d38f3da6082788213687b21d3e1ee519325be36f992639033e",
+      "sourceSha256": "477b24e73579fa129bed97c48c19b550819707e472a9e37835d2cd297c6f3713",
+      "ranges": [
+        [
+          93,
+          148
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/users/controllers/app-me.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/users/controllers/app-me.controller.ts",
+      "sourceBlob": "2f40b4b207c3990de6da9b685a97a3beb73de1f6",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/users/controllers/app-me.controller.ts",
+      "sha256": "358f00255666fef74025d08ff7112491658a5c94fe96e85e54919f723f99e419",
+      "sourceSha256": "9625025505457bb5fcb5aa2d898ad5b559134de283772fabaa1c00cf0660934d",
+      "ranges": [
+        [
+          133,
+          234
+        ],
+        [
+          381,
+          429
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/users/dto/app/app-me-response.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/users/dto/app/app-me-response.dto.ts",
+      "sourceBlob": "b3ad31bb56cf46008c521d193b40c3862a1536cd",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/users/dto/app/app-me-response.dto.ts",
+      "sha256": "2b8dc94666e02ec4d05e9ab041971d1ab3183ed0bcafec9da679714b59e75ca7",
+      "sourceSha256": "2b8dc94666e02ec4d05e9ab041971d1ab3183ed0bcafec9da679714b59e75ca7",
+      "ranges": [
+        [
+          1,
+          77
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/users/dto/app/app-capability-response.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/users/dto/app/app-capability-response.dto.ts",
+      "sourceBlob": "bffa36c87ae8bea549223086d7197e31aaf42b75",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/users/dto/app/app-capability-response.dto.ts",
+      "sha256": "e64ec4b2f3719e0819787c5f5c7e330c51730faa4d446270e6bbde1fed4776b4",
+      "sourceSha256": "e64ec4b2f3719e0819787c5f5c7e330c51730faa4d446270e6bbde1fed4776b4",
+      "ranges": [
+        [
+          1,
+          109
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/controllers/app-activities.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/controllers/app-activities.controller.ts",
+      "sourceBlob": "9b3eac68f55d9a5384cfe45be11054512d184ba0",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/controllers/app-activities.controller.ts",
+      "sha256": "0857c63dd261c9c14d78134a89b65533a8cda9375e9a68237faa9a6e05244988",
+      "sourceSha256": "0857c63dd261c9c14d78134a89b65533a8cda9375e9a68237faa9a6e05244988",
+      "ranges": [
+        [
+          1,
+          151
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-activity-directory.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-activity-directory.dto.ts",
+      "sourceBlob": "a7e5f61a1bec1408b3b206d498b6287333ec18e8",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-activity-directory.dto.ts",
+      "sha256": "636d5471c47192bbc3ebe9d2d9da15cc7f813893240e7553f59e4edd99a6b637",
+      "sourceSha256": "636d5471c47192bbc3ebe9d2d9da15cc7f813893240e7553f59e4edd99a6b637",
+      "ranges": [
+        [
+          1,
+          61
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-activity-detail.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-activity-detail.dto.ts",
+      "sourceBlob": "f1d7c425766c71ebf1d055f70ab9b632edd39441",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-activity-detail.dto.ts",
+      "sha256": "0d1a5dfe80ec2c47c7f4673a7f2c517405d44cf0cf78c60ca94d91abb129c8d7",
+      "sourceSha256": "0d1a5dfe80ec2c47c7f4673a7f2c517405d44cf0cf78c60ca94d91abb129c8d7",
+      "ranges": [
+        [
+          1,
+          226
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-registration-form.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-registration-form.dto.ts",
+      "sourceBlob": "9570aaa033d65cfbef104a077b9196c182d20430",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-registration-form.dto.ts",
+      "sha256": "da94a0ade0b564692629d4640429c70778857d212cd447e31f260bfd9eaf7b8b",
+      "sourceSha256": "2b1969f4b43cdf1a52edfef6f73678fa289d02cf9795a2428ee742d04c8c77a1",
+      "ranges": [
+        [
+          195,
+          255
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/controllers/app-activity-registrations.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/controllers/app-activity-registrations.controller.ts",
+      "sourceBlob": "2e131e942802ed2b78406104e6533e62b5ce0828",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/controllers/app-activity-registrations.controller.ts",
+      "sha256": "4b447ed8b9603f8182e11bc7de51b00a9b9d4895c30defdedbe15511485157df",
+      "sourceSha256": "4b447ed8b9603f8182e11bc7de51b00a9b9d4895c30defdedbe15511485157df",
+      "ranges": [
+        [
+          1,
+          83
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/app-activity-registration-command.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/app-activity-registration-command.dto.ts",
+      "sourceBlob": "92bcda22bcafd7eb71491a523534e15e83731d57",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/app-activity-registration-command.dto.ts",
+      "sha256": "72d893eca723fc0d61aedf58d7e004daa9ceb61d5c1d0f56929e9eb2c820d8cf",
+      "sourceSha256": "72d893eca723fc0d61aedf58d7e004daa9ceb61d5c1d0f56929e9eb2c820d8cf",
+      "ranges": [
+        [
+          1,
+          93
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/controllers/app-registration-upload-sessions.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/controllers/app-registration-upload-sessions.controller.ts",
+      "sourceBlob": "ad97d1ccac881d527cc8d95270295aad7664c6b0",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/controllers/app-registration-upload-sessions.controller.ts",
+      "sha256": "a94001ba900974a2e4869141a8d66663ab0d1cdbf57105dab25016448953584e",
+      "sourceSha256": "a94001ba900974a2e4869141a8d66663ab0d1cdbf57105dab25016448953584e",
+      "ranges": [
+        [
+          1,
+          192
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/app-registration-upload-session.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/app-registration-upload-session.dto.ts",
+      "sourceBlob": "dc236d67ffdf8d4fba6abdcdb45e286afdc12994",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/app-registration-upload-session.dto.ts",
+      "sha256": "5986259a89b1b00e3fab7952ef40d3b0fae00b0e0679c89eeedd8adb39309821",
+      "sourceSha256": "5986259a89b1b00e3fab7952ef40d3b0fae00b0e0679c89eeedd8adb39309821",
+      "ranges": [
+        [
+          1,
+          51
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/controllers/app-my-registrations.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/controllers/app-my-registrations.controller.ts",
+      "sourceBlob": "43714a670207adde7f7a3759bacee4cc39112987",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/controllers/app-my-registrations.controller.ts",
+      "sha256": "408a8fc0ed86eaca40e1664971d77dd6ac39a15b325e35157172ca20c095b82f",
+      "sourceSha256": "408a8fc0ed86eaca40e1664971d77dd6ac39a15b325e35157172ca20c095b82f",
+      "ranges": [
+        [
+          1,
+          211
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/controllers/app-managed-activity-registrations.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/controllers/app-managed-activity-registrations.controller.ts",
+      "sourceBlob": "b32c0bfed160deb602fdf57955353fd6205d2390",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/controllers/app-managed-activity-registrations.controller.ts",
+      "sha256": "211f4f253d2c4f99f17b4e9f9712504f0be1d19a961f8804a958f9a03283adc5",
+      "sourceSha256": "211f4f253d2c4f99f17b4e9f9712504f0be1d19a961f8804a958f9a03283adc5",
+      "ranges": [
+        [
+          1,
+          267
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/app-managed-registration.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/app-managed-registration.dto.ts",
+      "sourceBlob": "fb7531e010150c5781169fbe4b02efb2949db11a",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/app-managed-registration.dto.ts",
+      "sha256": "15f1655877dcfc562356f17293c9b93e1bd137b222f463c51e7f32ef79da71d7",
+      "sourceSha256": "15f1655877dcfc562356f17293c9b93e1bd137b222f463c51e7f32ef79da71d7",
+      "ranges": [
+        [
+          1,
+          222
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/insurances/controllers/app-me-insurances.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/insurances/controllers/app-me-insurances.controller.ts",
+      "sourceBlob": "4b7d44a6782d747379283c261e72fb7643c4db94",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/insurances/controllers/app-me-insurances.controller.ts",
+      "sha256": "71c467f11c885263a9242850c781dbbfe171d8723800b460dbdeed673ee14465",
+      "sourceSha256": "71c467f11c885263a9242850c781dbbfe171d8723800b460dbdeed673ee14465",
+      "ranges": [
+        [
+          1,
+          155
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/insurances/dto/app/app-my-insurance.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/insurances/dto/app/app-my-insurance.dto.ts",
+      "sourceBlob": "b57787571c21cb5566e7b84483de7b02d6b40988",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/insurances/dto/app/app-my-insurance.dto.ts",
+      "sha256": "937365fb4ac26c5f10a6983b0fd72726c94b4cdfddc0e6fdbf09a59172ed7bb4",
+      "sourceSha256": "937365fb4ac26c5f10a6983b0fd72726c94b4cdfddc0e6fdbf09a59172ed7bb4",
+      "ranges": [
+        [
+          1,
+          34
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/insurances/dto/app/create-app-me-insurance.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/insurances/dto/app/create-app-me-insurance.dto.ts",
+      "sourceBlob": "5d7ce85a65711838fef69aae9386e26cfe140b86",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/insurances/dto/app/create-app-me-insurance.dto.ts",
+      "sha256": "bb00a3214075283c3b0fcbceffcd722d15cbe709082f2be7e96d5fc0330d9491",
+      "sourceSha256": "bb00a3214075283c3b0fcbceffcd722d15cbe709082f2be7e96d5fc0330d9491",
+      "ranges": [
+        [
+          1,
+          29
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/insurances/dto/app/update-app-me-insurance.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/insurances/dto/app/update-app-me-insurance.dto.ts",
+      "sourceBlob": "e3597e57b64238e4d793cf9ccc4c7d60059a9abd",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/insurances/dto/app/update-app-me-insurance.dto.ts",
+      "sha256": "838d09e7bb47236162b499ad0e6ecfb4843167ddfb214d4b6c3e5625428aebaa",
+      "sourceSha256": "838d09e7bb47236162b499ad0e6ecfb4843167ddfb214d4b6c3e5625428aebaa",
+      "ranges": [
+        [
+          1,
+          53
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/insurances/dto/app/delete-app-me-insurance-query.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/insurances/dto/app/delete-app-me-insurance-query.dto.ts",
+      "sourceBlob": "4bc059228535ac40565045dbe663451d0e620b99",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/insurances/dto/app/delete-app-me-insurance-query.dto.ts",
+      "sha256": "e04de9fe96193905e1e1a792e010a3552b90dde278fba5bedd5745f9bb912ebf",
+      "sourceSha256": "e04de9fe96193905e1e1a792e010a3552b90dde278fba5bedd5745f9bb912ebf",
+      "ranges": [
+        [
+          1,
+          24
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-activity-punches.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-activity-punches.controller.ts",
+      "sourceBlob": "32a4d0b7f7d6fa293516af85aec52357f37950f1",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-activity-punches.controller.ts",
+      "sha256": "4a0e45a45013b291932e189b23157f8a2151dc252ebe8096916e675088548537",
+      "sourceSha256": "4a0e45a45013b291932e189b23157f8a2151dc252ebe8096916e675088548537",
+      "ranges": [
+        [
+          1,
+          167
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-activity-punch.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-activity-punch.dto.ts",
+      "sourceBlob": "8f1f102a00efa18b36402a7673f14a30886fb1a5",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-activity-punch.dto.ts",
+      "sha256": "a99ae461fc5b4a00eef5002f7f8927336b211b9c6ae43182db0041b3fc0760e3",
+      "sourceSha256": "a99ae461fc5b4a00eef5002f7f8927336b211b9c6ae43182db0041b3fc0760e3",
+      "ranges": [
+        [
+          1,
+          112
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-managed-activity-attendance-qr.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-managed-activity-attendance-qr.controller.ts",
+      "sourceBlob": "305b6a447344867ac0277266166b23afd91d5b9e",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-managed-activity-attendance-qr.controller.ts",
+      "sha256": "f6d3b80b05dd91f596b4ec78dddc369f0c922d9fde170e693979bddad4513227",
+      "sourceSha256": "f6d3b80b05dd91f596b4ec78dddc369f0c922d9fde170e693979bddad4513227",
+      "ranges": [
+        [
+          1,
+          200
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-managed-attendance-qr.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-managed-attendance-qr.dto.ts",
+      "sourceBlob": "6dea7d8925d8451d7a27ddbaf52d637dc9d41e7e",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-managed-attendance-qr.dto.ts",
+      "sha256": "459122002c1f4e68fa907a50b58b7c7a2f055c162ce627593d452a0ba0fca77d",
+      "sourceSha256": "459122002c1f4e68fa907a50b58b7c7a2f055c162ce627593d452a0ba0fca77d",
+      "ranges": [
+        [
+          1,
+          92
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-managed-activity-onsite-punches.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-managed-activity-onsite-punches.controller.ts",
+      "sourceBlob": "907524f38db87fff004444fbd3f8926ef73aae08",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-managed-activity-onsite-punches.controller.ts",
+      "sha256": "4157076a3e7c93f14e9645c52154f167d33eaf7b008bf1564c838cda893c9b23",
+      "sourceSha256": "4157076a3e7c93f14e9645c52154f167d33eaf7b008bf1564c838cda893c9b23",
+      "ranges": [
+        [
+          1,
+          160
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-managed-onsite-punch.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-managed-onsite-punch.dto.ts",
+      "sourceBlob": "89eaee10afcc7b07163497c999f84d35404cf86e",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-managed-onsite-punch.dto.ts",
+      "sha256": "2d1aabcd042de194b3f48567614c84debb81b7f069a171b77d50e1a18b9ed316",
+      "sourceSha256": "2d1aabcd042de194b3f48567614c84debb81b7f069a171b77d50e1a18b9ed316",
+      "ranges": [
+        [
+          1,
+          59
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-managed-activity-onsite-operations.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-managed-activity-onsite-operations.controller.ts",
+      "sourceBlob": "42c1eb5d1117787b970d689a490a176d42f316c2",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-managed-activity-onsite-operations.controller.ts",
+      "sha256": "3eacaf1f8f73e0cc6854b479553cd8b0db84c2f59f69aa6742cc62b45ab32f83",
+      "sourceSha256": "8742d08c6a33c505e857e3f4456ec17f400efee7c77f65e2f6351c55ee869b56",
+      "ranges": [
+        [
+          87,
+          96
+        ],
+        [
+          352,
+          455
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-managed-onsite-operations.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-managed-onsite-operations.dto.ts",
+      "sourceBlob": "0810371224a624e17f1ba101072743493e3a1e6b",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-managed-onsite-operations.dto.ts",
+      "sha256": "6f21db30f921d14833bac8217f2db1f429ddd6f20223e7d9aa12e0932437d4de",
+      "sourceSha256": "d3c5d1e81a3af304329a0364b0343c8f582c7ff28c21224f492bf00ed304facd",
+      "ranges": [
+        [
+          24,
+          150
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-my-attendance-member-credential.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-my-attendance-member-credential.controller.ts",
+      "sourceBlob": "a118a1cab96c298668924756327c5f02e9693364",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-my-attendance-member-credential.controller.ts",
+      "sha256": "66c1201eec81b03b1c4d17c2111ec76e38914db88acc6e54545552ef33c4f943",
+      "sourceSha256": "66c1201eec81b03b1c4d17c2111ec76e38914db88acc6e54545552ef33c4f943",
+      "ranges": [
+        [
+          1,
+          50
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/controllers/app-my-participation-summary.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/controllers/app-my-participation-summary.controller.ts",
+      "sourceBlob": "30a5345bb1ddf0f68729f80238bb9e42eb565856",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/controllers/app-my-participation-summary.controller.ts",
+      "sha256": "d827ed14c385032f94048ac4b4251d777d315a781c9833c1da509a21912c4e9f",
+      "sourceSha256": "d827ed14c385032f94048ac4b4251d777d315a781c9833c1da509a21912c4e9f",
+      "ranges": [
+        [
+          1,
+          40
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-my-participation-summary.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-my-participation-summary.dto.ts",
+      "sourceBlob": "258492c8a0a933cde8d217d245be8f3639576373",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-my-participation-summary.dto.ts",
+      "sha256": "23e0ca4067111e985c7f632c865306052eabb8fa7329c6585c0f10f43ed776c5",
+      "sourceSha256": "23e0ca4067111e985c7f632c865306052eabb8fa7329c6585c0f10f43ed776c5",
+      "ranges": [
+        [
+          1,
+          36
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/controllers/app-my-participation-ledger.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/controllers/app-my-participation-ledger.controller.ts",
+      "sourceBlob": "5b5c56858aef6a396c8bdf594465a4422ce5fc18",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/controllers/app-my-participation-ledger.controller.ts",
+      "sha256": "9ddb2c45e6a9599128b94330d3a23c9ae885ad3dfcd858edef3b72a9616333a5",
+      "sourceSha256": "9ddb2c45e6a9599128b94330d3a23c9ae885ad3dfcd858edef3b72a9616333a5",
+      "ranges": [
+        [
+          1,
+          79
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-participation-ledger.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-participation-ledger.dto.ts",
+      "sourceBlob": "bd8950b833c2580a8037b16bdbf11d7a21f70844",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-participation-ledger.dto.ts",
+      "sha256": "c7238950378139f874d46adb1f58dcb4e3bfcfc1dbbb59e9c04d2f521546d197",
+      "sourceSha256": "c7238950378139f874d46adb1f58dcb4e3bfcfc1dbbb59e9c04d2f521546d197",
+      "ranges": [
+        [
+          1,
+          46
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-participation-time-proof.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-participation-time-proof.dto.ts",
+      "sourceBlob": "3a27e35bdf957df8272f5d582a9f89706c007b06",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-participation-time-proof.dto.ts",
+      "sha256": "0298372bfb9aac69fe708e1da237954f3375716f38d2d8f1cfed3b4d6f30bb9d",
+      "sourceSha256": "0298372bfb9aac69fe708e1da237954f3375716f38d2d8f1cfed3b4d6f30bb9d",
+      "ranges": [
+        [
+          1,
+          119
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/auth/auth.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/auth/auth.dto.ts",
+      "sourceBlob": "3dda44b2ef255ba143c0bb25b976e3ec29d53e2b",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/auth/auth.dto.ts",
+      "sha256": "933f4ba1f8076ba6747f0cf176803b401e3e32c13b7971af4fb71fb1c5866e98",
+      "sourceSha256": "30d8ab433e82718ad9114128a37ebd705ae0ea51382c749defe9cefae87b16c5",
+      "ranges": [
+        [
+          20,
+          151
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/create-app-activity-registration.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/create-app-activity-registration.dto.ts",
+      "sourceBlob": "9fd44485be5aebe6279265b5ccf241f0d0a08b7b",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/create-app-activity-registration.dto.ts",
+      "sha256": "005a100671497467d0a503a237f5b1675448fad72784422ba1a20abeee8668e7",
+      "sourceSha256": "005a100671497467d0a503a237f5b1675448fad72784422ba1a20abeee8668e7",
+      "ranges": [
+        [
+          1,
+          25
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/users/users.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/users/users.dto.ts",
+      "sourceBlob": "8f7b183a5ee3ce8e7bd65877e26133f30b1761b9",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/users/users.dto.ts",
+      "sha256": "752c40d6661c34e05e75b3089bba6b004563d50ccbcc302d4117d7580f89de46",
+      "sourceSha256": "e6d74f58591c3d284a387c7dc4b6e69b0843f7c4e97c8a55d177a86dc5bac9c0",
+      "ranges": [
+        [
+          220,
+          245
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/common/dto/pagination.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/common/dto/pagination.dto.ts",
+      "sourceBlob": "f7fcb10861fbc3a66be5e528d87e4373fc166651",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/common/dto/pagination.dto.ts",
+      "sha256": "c962e6305b44a68630c9cfc644ab22848113888943d24a4d8d9466f4fb22e2ee",
+      "sourceSha256": "c962e6305b44a68630c9cfc644ab22848113888943d24a4d8d9466f4fb22e2ee",
+      "ranges": [
+        [
+          1,
+          58
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/app-my-registration.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/app-my-registration.dto.ts",
+      "sourceBlob": "d765df20dd91a1ad91ace7cfac724e048c7a7d9d",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/app-my-registration.dto.ts",
+      "sha256": "0bdd47ef9d8777c3b22d6160bed0a073c0366f0a9202b64a43ff277cf0563332",
+      "sourceSha256": "0bdd47ef9d8777c3b22d6160bed0a073c0366f0a9202b64a43ff277cf0563332",
+      "ranges": [
+        [
+          1,
+          68
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/app-my-registration-list-item.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/app-my-registration-list-item.dto.ts",
+      "sourceBlob": "d9552909cf0a6604101a6009bf32abdd3f726593",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/app-my-registration-list-item.dto.ts",
+      "sha256": "2c0487c5b2853c24e3ffd2e5fcd1f509515dc4578ed1d211b1eaa04a8ace3855",
+      "sourceSha256": "2c0487c5b2853c24e3ffd2e5fcd1f509515dc4578ed1d211b1eaa04a8ace3855",
+      "ranges": [
+        [
+          1,
+          63
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activity-registrations/dto/app/cancel-app-my-registration.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activity-registrations/dto/app/cancel-app-my-registration.dto.ts",
+      "sourceBlob": "e35036d9799142bc93d590ab55981a52cdc07eca",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activity-registrations/dto/app/cancel-app-my-registration.dto.ts",
+      "sha256": "3eb8ee22290509241046adc624cdc1bab2d4a02bb8837d1a83e1ba15abafe883",
+      "sourceSha256": "3eb8ee22290509241046adc624cdc1bab2d4a02bb8837d1a83e1ba15abafe883",
+      "ranges": [
+        [
+          1,
+          21
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/controllers/app-managed-activities.controller.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/controllers/app-managed-activities.controller.ts",
+      "sourceBlob": "3a76a312bd253c35687f2d5e7c307807417ce80d",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/controllers/app-managed-activities.controller.ts",
+      "sha256": "4f4af86ed1eb314506d0801420013d0ed25c6a3a837cf0a6a1930035119369a0",
+      "sourceSha256": "4dff67f1cb6d1916294b9342a1bff2ba98bcb60dc62489dbb4d071d001cb2196",
+      "ranges": [
+        [
+          187,
+          210
+        ],
+        [
+          232,
+          251
+        ],
+        [
+          1237,
+          1268
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-managed-activity.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-managed-activity.dto.ts",
+      "sourceBlob": "ed621a600857647373b7e962cdd0f9ebb2cd781c",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-managed-activity.dto.ts",
+      "sha256": "1bb2d7983fa728b3b14c9fe115e62f2aec38d5879cb07847e6b8a474cc470bd5",
+      "sourceSha256": "78e595a9ed2cf622dc5fd6cd586ba201867663b53b70e9beb3cf4f18902d94ad",
+      "ranges": [
+        [
+          432,
+          442
+        ],
+        [
+          598,
+          657
+        ]
+      ]
+    },
+    {
+      "file": "contracts/backend/src/modules/attendances/dto/app/app-participation-ledger-totals.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/attendances/dto/app/app-participation-ledger-totals.dto.ts",
+      "sourceBlob": "a45542458edeeee0c2b6041e7d36933ccc41deff",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-participation-ledger-totals.dto.ts",
+      "sha256": "44f7c6877121ec34217f4c1d873d8e5cd8b6b3ff2d8654b71608cc1f323070ac",
+      "sourceSha256": "44f7c6877121ec34217f4c1d873d8e5cd8b6b3ff2d8654b71608cc1f323070ac",
+      "ranges": [
+        [
+          1,
+          42
+        ]
+      ]
+    },
+    {
+      "file": "contracts/brand/srvf-tokens.scss",
+      "repo": "BA7IEE/srvf-admin-web",
+      "ref": "eaed861acae8fe18b1d12b093c9077060815678b",
+      "sourcePath": "src/style/srvf-tokens.scss",
+      "sourceBlob": "7295d168e2a15e140c5a522456246a6a4736f88d",
+      "sha256": "cd93f11b6da62c6798ebe5b9f29f9c06977b9b78d6131319a33ccd094532df79",
+      "sourceSha256": "cd93f11b6da62c6798ebe5b9f29f9c06977b9b78d6131319a33ccd094532df79",
+      "ranges": [
+        [
+          1,
+          149
+        ]
+      ]
+    }
+  ]
+}

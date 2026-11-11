@@ -1,0 +1,56 @@
+{
+  "name": "srvf-mobile-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.14.0",
+  "engines": {
+    "node": ">=22.12.0",
+    "pnpm": ">=10"
+  },
+  "scripts": {
+    "dev": "vite --mode mock --host 127.0.0.1",
+    "build": "node scripts/build.mjs unconfigured",
+    "build:mock": "node scripts/build.mjs mock",
+    "preview:mock": "vite preview --mode mock --outDir dist-mock --host 127.0.0.1 --port 4173 --strictPort",
+    "preview": "vite preview --host 127.0.0.1 --port 4174 --strictPort",
+    "typecheck": "vue-tsc --noEmit",
+    "lint": "eslint src tests scripts *.ts",
+    "format": "prettier --write src tests scripts docs *.ts *.js *.json *.md *.html",
+    "format:check": "prettier --check src tests scripts docs *.ts *.js *.json *.md *.html",
+    "test:unit": "vitest run tests/unit tests/components",
+    "test:contract": "vitest run tests/contract",
+    "test:e2e": "node scripts/e2e.mjs",
+    "check:contract": "node scripts/check-contract.mjs",
+    "check:tokens": "node scripts/check-tokens.mjs && node scripts/e2e.mjs tokens",
+    "check:bundle": "node scripts/check-bundle.mjs",
+    "check:boundaries": "node scripts/check-boundaries.mjs",
+    "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit && pnpm test:contract && pnpm check:contract && pnpm check:boundaries && pnpm build && pnpm build:mock && pnpm check:bundle && pnpm check:tokens && pnpm test:e2e"
+  },
+  "dependencies": {
+    "jsqr": "^1.4.0",
+    "pinia": "^3.0.4",
+    "qrcode": "^1.5.4",
+    "vant": "4.10.2",
+    "vue": "3.5.45",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.5",
+    "@playwright/test": "^1.65.0",
+    "@types/node": "^22.20.5",
+    "@types/qrcode": "^1.5.6",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
+    "eslint": "^9.39.5",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-vue": "^10.12.1",
+    "jsdom": "^26.1.0",
+    "prettier": "^3.10.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.2",
+    "vite": "7.3.8",
+    "vitest": "3.2.7",
+    "vue-tsc": "^3.3.14"
+  }
+}

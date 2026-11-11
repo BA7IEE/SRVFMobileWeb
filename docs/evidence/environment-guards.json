@@ -1,0 +1,12 @@
+[
+  {
+    "case": "ordinary-build-refuses-mock-env",
+    "exitCode": 1,
+    "status": "PASS"
+  },
+  {
+    "case": "api-mode-refused",
+    "exitCode": 1,
+    "status": "PASS"
+  }
+]

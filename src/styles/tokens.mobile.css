@@ -1,0 +1,11 @@
+:root {
+  --srvf-accent-primary: var(--srvf-red);
+  --srvf-accent-on-primary: var(--srvf-bg-surface);
+  --srvf-control-border: var(--srvf-fg-muted);
+  --srvf-error: var(--srvf-red-deep);
+  --srvf-text-on-inverse: var(--srvf-bg-surface);
+  --srvf-space: 16px;
+  --srvf-touch: 44px;
+  --srvf-text-success: #21633e;
+  --srvf-text-pending: #805000;
+}

@@ -1,0 +1,10 @@
+node_modules/
+dist/
+dist-mock/
+playwright-report/
+test-results/
+.env.local
+.env.*.local
+.DS_Store
+.local-contracts/
+.npmrc

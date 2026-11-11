@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "unitAndComponents": 61,
+  "offlineContracts": 45,
+  "browserTests": 48,
+  "browserProjects": {
+    "chromium": "158.0.8127.18",
+    "webkit": "27.2"
+  },
+  "networkEvidenceFiles": 48,
+  "realBusinessRequests": 0,
+  "externalAttempts": 0,
+  "cspViolations": 0,
+  "browserErrors": 0,
+  "screenshots": 42,
+  "snapshotSlices": 47,
+  "capabilityRows": 37,
+  "scenariosDefined": 65,
+  "realApi": "NOT_RUN",
+  "realDevices": "NOT_RUN"
+}

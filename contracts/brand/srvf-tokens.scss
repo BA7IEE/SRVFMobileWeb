@@ -1,0 +1,149 @@
+/* ============================================================
+   SRVF · 深圳公益救援队 品牌 tokens
+   来源：SRVF-web-admin参考/SRVF ADMIN UI参考.zip → assets/srvf-tokens.css
+   （设计稿原文件，本文件为忠实移植 —— 颜色 / 间距 / 圆角 / 阴影 / 字号刻度
+   逐值照搬，未改动任何数值）。
+
+   本文件只声明 CSS 变量，不对任何原生标签（h1/body/a 等）做全局样式应用——
+   那属于"工作台按设计稿升级"下一步的范畴，这里只建立可复用的词汇表。
+
+   `--el-color-primary` 已经在 `public/platform-config.json` 的
+   `EpThemeColor: "#C4001B"` 正确指向救援红，并由 Pure Admin 自身的
+   `useDataThemeChange` 在运行时动态派生明暗色阶——本文件不覆盖它，避免
+   和运行时注入的样式打架。
+
+   字体：设计稿原文件用 `@import url(fonts.googleapis.com/...)` 拉取
+   Inter / Barlow Condensed / JetBrains Mono / Noto Sans SC。本机构（深圳
+   公益救援队）员工日常在中国大陆网络环境工作，Google 域名通常不可达——
+   保留字体族名作为"如果可用则用"的第一选择，但不接入外链 @import，实际
+   渲染兜底到系统自带的中文字体（PingFang SC / Microsoft YaHei）与
+   sans-serif，不引入渲染阻塞的外部网络依赖。
+   ============================================================ */
+
+:root {
+  /* =====================================================
+     品牌核心色
+     ===================================================== */
+
+  /* 主色 — 救援红（队服红）。已通过 platform-config.json 的 EpThemeColor
+     驱动 --el-color-primary，此处仅补充明暗/高亮/浅底变体供非 Element
+     组件（图表、自定义徽章等）取用。 */
+  --srvf-red: #c4001b;
+  --srvf-red-deep: #9a0014;
+  --srvf-red-bright: #e11331;
+  --srvf-red-tint: #ffedee;
+
+  /* 辅助色 — 盾蓝（联合会盾徽蓝）。 */
+  --srvf-navy: #19478a;
+  --srvf-navy-deep: #0b214a;
+  --srvf-navy-ink: #06122b;
+  --srvf-navy-mid: #2c5ba6;
+  --srvf-navy-tint: #e5ecf7;
+
+  /* 强调色 — 荣誉金（徽记环/证书绶带）。 */
+  --srvf-gold: #c9a24a;
+  --srvf-gold-deep: #9a7a2f;
+  --srvf-gold-soft: #e4c97a;
+
+  /* 高可见反光灰（队服反光条），装备/安全类界面点缀用。 */
+  --srvf-hivis: #c9cdd2;
+  --srvf-hivis-glow: #eaf0f6;
+
+  /* 勋章系统专色（绶带/证书专用色号，来自官方绶带色号表）——
+     仅用于荣誉/勋章/证书场景，不进入通用 UI。 */
+  --pms-202: #8a1538;
+  --pms-293: #003da5;
+  --pms-187: #a6192e;
+  --pms-186: #c8102e;
+  --pms-7549: #ffb81c;
+  --pms-343: #136f3a;
+
+  /* =====================================================
+     中性色阶（WCAG 调校过对比度）
+     ===================================================== */
+  --ink-1000: #0a1426;
+  --ink-900: #14203a;
+  --ink-700: #2d3a52;
+  --ink-500: #5e6a80;
+  --ink-400: #767f94;
+  --ink-300: #9aa4b6;
+  --ink-200: #c8cfda;
+  --ink-100: #e3e7ed;
+  --ink-050: #f3f4f6;
+  --ink-000: #fff;
+
+  /* =====================================================
+     语义 tokens
+     ===================================================== */
+  --srvf-bg-page: var(--ink-050);
+  --srvf-bg-surface: var(--ink-000);
+  --srvf-bg-sunken: #eceff4;
+  --srvf-bg-inverse: var(--srvf-navy-deep);
+  --srvf-fg-default: var(--ink-1000);
+  --srvf-fg-muted: var(--ink-500);
+  --srvf-fg-disabled: var(--ink-400);
+  --srvf-fg-inverse: var(--ink-000);
+  --srvf-fg-brand: var(--srvf-red);
+  --srvf-border-default: var(--ink-100);
+  --srvf-border-strong: var(--ink-200);
+  --srvf-border-brand: var(--srvf-red);
+  --srvf-accent-primary: var(--srvf-red);
+  --srvf-accent-on-primary: var(--ink-000);
+  --srvf-accent-secondary: var(--srvf-navy);
+  --srvf-accent-on-secondary: var(--ink-000);
+
+  /* 状态色——运营语境（出勤/任务态），与 Element Plus 通用
+     success/warning/danger 是两套独立词汇表，不互相覆盖。
+     色相刻意与 --srvf-gold 区分开，避免"待命"读成装饰性金色。 */
+  --srvf-status-active: #2e8b57; /* 出勤/在岗 */
+  --srvf-status-standby: #b26a00; /* 候命/待命——琥珀色，非金色 */
+  --srvf-status-alert: var(--srvf-red); /* 告警 */
+  --srvf-status-resolved: #4a6fa5; /* 已处置 */
+  --srvf-status-offline: var(--ink-300); /* 离线/不可用 */
+
+  /* =====================================================
+     字体
+     ===================================================== */
+  --srvf-font-display: "Barlow Condensed", "Noto Sans SC", sans-serif;
+  --srvf-font-sans:
+    "Inter", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui,
+    sans-serif;
+  --srvf-font-cjk: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --srvf-font-mono: "JetBrains Mono", ui-monospace, "SF Mono", menlo, monospace;
+
+  /* 字号刻度 */
+  --srvf-text-xs: 12px;
+  --srvf-text-sm: 14px;
+  --srvf-text-base: 16px;
+  --srvf-text-md: 18px;
+  --srvf-text-lg: 22px;
+  --srvf-text-xl: 28px;
+  --srvf-text-2xl: 36px;
+  --srvf-text-3xl: 48px;
+  --srvf-text-4xl: 64px;
+  --srvf-lh-tight: 1.1;
+  --srvf-lh-snug: 1.25;
+  --srvf-lh-normal: 1.5;
+
+  /* =====================================================
+     间距 / 圆角 / 阴影
+     ===================================================== */
+  --srvf-sp-1: 4px;
+  --srvf-sp-2: 8px;
+  --srvf-sp-3: 12px;
+  --srvf-sp-4: 16px;
+  --srvf-sp-5: 24px;
+  --srvf-sp-6: 32px;
+  --srvf-sp-7: 48px;
+  --srvf-sp-8: 64px;
+  --srvf-radius-sm: 4px;
+  --srvf-radius-md: 8px;
+  --srvf-radius-pill: 999px;
+  --srvf-shadow-sm: 0 1px 2px rgb(10 20 38 / 6%), 0 1px 1px rgb(10 20 38 / 4%);
+  --srvf-shadow-md: 0 4px 12px rgb(10 20 38 / 8%), 0 2px 4px rgb(10 20 38 / 5%);
+  --srvf-shadow-lg:
+    0 12px 32px rgb(10 20 38 / 12%), 0 4px 8px rgb(10 20 38 / 6%);
+  --srvf-shadow-brand:
+    0 1px 0 rgb(154 0 20 / 25%), 0 8px 18px -10px rgb(196 0 27 / 35%);
+  --srvf-focus-ring: 0 0 0 3px rgb(225 19 49 / 35%);
+}

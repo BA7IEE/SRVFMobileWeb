@@ -1,0 +1,33 @@
+:root {
+  --van-primary-color: var(--srvf-accent-primary);
+  --van-danger-color: var(--srvf-red);
+  --van-success-color: var(--srvf-text-success);
+  --van-warning-color: var(--srvf-text-pending);
+  --van-blue: var(--srvf-navy);
+  --van-text-color: var(--srvf-fg-default);
+  --van-text-color-2: var(--srvf-fg-muted);
+  --van-text-color-3: var(--srvf-fg-muted);
+  --van-background: var(--srvf-bg-page);
+  --van-background-2: var(--srvf-bg-surface);
+  --van-background-3: var(--srvf-bg-page);
+  --van-border-color: var(--srvf-border-default);
+  --van-base-font: var(--srvf-font-sans);
+  --van-radius-sm: var(--srvf-radius-sm);
+  --van-radius-md: var(--srvf-radius-md);
+  --van-radius-lg: var(--srvf-radius-md);
+  --van-font-size-xs: 12px;
+  --van-font-size-sm: 14px;
+  --van-font-size-md: 16px;
+  --van-font-size-lg: 18px;
+  --van-line-height-xs: 18px;
+  --van-line-height-sm: 21px;
+  --van-line-height-md: 24px;
+  --van-line-height-lg: 27px;
+  --van-button-default-height: 48px;
+  --van-button-border-radius: var(--srvf-radius-sm);
+  --van-tabbar-height: 64px;
+  --van-tabbar-item-font-size: 14px;
+  --van-cell-line-height: 24px;
+  --van-field-placeholder-text-color: var(--srvf-fg-muted);
+  --van-dialog-confirm-button-text-color: var(--srvf-red);
+}

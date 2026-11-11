@@ -1,0 +1,59 @@
+{
+  "test": "11 普通产物未接线，URL与存储不能强开mock",
+  "browser": "158.0.8127.18",
+  "requests": [
+    {
+      "path": "http://127.0.0.1:4174/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-CnBKQTIZ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/unconfigured-Cib9HUdE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/SystemPage-Dekcr3Nl.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-BthYiVKP.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-CnBKQTIZ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/unconfigured-Cib9HUdE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/SystemPage-Dekcr3Nl.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4174/assets/index-BthYiVKP.js",
+      "type": "script"
+    }
+  ],
+  "forbidden": [],
+  "cspViolations": [],
+  "pageErrors": [],
+  "apiRequests": 0,
+  "serviceWorkers": 0
+}

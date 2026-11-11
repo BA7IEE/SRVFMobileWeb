@@ -1,0 +1,29 @@
+/* Selected values: srvf-admin-web@eaed861acae8fe18b1d12b093c9077060815678b
+   src/style/srvf-tokens.scss blob 7295d168e2a15e140c5a522456246a6a4736f88d. No admin CSS imported. */
+:root {
+  --srvf-red: #c4001b;
+  --srvf-red-deep: #9a0014;
+  --srvf-red-bright: #e11331;
+  --srvf-red-tint: #ffedee;
+  --srvf-navy: #19478a;
+  --srvf-navy-deep: #0b214a;
+  --srvf-navy-tint: #e5ecf7;
+  --srvf-gold: #c9a24a;
+  --srvf-bg-page: #f3f4f6;
+  --srvf-bg-surface: #fff;
+  --srvf-fg-default: #0a1426;
+  --srvf-fg-muted: #5e6a80;
+  --srvf-border-default: #e3e7ed;
+  --srvf-status-active: #2e8b57;
+  --srvf-status-standby: #b26a00;
+  --srvf-status-resolved: #4a6fa5;
+  --srvf-font-sans: 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --srvf-text-xs: 12px;
+  --srvf-text-sm: 14px;
+  --srvf-text-base: 16px;
+  --srvf-text-md: 18px;
+  --srvf-text-lg: 22px;
+  --srvf-radius-sm: 4px;
+  --srvf-radius-md: 8px;
+  --srvf-focus-ring: 0 0 0 3px rgb(225 19 49 / 35%);
+}
