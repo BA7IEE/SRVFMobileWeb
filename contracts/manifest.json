@@ -804,6 +804,22 @@
           149
         ]
       ]
+    },
+    {
+      "file": "contracts/backend/src/modules/activities/dto/app/app-activity-qualification.dto.ts",
+      "repo": "BA7IEE/srvf-nest-api",
+      "ref": "fcf4e5d5802c42a1503b205751f737e3badd6ffc",
+      "sourcePath": "src/modules/activities/dto/app/app-activity-qualification.dto.ts",
+      "sourceBlob": "cdd081290350fc4be3c6352c8f0d96f78e9ee362",
+      "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-activity-qualification.dto.ts",
+      "sha256": "493d85afb6eab11e4f16db1b8d877d67fc10a93003438ad3d68f415d126590c1",
+      "sourceSha256": "493d85afb6eab11e4f16db1b8d877d67fc10a93003438ad3d68f415d126590c1",
+      "ranges": [
+        [
+          1,
+          29
+        ]
+      ]
     }
   ]
 }

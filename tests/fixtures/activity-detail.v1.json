@@ -1,0 +1,160 @@
+{
+  "code": 0,
+  "message": "ok",
+  "data": {
+    "id": "activity-wire",
+    "title": "固定契约合成演练",
+    "description": "",
+    "activityTypeCode": "training",
+    "allocationMode": "first_come",
+    "statusCode": "published",
+    "phase": "upcoming",
+    "startAt": "2026-11-16T01:00:00Z",
+    "endAt": "2026-11-17T09:00:00Z",
+    "location": "合成训练中心",
+    "capacity": null,
+    "registrationDeadline": null,
+    "registrationNotes": "",
+    "genderRequirementCode": null,
+    "requiresInsurance": true,
+    "passCount": 0,
+    "coverImageUrl": null,
+    "createdAt": "2026-11-01T00:00:00Z",
+    "registrationMode": null,
+    "formVersion": null,
+    "registrationForm": null,
+    "myInvitations": [],
+    "qualification": {
+      "resultCode": "warn",
+      "unmetRules": [
+        {
+          "ruleId": "rule-synthetic",
+          "enforcementCode": "warn",
+          "resultCode": "warn",
+          "message": "请核对活动安全说明",
+          "warnScore": 0
+        }
+      ]
+    },
+    "sessions": [
+      {
+        "id": "session-morning",
+        "code": "morning",
+        "name": "上午合成场次",
+        "startAt": "2026-11-16T01:00:00Z",
+        "endAt": "2026-11-16T04:00:00Z",
+        "locationText": "合成场地一",
+        "capacity": null,
+        "qualification": {
+          "resultCode": "pass",
+          "unmetRules": []
+        },
+        "positions": [
+          {
+            "id": "position-aid",
+            "code": "position-aid",
+            "name": "救护协作",
+            "attendanceRoleCode": "participant",
+            "capacity": null,
+            "startAt": null,
+            "endAt": null,
+            "genderRequirementCode": null,
+            "description": "",
+            "equipmentNotes": "自备合成演示装备",
+            "sortOrder": 20,
+            "qualification": {
+              "resultCode": "warn",
+              "unmetRules": [
+                {
+                  "ruleId": "rule-synthetic",
+                  "enforcementCode": "warn",
+                  "resultCode": "warn",
+                  "message": "请核对救护协作装备",
+                  "warnScore": 0
+                }
+              ]
+            }
+          },
+          {
+            "id": "position-logistics",
+            "code": "position-logistics",
+            "name": "后勤保障",
+            "attendanceRoleCode": "participant",
+            "capacity": null,
+            "startAt": null,
+            "endAt": null,
+            "genderRequirementCode": null,
+            "description": "",
+            "equipmentNotes": null,
+            "sortOrder": 10,
+            "qualification": {
+              "resultCode": "pass",
+              "unmetRules": []
+            }
+          },
+          {
+            "id": "position-blocked",
+            "code": "position-blocked",
+            "name": "受限岗位",
+            "attendanceRoleCode": "participant",
+            "capacity": 0,
+            "startAt": null,
+            "endAt": null,
+            "genderRequirementCode": null,
+            "description": "",
+            "equipmentNotes": null,
+            "sortOrder": 30,
+            "qualification": {
+              "resultCode": "fail",
+              "unmetRules": [
+                {
+                  "ruleId": "rule-synthetic",
+                  "enforcementCode": "block",
+                  "resultCode": "fail",
+                  "message": "不满足本岗位资格",
+                  "warnScore": null
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "session-blocked",
+        "code": "blocked",
+        "name": "受限合成场次",
+        "startAt": "2026-11-17T01:00:00Z",
+        "endAt": "2026-11-17T04:00:00Z",
+        "locationText": "合成场地二",
+        "capacity": 0,
+        "qualification": {
+          "resultCode": "fail",
+          "unmetRules": [
+            {
+              "ruleId": "rule-synthetic",
+              "enforcementCode": "block",
+              "resultCode": "fail",
+              "message": "本场次资格不满足",
+              "warnScore": null
+            }
+          ]
+        },
+        "positions": []
+      },
+      {
+        "id": "session-no-position",
+        "code": "none",
+        "name": "不分岗位场次",
+        "startAt": "2026-11-17T05:00:00Z",
+        "endAt": "2026-11-17T09:00:00Z",
+        "locationText": "合成场地三",
+        "capacity": 12,
+        "qualification": {
+          "resultCode": "pass",
+          "unmetRules": []
+        },
+        "positions": []
+      }
+    ]
+  }
+}

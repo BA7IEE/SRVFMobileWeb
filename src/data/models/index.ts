@@ -29,7 +29,30 @@ export type CurrentMember = {
   managed: boolean;
 };
 export type Session = { id: string; actor: string; expiresAt: number; refreshExpiresAt: number };
-export type Position = { id: string; name: string };
+export type Qualification = {
+  result: 'pass' | 'warn' | 'fail';
+  unmetRules: {
+    id: string;
+    enforcement: 'block' | 'warn';
+    result: 'warn' | 'fail';
+    message: string | null;
+    warnScore: number | null;
+  }[];
+};
+export type Position = {
+  id: string;
+  name: string;
+  code?: string;
+  attendanceRole?: string;
+  capacity?: number | null;
+  startAt?: string | null;
+  endAt?: string | null;
+  description?: string | null;
+  equipmentNotes?: string | null;
+  genderRequirement?: string | null;
+  sortOrder?: number;
+  qualification?: Qualification;
+};
 export type SessionInfo = {
   id: string;
   name: string;
@@ -37,6 +60,10 @@ export type SessionInfo = {
   endAt: string;
   positions: Position[];
   locationRequired: boolean | null;
+  code?: string;
+  location?: string;
+  capacity?: number | null;
+  qualification?: Qualification;
 };
 export type ActivityListItem = {
   id: string;
@@ -50,6 +77,7 @@ export type ActivityListItem = {
   summary: string;
 };
 export type ActivityDetail = ActivityListItem & {
+  qualification?: Qualification;
   sessions: SessionInfo[];
   description: string;
   registration: ActionAvailability;
@@ -74,8 +102,10 @@ export type Question = {
   min?: number;
   max?: number;
   options?: string[];
+  optionLabels?: Record<string, string>;
 };
 export type RegistrationFormDefinition = {
+  qualification?: Qualification;
   version: number | null;
   questions: Question[];
   sessions: SessionInfo[];

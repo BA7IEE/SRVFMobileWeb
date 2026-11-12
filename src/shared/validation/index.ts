@@ -94,6 +94,14 @@ export function preferenceError(preferences: Preferences, sessions: SessionInfo[
   for (const p of preferences) {
     const s = sessions.find((s) => s.id === p.sessionId);
     if (
+      s?.qualification?.result === 'fail' ||
+      s?.positions.some(
+        (position) =>
+          p.positionIds.includes(position.id) && position.qualification?.result === 'fail',
+      )
+    )
+      return '所选场次或岗位的资格已变化，请重新核对';
+    if (
       !s ||
       new Set(p.positionIds).size !== p.positionIds.length ||
       p.positionIds.some((id) => !s.positions.some((x) => x.id === id)) ||

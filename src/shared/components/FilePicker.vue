@@ -36,8 +36,8 @@ onUnmounted(() => {
 <template>
   <div class="stack">
     <input
-      ref="fileInput"
       :id="id"
+      ref="fileInput"
       class="visually-hidden"
       type="file"
       accept="image/jpeg,image/png,image/webp,application/pdf"

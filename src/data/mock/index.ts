@@ -1,6 +1,6 @@
 import type { Ports } from '../ports';
 import type * as M from '../models';
-import { activities, members, DEMO_PASSWORD, questions } from './fixtures';
+import { activities, members, DEMO_PASSWORD, questions, insuranceLayoutOverview } from './fixtures';
 import { scenarios } from './scenarios';
 import { fail } from '../../shared/errors';
 import { readMock, writeMock, removeMock, cleanupSession } from '../../shared/storage';
@@ -271,6 +271,10 @@ export function createMockPorts(): Ports {
       },
       async getCurrentMember(s) {
         await delay();
+        if (scene === 'AUTH-RESTORE-ONCE' && !failureUsed) {
+          failureUsed = true;
+          throw fail('network', '合成场景：首次身份读取暂不可用，请重试');
+        }
         const m = members.find((m) => m.id === s.actor);
         if (!m) throw fail('unauthenticated', '身份失效');
         return clone(m);
@@ -341,6 +345,7 @@ export function createMockPorts(): Ports {
         if (scene === 'REG-04') failureUsed = true;
         return {
           version,
+          qualification: a.qualification,
           questions: id === 'act-position' ? clone(questions) : [clone(questions[7]!)],
           sessions: a.sessions,
         };
@@ -435,7 +440,19 @@ export function createMockPorts(): Ports {
     insurance: {
       async getMyOverview() {
         const m = requireActor();
+        const generation = authGeneration;
+        const currentScene = scene;
         await delay();
+        if (currentScene === 'INS-SLOW') {
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          if (generation !== authGeneration) throw fail('cancelled', '身份已切换');
+        }
+        if (currentScene === 'INS-ERROR')
+          throw fail('service-unavailable', '合成场景：保险资料暂不可用，请重新读取');
+        if (currentScene === 'INS-FORBIDDEN')
+          throw fail('forbidden', '合成场景：当前身份无权读取保险资料，请联系管理员');
+        if (currentScene === 'INS-EMPTY') return { self: [], team: [] };
+        if (currentScene === 'INS-LAYOUT') return clone(insuranceLayoutOverview);
         const pending = readMock(
           'insurance-intent:' + m.id,
           (x): x is { id: string } =>

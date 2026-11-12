@@ -92,6 +92,8 @@ export async function scenario(page: Page, id: string) {
   await panel(page);
   await page.getByLabel('选择场景').selectOption(id);
   await page.getByRole('button', { name: '应用场景', exact: true }).click();
+  await expect(page.locator('.dev-panel')).toBeHidden();
+  await expect(page.locator('.van-overlay')).toBeHidden();
 }
 export async function switchAccount(page: Page, account: string) {
   await panel(page);

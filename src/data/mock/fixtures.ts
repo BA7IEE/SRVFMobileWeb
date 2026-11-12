@@ -1,5 +1,45 @@
-import type { ActivityDetail, CurrentMember, Question } from '../models';
+import type { ActivityDetail, CurrentMember, Question, InsuranceOverview } from '../models';
 export const DEMO_PASSWORD = 'demo-only';
+// Synthetic read-only layout data; never represents actual coverage or approval.
+export const insuranceLayoutOverview: InsuranceOverview = {
+  team: [
+    {
+      name: '合成队伍统一保障一 · 多日期山野安全演练与应急协作长期文案排版验证',
+      start: '2026-01-01',
+      end: '2026-12-31',
+    },
+    { name: '合成队伍统一保障二 · 城市志愿服务', start: '2026-02-01', end: '2026-11-30' },
+  ],
+  self: [
+    {
+      id: 'layout-verified',
+      insurer: '合成保险公司一 · 山野应急救援与多场次志愿服务综合保障长名称展示',
+      policy: 'SYNTHETIC-LAYOUT-ONLY-'.repeat(6).slice(0, 128),
+      start: '2026-01-01',
+      end: '2026-12-31',
+      review: 'verified',
+      version: 1,
+    },
+    {
+      id: 'layout-pending',
+      insurer: '合成保险公司二 · 待审核',
+      policy: 'SYNTHETIC-PENDING-ONLY',
+      start: null,
+      end: '2026-12-31',
+      review: 'pending',
+      version: 2,
+    },
+    {
+      id: 'layout-rejected',
+      insurer: '合成保险公司三 · 审核未通过',
+      policy: 'SYNTHETIC-REJECTED-ONLY',
+      start: '2026-01-01',
+      end: '2026-11-30',
+      review: 'rejected',
+      version: 3,
+    },
+  ],
+};
 export const members: CurrentMember[] = [
   {
     id: 'member-a',
@@ -218,6 +258,15 @@ export const activities: ActivityDetail[] = [
     sessions: [{ ...session, startAt: '2026-10-25T01:00:00Z', endAt: '2026-10-25T09:00:00Z' }],
   },
 ];
+// Fixed positive qualification for these synthetic scenarios; wire data is never given this default.
+for (const activity of activities) {
+  activity.qualification = { result: 'pass', unmetRules: [] };
+  for (const session of activity.sessions) {
+    session.qualification = { result: 'pass', unmetRules: [] };
+    for (const position of session.positions)
+      position.qualification = { result: 'pass', unmetRules: [] };
+  }
+}
 export const questions: Question[] = [
   { code: 'contact', type: 'short_text', label: '现场称呼', required: true, min: 1, max: 32 },
   {

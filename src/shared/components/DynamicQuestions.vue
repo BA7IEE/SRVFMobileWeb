@@ -61,7 +61,7 @@ function multi(code: string, value: string, checked: boolean) {
         @change="set(q.code, ($event.target as HTMLSelectElement).value)"
       >
         <option value="">请选择</option>
-        <option v-for="o in q.options" :key="o" :value="o">{{ o }}</option>
+        <option v-for="o in q.options" :key="o" :value="o">{{ q.optionLabels?.[o] ?? o }}</option>
       </select>
       <fieldset v-else-if="q.type === 'multi_choice'">
         <legend>可多选</legend>
@@ -72,7 +72,7 @@ function multi(code: string, value: string, checked: boolean) {
               Array.isArray(modelValue[q.code]) && (modelValue[q.code] as string[]).includes(o)
             "
             @change="multi(q.code, o, ($event.target as HTMLInputElement).checked)"
-          />{{ o }}</label
+          />{{ q.optionLabels?.[o] ?? o }}</label
         >
       </fieldset>
       <file-picker

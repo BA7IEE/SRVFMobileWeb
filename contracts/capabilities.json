@@ -118,11 +118,11 @@
     "sourcePath": "src/modules/activities/controllers/app-activities.controller.ts",
     "sourceRef": "fcf4e5d5802c42a1503b205751f737e3badd6ffc:src/modules/activities/controllers/app-activities.controller.ts:L1-L151",
     "request": "8—64位ID",
-    "response": "安全详情/场次/表单；不完整历史读面",
+    "response": "安全详情、场次地点/容量、岗位/资格和表单；不完整历史读面",
     "permission": "当前成员准入；管理命令另需当前活动对应职责，部署开关仍待联调",
     "retryPolicy": "safe-read",
-    "resolution": "重新读取当前资源；不自动重放写入",
-    "readiness": "CONTRACT_VERIFIED",
+    "resolution": "已完成原始响应→页面表单模型→岗位选择→报名命令离线串联；不代表历史和保险读取已齐备",
+    "readiness": "WIRE_TESTED",
     "gap": "G06"
   },
   {
@@ -146,11 +146,11 @@
     "sourcePath": "src/modules/activities/dto/app/app-registration-form.dto.ts",
     "sourceRef": "fcf4e5d5802c42a1503b205751f737e3badd6ffc:src/modules/activities/dto/app/app-registration-form.dto.ts:L195-L255",
     "request": "无独立新路径；从详情投影",
-    "response": "registrationForm.version/fields；无表单为null",
+    "response": "registrationForm.version/fields；无表单为null；场次/岗位/资格投影到实际选择模型",
     "permission": "当前成员准入；管理命令另需当前活动对应职责，部署开关仍待联调",
     "retryPolicy": "safe-read",
-    "resolution": "重新读取当前资源；不自动重放写入",
-    "readiness": "CONTRACT_VERIFIED",
+    "resolution": "activityRegistrationForm + SessionPositionSelector 离线串联，保留归属/顺序/资格；不授权真实提交",
+    "readiness": "WIRE_TESTED",
     "gap": null
   },
   {

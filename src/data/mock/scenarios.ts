@@ -1,6 +1,20 @@
 import type { Scenario } from '../models';
 export const scenarios: Scenario[] = [
   {
+    id: 'AUTH-RESTORE-ONCE',
+    label: '首次身份读取失败后恢复',
+    description: '已有演示会话刷新页面，显式重试后重新读取身份',
+  },
+  {
+    id: 'INS-LAYOUT',
+    label: '保险完成态长文案多记录',
+    description: '两条统保、三条自购合成记录，仅验证排版',
+  },
+  { id: 'INS-SLOW', label: '保险加载中', description: '保险读取延迟两秒后完成' },
+  { id: 'INS-EMPTY', label: '保险空记录', description: '统保、自购均为空，不等于活动资格不满足' },
+  { id: 'INS-ERROR', label: '保险读取失败', description: '独立服务错误，不展示过期记录' },
+  { id: 'INS-FORBIDDEN', label: '保险读取无权限', description: '明确权限拒绝，不当成空记录' },
+  {
     id: 'AUTH-01',
     label: '深链接未登录',
     description: '登录后回到允许的原活动',

@@ -108,6 +108,9 @@ describe('固定读取与命令补充切片', () => {
       ok({
         ...base,
         description: null,
+        capacity: null,
+        registrationNotes: null,
+        qualification: { resultCode: 'pass', unmetRules: [] },
         requiresInsurance: true,
         phase: 'upcoming',
         formVersion: null,

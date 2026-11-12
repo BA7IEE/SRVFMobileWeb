@@ -28,6 +28,8 @@ const info = reasons[String(route.params.reason)] ?? reasons['not-found']!;
 async function retry() {
   await auth.revalidate();
   if (auth.ready) void router.replace('/activities');
+  else if (auth.state === 'blocked') void router.replace('/system/blocked');
+  else if (auth.state === 'anonymous' || auth.state === 'expired') void router.replace('/login');
 }
 </script>
 <template>

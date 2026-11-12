@@ -20,6 +20,7 @@ export const useAuth = defineStore('auth', () => {
   const epoch = ref(0);
   const revision = ref(0);
   let restore: Promise<void> | undefined;
+  let initialized = false;
   let refreshing: Promise<void> | undefined;
   const ready = computed(
     () =>
@@ -31,10 +32,13 @@ export const useAuth = defineStore('auth', () => {
     member.value = undefined;
     session.value = undefined;
     refreshing = undefined;
+    restore = undefined;
+    initialized = true;
     revision.value++;
   }
   async function identify(s: Session, id: number) {
     const m = await getData().auth.getCurrentMember(s);
+    if (id !== epoch.value) return;
     const cap = await getData().auth.getCapabilities(s);
     if (id !== epoch.value) return;
     if (m.admission !== 'active') {
@@ -61,21 +65,33 @@ export const useAuth = defineStore('auth', () => {
   }
   function restoreSession() {
     if (restore) return restore;
+    if (initialized) return Promise.resolve();
     const id = epoch.value;
-    restore = (async () => {
+    state.value = 'initializing';
+    message.value = '';
+    const pending = (async () => {
       try {
         const s = await getData().auth.restoreSession();
         if (id !== epoch.value) return;
         if (!s) {
           state.value = 'anonymous';
+          initialized = true;
           return;
         }
         await identify(s, id);
+        if (id === epoch.value) initialized = true;
       } catch (e) {
-        if (id === epoch.value) handle(e);
+        if (id === epoch.value) {
+          handle(e);
+          initialized = state.value !== 'unavailable';
+        }
       }
     })();
-    return restore;
+    const task = pending.finally(() => {
+      if (restore === task) restore = undefined;
+    });
+    restore = task;
+    return task;
   }
   async function login(account: string, password: string) {
     clear();
@@ -127,7 +143,10 @@ export const useAuth = defineStore('auth', () => {
       await refresh();
   }
   async function revalidate() {
-    if (!session.value) return;
+    if (!session.value) {
+      await restoreSession();
+      return;
+    }
     const id = epoch.value;
     try {
       await ensureSession();
