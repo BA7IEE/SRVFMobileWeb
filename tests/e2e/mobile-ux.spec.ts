@@ -3,6 +3,10 @@ import type { Page } from '@playwright/test';
 
 async function layoutFits(page: Page) {
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  for (const select of await page.locator('select:visible').all()) {
+    const height = await select.evaluate((element) => element.getBoundingClientRect().height);
+    expect(height, '实际下拉框高度应至少 44px').toBeGreaterThanOrEqual(44);
+  }
 }
 
 async function clickable(page: Page, name: string) {

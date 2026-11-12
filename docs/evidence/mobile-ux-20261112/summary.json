@@ -3,7 +3,6 @@
   "date": "2026-11-12",
   "timezone": "Asia/Shanghai",
   "baseline": "7218acc54f8c2f7bc85e0dbd33080d1d42fff50d",
-  "codeAndTestCommit": "8a70b30dd209a112d90ba47609761781830e04ab",
   "command": "pnpm check",
   "exitCode": 0,
   "unitAndComponents": 105,
@@ -24,21 +23,21 @@
     "pageErrors": 0,
     "serviceWorkers": 0
   },
-  "sourceFingerprint": "a4dd01234ad0b686f33cd0c768cfa6f3ba3879fba3bad811e173e445abc9ffe2",
+  "sourceFingerprint": "77078dcaf70de93a9811f0617e16106e4779976f5e2573d38a2c0384325a71fd",
   "mockBuildMatchesSource": true,
   "ordinaryBuildMatchesSource": true,
   "bundles": {
     "dist": {
       "files": 39,
-      "allJsCssGzip": 224437,
+      "allJsCssGzip": 224515,
       "decoderGzip": 47468,
-      "withoutDecoderGzip": 176969
+      "withoutDecoderGzip": 177047
     },
     "dist-mock": {
       "files": 46,
-      "allJsCssGzip": 243450,
+      "allJsCssGzip": 243570,
       "decoderGzip": 47468,
-      "withoutDecoderGzip": 195982
+      "withoutDecoderGzip": 196102
     }
   },
   "artifactScreenshots": 78,
@@ -53,7 +52,7 @@
   "representativeScreenshots": [
     {
       "file": "form-after-320.png",
-      "sha256": "765285df370c23f95d60407b72b6e219353016011d6ca6e715ed40a318756913"
+      "sha256": "23d6bd14930e9737915e780ccd799040f6ada79f6a7d02468bf0af736f5f2996"
     },
     {
       "file": "form-before-320.png",
@@ -61,7 +60,7 @@
     },
     {
       "file": "people-after-320.png",
-      "sha256": "307a42fab562c09fa8a19ecd1fc3c49a782525d138a222654aa2dadd353bcb43"
+      "sha256": "14024d5c1b493876c03126f81858a638ab083e3e70a2b5f7b7627b5c78963148"
     },
     {
       "file": "people-before-320.png",
@@ -72,7 +71,8 @@
     "320px unfilled eight-question form before/after",
     "320px onsite people before/after",
     "320px form field focus and insurance editor",
-    "Chromium/WebKit final 320px filled form and WebKit 390px insurance error"
+    "Chromium/WebKit final 320px filled form and WebKit 390px insurance error",
+    "WebKit 320px native select 46px height and local CSS arrow"
   ],
   "notRun": [
     "realApi",
@@ -81,7 +81,8 @@
     "realDevices",
     "mobileWeChat",
     "realSoftKeyboard",
-    "deployment"
+    "deployment",
+    "nativeSelectKeyboardInteraction"
   ],
   "earlierAttempts": [
     {
@@ -99,5 +100,8 @@
       "stage": "format:check",
       "reason": "earlier generated evidence JSON formatting; restored historical files and moved new evidence to test artifacts"
     }
-  ]
+  ],
+  "codeAndTestBaseCommit": "8a70b30dd209a112d90ba47609761781830e04ab",
+  "followup": "WebKit native selects: 27px to 46px; browser assertions require at least 44px",
+  "pullRequest": "https://github.com/BA7IEE/SRVFMobileWeb/pull/2"
 }
