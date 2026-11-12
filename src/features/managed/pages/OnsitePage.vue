@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { Button as VanButton, showConfirmDialog } from 'vant';
+import { Button as VanButton } from 'vant';
 import { getData } from '../../../data';
-import { useResource } from '../../../shared/composables/resource';
+import { useManagedResource } from '../access';
+import ManagedAccessDenied from '../components/ManagedAccessDenied.vue';
 import type { PunchAction, QrCredential } from '../../../data/models';
-import { appError } from '../../../shared/errors';
+import { appError, fail } from '../../../shared/errors';
 import { beijing } from '../../../shared/time';
 import { onSessionCleanup, onBackgroundCleanup } from '../../../shared/storage';
 import PageState from '../../../shared/components/PageState.vue';
@@ -24,15 +25,31 @@ const unknown = ref(false);
 let active = true;
 let qrGeneration = 0;
 let writeInFlight = false;
-const { data, loading, error, load } = useResource(async () => {
-  const activity = await getData().activities.getDetail(id);
-  if (!sessionId.value) sessionId.value = activity.sessions[0]?.id ?? '';
-  const current = sessionId.value;
-  if (!activity.sessions.some((s) => s.id === current)) throw new Error('无法确认当前场次');
-  return { activity, overview: await getData().managed.getOnsiteOverview(id, current) };
-});
-async function read() {
-  if (!active || !sessionId.value) return;
+const access = useManagedResource(
+  async (currentAccess) => {
+    const activity = await getData().activities.getDetail(id);
+    if (!currentAccess()) throw fail('cancelled', '当前权限状态已变化');
+    if (!sessionId.value) sessionId.value = activity.sessions[0]?.id ?? '';
+    const current = sessionId.value;
+    if (!activity.sessions.some((s) => s.id === current)) throw new Error('无法确认当前场次');
+    return { activity, overview: await getData().managed.getOnsiteOverview(id, current) };
+  },
+  () => {
+    writeInFlight = false;
+    clearCredential();
+    sessionId.value = '';
+    action.value = 'check_in';
+    qrLoading.value = false;
+    qrError.value = '';
+    message.value = '';
+    unknown.value = false;
+    busy.value = false;
+  },
+);
+const { data, loading, error, load, denied, retrying } = access;
+async function read(revalidate = false) {
+  if (!active || !sessionId.value || (denied.value && !revalidate)) return false;
+  const currentAccess = access.snapshot();
   const generation = ++qrGeneration;
   const current = sessionId.value;
   const currentAction = action.value;
@@ -42,19 +59,25 @@ async function read() {
   qrError.value = '';
   try {
     const next = await getData().managed.getQr(id, current, currentAction, 'read');
-    if (active && generation === qrGeneration) qr.value = next;
+    if (!active || !currentAccess() || generation !== qrGeneration) return false;
+    qr.value = next;
+    return true;
   } catch (e) {
-    if (active && generation === qrGeneration) {
+    if (active && currentAccess() && generation === qrGeneration) {
       qrError.value = appError(e).message;
-      if (appError(e).kind === 'forbidden') data.value = undefined;
+      if (appError(e).kind === 'forbidden') access.revoke(appError(e));
     }
+    return false;
   } finally {
     if (active && generation === qrGeneration) qrLoading.value = false;
   }
 }
+function resumeRead() {
+  void read();
+}
 onMounted(() => {
   void load();
-  window.addEventListener('srvf:resume', read);
+  window.addEventListener('srvf:resume', resumeRead);
 });
 watch([sessionId, action], ([current], [previous]) => {
   show.value = false;
@@ -69,38 +92,42 @@ function clearCredential() {
   show.value = false;
   qr.value = undefined;
 }
-watch(error, (failure) => {
-  if (failure?.kind === 'forbidden') {
-    data.value = undefined;
-    clearCredential();
-  }
-});
 const unregister = onSessionCleanup(() => {
   active = false;
+  access.cancel();
   clearCredential();
 });
 const unregisterBackground = onBackgroundCleanup(clearCredential);
 onUnmounted(() => {
   active = false;
   clearCredential();
-  window.removeEventListener('srvf:resume', read);
+  window.removeEventListener('srvf:resume', resumeRead);
   unregister();
   unregisterBackground();
 });
 async function operate(op: 'issue' | 'revoke') {
-  if (busy.value || qrLoading.value || qrError.value || unknown.value || !data.value) return;
+  if (
+    busy.value ||
+    qrLoading.value ||
+    qrError.value ||
+    unknown.value ||
+    denied.value ||
+    !data.value
+  )
+    return;
+  const currentAccess = access.snapshot();
   busy.value = true;
   const snapshot = { session: sessionId.value, action: action.value };
   try {
-    await showConfirmDialog({
+    await access.confirm({
       title: op === 'issue' ? '生成 / 重签演示码' : '撤销本场次演示码',
       message: `当前活动：${data.value.activity.title}\n场次：${data.value.activity.sessions.find((s) => s.id === snapshot.session)?.name}\n动作：${snapshot.action === 'check_in' ? '签到' : '签退'}。重签或撤销后旧码不再使用。`,
     });
   } catch {
-    busy.value = false;
+    if (active && currentAccess()) busy.value = false;
     return;
   }
-  if (!active) return;
+  if (!active || !currentAccess()) return;
   message.value = '';
   const generation = ++qrGeneration;
   writeInFlight = true;
@@ -112,26 +139,31 @@ async function operate(op: 'issue' | 'revoke') {
       op,
       crypto.randomUUID(),
     );
-    if (!active || generation !== qrGeneration) return;
+    if (!active || !currentAccess() || generation !== qrGeneration) return;
     qr.value = result;
     show.value = op === 'issue';
   } catch (e) {
-    if (!active || generation !== qrGeneration) return;
+    if (!active || !currentAccess() || generation !== qrGeneration) return;
     message.value = appError(e).message;
     unknown.value = appError(e).kind === 'result-unknown';
-    if (appError(e).kind === 'forbidden') {
-      data.value = undefined;
-      clearCredential();
-    }
+    if (appError(e).kind === 'forbidden') access.revoke(appError(e));
   } finally {
-    writeInFlight = false;
-    if (active) busy.value = false;
+    if (active && currentAccess()) {
+      writeInFlight = false;
+      busy.value = false;
+    }
   }
 }
 </script>
 <template>
   <div class="page">
-    <page-state :loading="loading" :error="error" @retry="load"
+    <managed-access-denied
+      v-if="denied"
+      :message="denied.message"
+      :loading="retrying"
+      @retry="access.retry(() => read(true))"
+    />
+    <page-state v-else :loading="loading" :error="error" @retry="load"
       ><template v-if="data"
         ><div class="page-intro">
           <h1>{{ data.activity.title }}</h1>
@@ -203,7 +235,7 @@ async function operate(op: 'issue' | 'revoke') {
           <p v-if="unknown" class="notice">
             操作结果尚未确认，请读取二维码状态并联系负责人核对，勿重复生成或撤销。
           </p>
-          <button class="text-button" :disabled="busy || qrLoading" @click="read">
+          <button class="text-button" :disabled="busy || qrLoading" @click="read()">
             刷新二维码状态
           </button>
         </section>

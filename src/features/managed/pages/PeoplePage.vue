@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { Button as VanButton, showConfirmDialog } from 'vant';
+import { Button as VanButton } from 'vant';
 import { getData } from '../../../data';
-import { useResource } from '../../../shared/composables/resource';
+import { useManagedResource } from '../access';
+import ManagedAccessDenied from '../components/ManagedAccessDenied.vue';
 import type { PunchAction, PunchReceipt } from '../../../data/models';
-import { appError } from '../../../shared/errors';
+import { appError, fail } from '../../../shared/errors';
 import { onSessionCleanup } from '../../../shared/storage';
 import PageState from '../../../shared/components/PageState.vue';
 import ScannerPanel from '../../../shared/components/ScannerPanel.vue';
@@ -22,26 +23,33 @@ const receiptTarget = ref('');
 const busy = ref(false);
 const unknown = ref(false);
 let active = true;
-const { data, loading, error, load } = useResource(async () => {
-  const activity = await getData().activities.getDetail(id);
-  const current = activity.sessions.find((s) => s.id === sessionId.value) ?? activity.sessions[0];
-  if (!current) throw new Error('本活动暂无可核验的场次');
-  if (!sessionId.value) sessionId.value = current.id;
-  if (current.id !== sessionId.value) throw new Error('无法确认当前场次，请返回活动重新选择');
-  return { activity, overview: await getData().managed.getOnsiteOverview(id, current.id) };
-});
-onMounted(() => void load());
-watch(error, (failure) => {
-  if (failure?.kind === 'forbidden') {
-    data.value = undefined;
+const access = useManagedResource(
+  async (currentAccess) => {
+    const activity = await getData().activities.getDetail(id);
+    if (!currentAccess()) throw fail('cancelled', '当前权限状态已变化');
+    const current = activity.sessions.find((s) => s.id === sessionId.value) ?? activity.sessions[0];
+    if (!current) throw new Error('本活动暂无可核验的场次');
+    if (!sessionId.value) sessionId.value = current.id;
+    if (current.id !== sessionId.value) throw new Error('无法确认当前场次，请返回活动重新选择');
+    return { activity, overview: await getData().managed.getOnsiteOverview(id, current.id) };
+  },
+  () => {
     personId.value = '';
     reason.value = '';
+    keyword.value = '';
+    sessionId.value = '';
     receipt.value = undefined;
-  }
-});
+    receiptTarget.value = '';
+    message.value = '';
+    unknown.value = false;
+    busy.value = false;
+  },
+);
+const { data, loading, error, load, denied, retrying } = access;
+onMounted(() => void load());
 const unregister = onSessionCleanup(() => {
   active = false;
-  data.value = undefined;
+  access.cancel();
   personId.value = '';
   reason.value = '';
   receipt.value = undefined;
@@ -72,7 +80,8 @@ const visible = computed(
 );
 const selected = computed(() => visible.value.find((p) => p.identityId === personId.value));
 async function execute(code?: string) {
-  if (busy.value || unknown.value) return;
+  if (busy.value || unknown.value || denied.value) return;
+  const current = access.snapshot();
   const target = selected.value;
   if (!target) {
     message.value = code
@@ -94,15 +103,15 @@ async function execute(code?: string) {
   message.value = '';
   receipt.value = undefined;
   try {
-    await showConfirmDialog({
+    await access.confirm({
       title: `确认${snapshot.action === 'check_in' ? '代签' : '代退'}（演示）`,
       message: `活动：${data.value?.activity.title}\n场次：${data.value?.activity.sessions.find((s) => s.id === snapshot.sessionId)?.name}\n人员：${target.label}\n参与身份：${target.identityId}\n原因：${snapshot.reason || '现场扫描核验'}\n不产生正式时长或贡献。`,
     });
   } catch {
-    busy.value = false;
+    if (active && current()) busy.value = false;
     return;
   }
-  if (!active) return;
+  if (!active || !current()) return;
   try {
     const result = code
       ? await getData().managed.staffScan(
@@ -121,23 +130,19 @@ async function execute(code?: string) {
           snapshot.reason,
           crypto.randomUUID(),
         );
-    if (!active) return;
+    if (!active || !current()) return;
     receipt.value = result;
     receiptTarget.value = `${target.label} · ${snapshot.action === 'check_in' ? '代签' : '代退'}`;
     reason.value = '';
     await load();
   } catch (e) {
-    if (!active) return;
+    if (!active || !current()) return;
     const err = appError(e);
     message.value = err.message;
     unknown.value = err.kind === 'result-unknown';
-    if (err.kind === 'forbidden') {
-      data.value = undefined;
-      personId.value = '';
-      reason.value = '';
-    }
+    if (err.kind === 'forbidden') access.revoke(err);
   } finally {
-    busy.value = false;
+    if (active && current()) busy.value = false;
   }
 }
 const example = __MOCK__
@@ -146,7 +151,13 @@ const example = __MOCK__
 </script>
 <template>
   <div class="page">
-    <page-state :loading="loading" :error="error" @retry="load"
+    <managed-access-denied
+      v-if="denied"
+      :message="denied.message"
+      :loading="retrying"
+      @retry="access.retry()"
+    />
+    <page-state v-else :loading="loading" :error="error" @retry="load"
       ><template v-if="data"
         ><h1>人员核验与异常</h1>
         <p>{{ data.activity.title }}</p>

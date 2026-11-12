@@ -43,6 +43,11 @@ function insurance() {
   auth.rerender();
   show.value = false;
 }
+function revokeScope() {
+  selected.value = 'STAFF-06';
+  controls.apply(selected.value);
+  show.value = false;
+}
 </script>
 <template>
   <button ref="trigger" class="dev-trigger" aria-label="打开演示场景面板" @click="show = true">
@@ -76,6 +81,7 @@ function insurance() {
       <p class="help">模拟时钟：{{ now }}</p>
       <van-button plain @click="advance">推进模拟时间 30 分钟</van-button
       ><van-button plain @click="insurance">测试控制：保险审核通过</van-button
+      ><van-button plain @click="revokeScope">测试控制：撤销当前活动职责（保留页面）</van-button
       ><van-button plain @click="refresh">同时发起 5 次模拟续期</van-button
       ><van-button
         plain
