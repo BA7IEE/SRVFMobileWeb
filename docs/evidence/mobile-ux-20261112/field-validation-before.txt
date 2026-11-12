@@ -1,0 +1,44 @@
+
+ RUN  v3.2.7 /Volumes/WorkSSD/Development/Repos/SRVFMobileWeb
+
+ ❯ tests/components/forms-ux.test.ts (11 tests | 1 failed) 121ms
+   ✓ 保险编辑与错误定位 > 删除确认等待期间离页，晚到确认不能再发送保险删除 21ms
+   ✓ 保险编辑与错误定位 > 打开编辑定位到公司，提交首错聚焦且关联错误，不清空其他输入 14ms
+   ✓ 保险编辑与错误定位 > 冲突刷新失败后继续锁住保存，成功核对当前版本后才允许更新 20ms
+   ✓ 保险编辑与错误定位 > 服务端字段错误只映射已知保险字段并聚焦，保留原输入 6ms
+   ✓ 保险编辑与错误定位 > 保存期间不能切换登记或关闭编辑，避免旧保存覆盖新编辑 5ms
+   ✓ 动态题错误语义 > 校验通过不插入空错误块，避免失焦时提交按钮跳位 2ms
+   ✓ 动态题错误语义 > 选择、确认和附件均关联对应题目及错误，必填可选用文字说明 5ms
+   × 报名读取与服务端字段错误 > 改正已报错题立即更新该题错误，保留未修改题目的服务端错误 30ms
+     → expected true to be false // Object.is equality
+   ✓ 报名读取与服务端字段错误 > 确认等待期间离开报名页，晚到确认不能再发送报名写入 9ms
+   ✓ 报名读取与服务端字段错误 > 恢复页面时后发读取优先，旧表单晚到不能清空新输入 4ms
+   ✓ 报名读取与服务端字段错误 > 关联已知动态题并定位输入，不把未知字段注入表单 5ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/forms-ux.test.ts > 报名读取与服务端字段错误 > 改正已报错题立即更新该题错误，保留未修改题目的服务端错误
+AssertionError: expected true to be false // Object.is equality
+
+- Expected
++ Received
+
+- false
++ true
+
+ ❯ tests/components/forms-ux.test.ts:282:50
+    280|     expect(wrapper.get('#err-travel').text()).toBe('请重新核对到场方式');
+    281|     await wrapper.get('#q-travel').setValue('统一集合');
+    282|     expect(wrapper.find('#err-travel').exists()).toBe(false);
+       |                                                  ^
+    283|     expect(wrapper.get('#err-contact').text()).toBe('称呼仍需人工核对');
+    284|     await wrapper.get('#q-travel').trigger('blur');
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 10 passed (11)
+   Start at  15:06:55
+   Duration  1.16s (transform 294ms, setup 18ms, collect 388ms, tests 121ms, environment 328ms, prepare 60ms)
+
