@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, onUnmounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
@@ -7,69 +7,125 @@ import { useResource } from '../../../shared/composables/resource';
 import type { PunchAction, QrCredential } from '../../../data/models';
 import { appError } from '../../../shared/errors';
 import { beijing } from '../../../shared/time';
+import { onSessionCleanup, onBackgroundCleanup } from '../../../shared/storage';
 import PageState from '../../../shared/components/PageState.vue';
 import CredentialPopup from '../../../shared/components/CredentialPopup.vue';
 import StatusBadge from '../../../shared/components/StatusBadge.vue';
 const id = String(useRoute().params.activityId);
-const sessionId = ref('session-am');
+const sessionId = ref('');
 const action = ref<PunchAction>('check_in');
 const qr = ref<QrCredential | null>();
 const show = ref(false);
 const busy = ref(false);
+const qrLoading = ref(false);
+const qrError = ref('');
 const message = ref('');
-const { data, loading, error, load } = useResource(async () => ({
-  activity: await getData().activities.getDetail(id),
-  overview: await getData().managed.getOnsiteOverview(id, sessionId.value),
-}));
+const unknown = ref(false);
+let active = true;
+let qrGeneration = 0;
+let writeInFlight = false;
+const { data, loading, error, load } = useResource(async () => {
+  const activity = await getData().activities.getDetail(id);
+  if (!sessionId.value) sessionId.value = activity.sessions[0]?.id ?? '';
+  const current = sessionId.value;
+  if (!activity.sessions.some((s) => s.id === current)) throw new Error('无法确认当前场次');
+  return { activity, overview: await getData().managed.getOnsiteOverview(id, current) };
+});
 async function read() {
+  if (!active || !sessionId.value) return;
+  const generation = ++qrGeneration;
+  const current = sessionId.value;
+  const currentAction = action.value;
+  show.value = false;
+  qr.value = undefined;
+  qrLoading.value = true;
+  qrError.value = '';
   try {
-    qr.value = await getData().managed.getQr(id, sessionId.value, action.value, 'read');
+    const next = await getData().managed.getQr(id, current, currentAction, 'read');
+    if (active && generation === qrGeneration) qr.value = next;
   } catch (e) {
-    qr.value = undefined;
-    message.value = appError(e).message;
+    if (active && generation === qrGeneration) {
+      qrError.value = appError(e).message;
+      if (appError(e).kind === 'forbidden') data.value = undefined;
+    }
+  } finally {
+    if (active && generation === qrGeneration) qrLoading.value = false;
   }
 }
-onMounted(async () => {
-  await load();
-  await read();
+onMounted(() => {
+  void load();
+  window.addEventListener('srvf:resume', read);
 });
-watch([sessionId, action], () => {
+watch([sessionId, action], ([current], [previous]) => {
   show.value = false;
   qr.value = undefined;
   message.value = '';
-  void load();
+  if (previous && current !== previous) void load();
   void read();
 });
+function clearCredential() {
+  if (writeInFlight) unknown.value = true;
+  qrGeneration++;
+  show.value = false;
+  qr.value = undefined;
+}
+watch(error, (failure) => {
+  if (failure?.kind === 'forbidden') {
+    data.value = undefined;
+    clearCredential();
+  }
+});
+const unregister = onSessionCleanup(() => {
+  active = false;
+  clearCredential();
+});
+const unregisterBackground = onBackgroundCleanup(clearCredential);
+onUnmounted(() => {
+  active = false;
+  clearCredential();
+  window.removeEventListener('srvf:resume', read);
+  unregister();
+  unregisterBackground();
+});
 async function operate(op: 'issue' | 'revoke') {
-  if (busy.value) return;
+  if (busy.value || qrLoading.value || qrError.value || unknown.value || !data.value) return;
   busy.value = true;
+  const snapshot = { session: sessionId.value, action: action.value };
   try {
     await showConfirmDialog({
       title: op === 'issue' ? '生成 / 重签演示码' : '撤销本场次演示码',
-      message: `当前活动：${data.value?.activity.title}\n场次：${data.value?.activity.sessions.find((s) => s.id === sessionId.value)?.name}\n动作：${action.value === 'check_in' ? '签到' : '签退'}。重签或撤销后旧码不再使用。`,
+      message: `当前活动：${data.value.activity.title}\n场次：${data.value.activity.sessions.find((s) => s.id === snapshot.session)?.name}\n动作：${snapshot.action === 'check_in' ? '签到' : '签退'}。重签或撤销后旧码不再使用。`,
     });
   } catch {
     busy.value = false;
     return;
   }
+  if (!active) return;
   message.value = '';
+  const generation = ++qrGeneration;
+  writeInFlight = true;
   try {
-    qr.value = await getData().managed.getQr(
+    const result = await getData().managed.getQr(
       id,
-      sessionId.value,
-      action.value,
+      snapshot.session,
+      snapshot.action,
       op,
       crypto.randomUUID(),
     );
+    if (!active || generation !== qrGeneration) return;
+    qr.value = result;
     show.value = op === 'issue';
   } catch (e) {
+    if (!active || generation !== qrGeneration) return;
     message.value = appError(e).message;
+    unknown.value = appError(e).kind === 'result-unknown';
     if (appError(e).kind === 'forbidden') {
       data.value = undefined;
-      qr.value = undefined;
+      clearCredential();
     }
   } finally {
-    busy.value = false;
+    writeInFlight = false;
+    if (active) busy.value = false;
   }
 }
 </script>
@@ -79,11 +135,11 @@ async function operate(op: 'issue' | 'revoke') {
       ><template v-if="data"
         ><div class="page-intro">
           <h1>{{ data.activity.title }}</h1>
-          <p class="muted">现场操作与正式认定分别处理。</p>
+          <p class="muted">职责：本活动现场考勤。现场操作与正式认定分别处理。</p>
         </div>
         <section class="panel">
           <label class="field"
-            >当前场次<select v-model="sessionId">
+            >当前场次<select v-model="sessionId" :disabled="busy">
               <option v-for="s in data.activity.sessions" :key="s.id" :value="s.id">
                 {{ s.name }}
               </option>
@@ -102,9 +158,17 @@ async function operate(op: 'issue' | 'revoke') {
         <section class="panel">
           <h2>场次考勤码</h2>
           <div class="pill-filter">
-            <button :aria-pressed="action === 'check_in'" @click="action = 'check_in'">
+            <button
+              :aria-pressed="action === 'check_in'"
+              :disabled="busy"
+              @click="action = 'check_in'"
+            >
               签到码</button
-            ><button :aria-pressed="action === 'check_out'" @click="action = 'check_out'">
+            ><button
+              :aria-pressed="action === 'check_out'"
+              :disabled="busy"
+              @click="action = 'check_out'"
+            >
               签退码
             </button>
           </div>
@@ -117,18 +181,31 @@ async function operate(op: 'issue' | 'revoke') {
               >展示当前{{ action === 'check_in' ? '签到' : '签退' }}码</van-button
             ></template
           >
+          <p v-else-if="qrLoading" role="status">正在读取当前场次考勤码…</p>
+          <p v-else-if="qrError" class="error" role="alert">
+            考勤码读取失败：{{ qrError }}。请刷新二维码状态后再操作。
+          </p>
           <p v-else class="muted">
             此场次尚未生成{{ action === 'check_in' ? '签到' : '签退' }}码。
           </p>
-          <van-button type="primary" :loading="busy" @click="operate('issue')">{{
-            qr ? '重签演示码' : '生成演示码'
-          }}</van-button><van-button
+          <van-button
+            type="primary"
+            :loading="busy"
+            :disabled="busy || qrLoading || !!qrError || unknown"
+            @click="operate('issue')"
+            >{{ qr ? '重签演示码' : '生成演示码' }}</van-button><van-button
             v-if="qr?.status === 'active'"
             plain
-            :disabled="busy"
+            :disabled="busy || qrLoading || !!qrError || unknown"
             @click="operate('revoke')"
             >撤销当前码</van-button
-          ><button class="text-button" @click="read">刷新二维码状态</button>
+          >
+          <p v-if="unknown" class="notice">
+            操作结果尚未确认，请读取二维码状态并联系负责人核对，勿重复生成或撤销。
+          </p>
+          <button class="text-button" :disabled="busy || qrLoading" @click="read">
+            刷新二维码状态
+          </button>
         </section>
         <p v-if="message" role="alert" class="error">{{ message }}</p>
         <router-link

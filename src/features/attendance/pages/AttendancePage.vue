@@ -31,6 +31,11 @@ const location = ref<LocationResult>();
 const locator = new LocationAdapter();
 const intent = ref<PunchIntent>();
 const unknown = ref(false);
+const locating = ref(false);
+const memberLoading = ref(false);
+let active = true;
+let deviceGeneration = 0;
+let punchInFlight = false;
 const actionName = computed(() => (data.value?.state.next === 'check_out' ? '签退' : '签到'));
 const wait = computed(() =>
   Boolean(
@@ -40,26 +45,42 @@ const wait = computed(() =>
 );
 onMounted(() => void load());
 const unregister = onSessionCleanup(() => {
+  active = false;
+  deviceGeneration++;
   locator.cancel();
   intent.value = undefined;
   memberCode.value = undefined;
 });
 const unregisterBackground = onBackgroundCleanup(() => {
+  if (punchInFlight) unknown.value = true;
+  deviceGeneration++;
   locator.cancel();
+  locating.value = false;
+  memberLoading.value = false;
+  memberCode.value = undefined;
+  show.value = false;
   location.value = undefined;
 });
 onUnmounted(() => {
+  active = false;
+  deviceGeneration++;
   locator.cancel();
   unregister();
   unregisterBackground();
 });
 async function requestLocation() {
+  if (locating.value || busy.value || data.value?.session.locationRequired !== true) return;
+  locating.value = true;
+  const generation = deviceGeneration;
   message.value = '正在获取位置…';
   const mode = getData().controls?.deviceScenario('location');
-  location.value =
+  const result: LocationResult =
     mode === 'denied' || mode === 'timeout' || mode === 'unavailable'
       ? { state: mode }
       : await locator.get(true);
+  if (!active || generation !== deviceGeneration) return;
+  locating.value = false;
+  location.value = result;
   message.value = (
     {
       success: '定位已获取，仅用于本次本地测试，不会上报',
@@ -76,6 +97,7 @@ async function scan(credential: string) {
   busy.value = true;
   message.value = '';
   const snapshot = data.value;
+  const generation = deviceGeneration;
   const action = snapshot.state.next;
   try {
     await showConfirmDialog({
@@ -84,6 +106,12 @@ async function scan(credential: string) {
     });
   } catch {
     busy.value = false;
+    return;
+  }
+  if (!active) return;
+  if (generation !== deviceGeneration) {
+    busy.value = false;
+    message.value = '页面状态已变化，请重新读取考勤状态后再核对';
     return;
   }
   if (snapshot.session.locationRequired === null) {
@@ -106,22 +134,39 @@ async function scan(credential: string) {
       ? { location: location.value.coords }
       : {}),
   };
+  punchInFlight = true;
   try {
-    receipt.value = await getData().attendance.submitPunch(intent.value);
+    const result = await getData().attendance.submitPunch(intent.value);
+    if (!active || generation !== deviceGeneration) return;
+    receipt.value = result;
     intent.value = undefined;
     location.value = undefined;
     await load();
   } catch (e) {
+    if (!active) return;
     const err = appError(e);
     message.value = err.message;
     unknown.value = err.kind === 'result-unknown';
   } finally {
+    punchInFlight = false;
     busy.value = false;
   }
 }
 async function member() {
-  memberCode.value = await getData().attendance.getMemberCredential();
-  show.value = true;
+  if (memberLoading.value) return;
+  memberLoading.value = true;
+  const generation = deviceGeneration;
+  try {
+    const code = await getData().attendance.getMemberCredential();
+    if (active && generation === deviceGeneration) {
+      memberCode.value = code;
+      show.value = true;
+    }
+  } catch (e) {
+    if (active && generation === deviceGeneration) message.value = appError(e).message;
+  } finally {
+    if (active && generation === deviceGeneration) memberLoading.value = false;
+  }
 }
 const example = __MOCK__
   ? () => getData().controls!.scanExample(id, sessionId, data.value!.state.next)
@@ -151,7 +196,7 @@ const example = __MOCK__
             最早签退时间
             {{ beijing(data.state.checkOutAllowedAt!) }}。到时请重新读取，不会自动签退。
           </p>
-          <van-button plain @click="load">重新读取考勤状态</van-button>
+          <van-button plain :disabled="busy" @click="load">重新读取考勤状态</van-button>
           <p class="help">
             {{
               data.session.locationRequired === false
@@ -161,7 +206,14 @@ const example = __MOCK__
                   : '本场次需要定位快照'
             }}
           </p>
-          <van-button plain @click="requestLocation">主动测试定位</van-button>
+          <van-button
+            v-if="data.session.locationRequired === true"
+            plain
+            :loading="locating"
+            :disabled="busy || locating"
+            @click="requestLocation"
+            >获取本次定位</van-button
+          >
         </section>
         <scanner-panel
           :simulation="getData().controls?.deviceScenario('camera')"
@@ -169,13 +221,18 @@ const example = __MOCK__
           :disabled="busy || unknown"
           :label="`扫描场次${actionName}码`"
           @recognized="scan" />
+        <p v-if="unknown" class="notice">
+          打卡结果尚未确认，请重新读取考勤状态并联系负责人核对，勿重复扫码。
+        </p>
         <p v-if="message" role="alert" class="error-box">{{ message }}</p>
         <div v-if="receipt" class="panel" role="status">
           <h2>{{ receipt.action === 'check_in' ? '签到' : '签退' }}已记录（演示）</h2>
           <p>{{ receipt.message }}</p>
           <p class="muted">{{ beijing(receipt.at) }}</p>
         </div>
-        <button class="text-button" @click="member">出示本人成员码</button>
+        <button class="text-button" :disabled="memberLoading" @click="member">
+          出示本人成员码
+        </button>
         <p class="safety-note">
           本页不生成正式时长或贡献；权限、二维码、位置与时间窗仍需真实服务端验收。
         </p>

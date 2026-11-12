@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
+import { onBeforeRouteLeave } from 'vue-router';
 import { Button as VanButton, Icon as VanIcon } from 'vant';
 import { getData } from '../../../data';
 import { useAuth } from '../../auth/store';
@@ -10,15 +11,23 @@ import StatusBadge from '../../../shared/components/StatusBadge.vue';
 import { beijing } from '../../../shared/time';
 const auth = useAuth();
 const key = 'srvf:ui:activities:' + auth.member?.id;
-let saved: { keyword?: string; type?: string; available?: boolean } = {};
+const epoch = auth.epoch;
+let saved: {
+  keyword?: string;
+  type?: string;
+  available?: boolean;
+  page?: number;
+  scroll?: number;
+} = {};
 try {
-  saved = JSON.parse(sessionStorage.getItem(key) ?? '{}') as typeof saved;
+  const raw: unknown = JSON.parse(sessionStorage.getItem(key) ?? '{}');
+  if (raw && typeof raw === 'object') saved = raw as typeof saved;
 } catch {
-  /* 损坏偏好使用默认值 */
+  /* 存储不可用或偏好损坏时使用默认值 */
 }
-const keyword = ref(saved.keyword ?? '');
-const type = ref(saved.type ?? '');
-const available = ref(saved.available ?? false);
+const keyword = ref(typeof saved.keyword === 'string' ? saved.keyword : '');
+const type = ref(['培训', '演练', '服务'].includes(saved.type ?? '') ? saved.type! : '');
+const available = ref(saved.available === true);
 const items = ref<ActivityListItem[]>([]);
 const error = ref<AppError>();
 const loading = ref(false);
@@ -28,10 +37,31 @@ const total = ref(0);
 let sequence = 0;
 let controller: AbortController | undefined;
 let timer: ReturnType<typeof setTimeout> | undefined;
-async function load(more = false) {
+const restorePages = Number.isInteger(saved.page) ? Math.min(50, Math.max(1, saved.page!)) : 1;
+const restoreScroll =
+  typeof saved.scroll === 'number' && Number.isFinite(saved.scroll) ? Math.max(0, saved.scroll) : 0;
+function persist(scroll = window.scrollY) {
+  if (!auth.ready || auth.epoch !== epoch) return;
+  try {
+    sessionStorage.setItem(
+      key,
+      JSON.stringify({
+        keyword: keyword.value,
+        type: type.value,
+        available: available.value,
+        page: page.value,
+        scroll,
+      }),
+    );
+  } catch {
+    /* 偏好写入失败不阻断浏览 */
+  }
+}
+async function load(more = false, pages = 1, scroll?: number) {
   const id = ++sequence;
   controller?.abort();
-  controller = new AbortController();
+  const request = new AbortController();
+  controller = request;
   loading.value = true;
   error.value = undefined;
   if (!more) {
@@ -39,44 +69,55 @@ async function load(more = false) {
     items.value = [];
   }
   try {
-    const next = await getData().activities.list(
-      {
-        keyword: keyword.value,
-        type: type.value,
-        available: available.value,
-        page: more ? page.value + 1 : 1,
-      },
-      controller.signal,
-    );
-    if (id !== sequence) return;
-    items.value = [
-      ...new Map([...(more ? items.value : []), ...next.items].map((x) => [x.id, x])).values(),
-    ];
-    page.value = next.page;
-    total.value = next.total;
-    hasMore.value = next.hasMore;
+    let nextPage = more ? page.value + 1 : 1;
+    do {
+      const next = await getData().activities.list(
+        { keyword: keyword.value, type: type.value, available: available.value, page: nextPage },
+        request.signal,
+      );
+      if (id !== sequence) return;
+      items.value = [...new Map([...items.value, ...next.items].map((x) => [x.id, x])).values()];
+      page.value = next.page;
+      total.value = next.total;
+      hasMore.value = next.hasMore;
+      nextPage++;
+    } while (!more && hasMore.value && nextPage <= pages);
+    if (scroll !== undefined) {
+      await nextTick();
+      if (id === sequence) window.scrollTo({ top: scroll, behavior: 'instant' });
+    }
   } catch (e) {
     if (id === sequence && appError(e).kind !== 'cancelled') error.value = appError(e);
   } finally {
     if (id === sequence) loading.value = false;
   }
 }
-watch([keyword, type, available], () => {
-  clearTimeout(timer);
-  timer = setTimeout(() => {
-    sessionStorage.setItem(
-      key,
-      JSON.stringify({ keyword: keyword.value, type: type.value, available: available.value }),
-    );
-    void load();
-  }, 250);
+watch(
+  [keyword, type, available],
+  () => {
+    clearTimeout(timer);
+    sequence++;
+    controller?.abort();
+    items.value = [];
+    page.value = 1;
+    loading.value = true;
+    error.value = undefined;
+    persist(0);
+    timer = setTimeout(() => void load(), 250);
+  },
+  { flush: 'sync' },
+);
+const resume = () => void load(false, page.value);
+onMounted(() => {
+  void load(false, restorePages, restoreScroll);
+  window.addEventListener('srvf:resume', resume);
 });
-onMounted(() => void load());
+onBeforeRouteLeave(() => persist());
 onUnmounted(() => {
   controller?.abort();
   clearTimeout(timer);
   sequence++;
-  sessionStorage.setItem('srvf:ui:scroll', String(window.scrollY));
+  window.removeEventListener('srvf:resume', resume);
 });
 const phases = { open: '开放报名', closed: '报名截止', ended: '已结束', cancelled: '已取消' };
 </script>
@@ -103,7 +144,7 @@ const phases = { open: '开放报名', closed: '报名截止', ended: '已结束
     <label class="check-label"><input v-model="available" type="checkbox" />只看可报名活动</label>
     <page-state
       :loading="loading && !items.length"
-      :error="error"
+      :error="items.length ? undefined : error"
       :empty="!loading && !items.length"
       empty-text="没有符合条件的活动"
       @retry="load()"
@@ -130,7 +171,17 @@ const phases = { open: '开放报名', closed: '报名截止', ended: '已结束
           <p class="activity-meta">
             <van-icon name="label-o" />{{ a.type }}{{ a.invitation ? ' · 受邀可见' : '' }}
           </p></router-link
-        ><van-button v-if="hasMore" plain :loading="loading" @click="load(true)"
+        >
+        <div v-if="error && items.length" class="error-box" role="alert">
+          <p>{{ error.message }}，已读取的活动仍保留。</p>
+          <van-button plain :loading="loading" @click="load(true)">重试加载更多</van-button>
+        </div>
+        <van-button
+          v-else-if="hasMore"
+          plain
+          :loading="loading"
+          :disabled="loading"
+          @click="load(true)"
           >加载更多</van-button
         >
         <p v-else class="safety-note">已显示当前筛选的全部结果</p>
