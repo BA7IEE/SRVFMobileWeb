@@ -1,10 +1,11 @@
 {
   "status": "PASS",
-  "scope": "git candidate files; synthetic screenshot and public owned source slices reviewed",
-  "candidateFiles": 250,
+  "scope": "current branch candidate files, review diff, synthetic fixtures/screenshots and fixed public source slices",
+  "codeAndTestCommit": "64498e7001956e3c0a7195ea55e4ecd0a91649a1",
+  "candidateFiles": 304,
   "secretPatternHits": 0,
   "excludedLocalArtifactsIncluded": 0,
   "realCredentialsIncluded": false,
   "realBusinessDataIncluded": false,
-  "note": "Pattern scan is combined with source provenance and manual content review, not a claim to detect every possible secret."
+  "note": "Pattern scan combined with manual diff, synthetic fixtures and source provenance review; not a whole-repository or dependency security audit."
 }

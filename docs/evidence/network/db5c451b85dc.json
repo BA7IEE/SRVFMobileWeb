@@ -1,0 +1,763 @@
+{
+  "test": "四种屏宽完成态截图，长文案多记录及页尾可达",
+  "browser": "158.0.8127.18",
+  "requests": [
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivityDetailPage-Ce6n3SLh.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/resource-zHqemjVE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-BhCLjoec.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-C2SqXKPi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-DsAf237-.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-DMpQ5Uvb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegisterPage-Ddv_O1md.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-BYKlCc_1.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsurancePage-DRNek5SD.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-DNQB09_h.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/OnsitePage-Ih9_bqWJ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DkcQZQhM.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/scanner-EQa0UFxu.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivityDetailPage-Ce6n3SLh.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/resource-zHqemjVE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-BhCLjoec.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-C2SqXKPi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-DsAf237-.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-DMpQ5Uvb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegisterPage-Ddv_O1md.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-BYKlCc_1.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsurancePage-DRNek5SD.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-DNQB09_h.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/OnsitePage-Ih9_bqWJ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DkcQZQhM.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/scanner-EQa0UFxu.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivityDetailPage-Ce6n3SLh.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/resource-zHqemjVE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-BhCLjoec.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-C2SqXKPi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-DsAf237-.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-DMpQ5Uvb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegisterPage-Ddv_O1md.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-BYKlCc_1.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsurancePage-DRNek5SD.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-DNQB09_h.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/OnsitePage-Ih9_bqWJ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DkcQZQhM.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/scanner-EQa0UFxu.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-_DY7ao_T.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-CRK7ycYI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-C3ubY8vq.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Vp8CGeUU.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BUV0-mFR.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bi0EW2gN.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-D35kBSWA.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CMMqJSD3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-Bx2XFIR3.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BPjreKc_.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivityDetailPage-Ce6n3SLh.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/resource-zHqemjVE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-BhCLjoec.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-C2SqXKPi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-DsAf237-.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-DMpQ5Uvb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/RegisterPage-Ddv_O1md.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-BYKlCc_1.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsurancePage-DRNek5SD.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-DNQB09_h.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/OnsitePage-Ih9_bqWJ.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DkcQZQhM.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/scanner-EQa0UFxu.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/MyActivitiesPage-DIwbWKCL.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ParticipationPage-CtDcp_D5.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/AccountPage-KvN6x7wm.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/AccountPage-BgAO77Vf.css",
+      "type": "stylesheet"
+    }
+  ],
+  "forbidden": [],
+  "cspViolations": [],
+  "pageErrors": [],
+  "apiRequests": 0,
+  "serviceWorkers": 0
+}

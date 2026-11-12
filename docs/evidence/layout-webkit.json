@@ -1,0 +1,142 @@
+[
+  {
+    "file": "webkit-320-login.png",
+    "state": "ready",
+    "width": 320,
+    "checks": ["演示登录可操作"]
+  },
+  {
+    "file": "webkit-320-detail.png",
+    "state": "ready",
+    "width": 320,
+    "checks": ["实际场次和岗位区已出现"]
+  },
+  {
+    "file": "webkit-320-form.png",
+    "state": "ready",
+    "width": 320,
+    "checks": ["八类题目已渲染", "提交操作存在"]
+  },
+  {
+    "file": "webkit-320-insurance.png",
+    "state": "ready",
+    "width": 320,
+    "checks": [
+      "统保2条、自购3条已加载",
+      "长名称及128字符保单号",
+      "三种审核状态",
+      "最后一条记录删除操作滚动可达"
+    ]
+  },
+  {
+    "file": "webkit-320-onsite.png",
+    "state": "ready",
+    "width": 320,
+    "checks": ["现场统计及生成考勤码操作已加载"]
+  },
+  {
+    "file": "webkit-375-login.png",
+    "state": "ready",
+    "width": 375,
+    "checks": ["演示登录可操作"]
+  },
+  {
+    "file": "webkit-375-detail.png",
+    "state": "ready",
+    "width": 375,
+    "checks": ["实际场次和岗位区已出现"]
+  },
+  {
+    "file": "webkit-375-form.png",
+    "state": "ready",
+    "width": 375,
+    "checks": ["八类题目已渲染", "提交操作存在"]
+  },
+  {
+    "file": "webkit-375-insurance.png",
+    "state": "ready",
+    "width": 375,
+    "checks": [
+      "统保2条、自购3条已加载",
+      "长名称及128字符保单号",
+      "三种审核状态",
+      "最后一条记录删除操作滚动可达"
+    ]
+  },
+  {
+    "file": "webkit-375-onsite.png",
+    "state": "ready",
+    "width": 375,
+    "checks": ["现场统计及生成考勤码操作已加载"]
+  },
+  {
+    "file": "webkit-390-login.png",
+    "state": "ready",
+    "width": 390,
+    "checks": ["演示登录可操作"]
+  },
+  {
+    "file": "webkit-390-detail.png",
+    "state": "ready",
+    "width": 390,
+    "checks": ["实际场次和岗位区已出现"]
+  },
+  {
+    "file": "webkit-390-form.png",
+    "state": "ready",
+    "width": 390,
+    "checks": ["八类题目已渲染", "提交操作存在"]
+  },
+  {
+    "file": "webkit-390-insurance.png",
+    "state": "ready",
+    "width": 390,
+    "checks": [
+      "统保2条、自购3条已加载",
+      "长名称及128字符保单号",
+      "三种审核状态",
+      "最后一条记录删除操作滚动可达"
+    ]
+  },
+  {
+    "file": "webkit-390-onsite.png",
+    "state": "ready",
+    "width": 390,
+    "checks": ["现场统计及生成考勤码操作已加载"]
+  },
+  {
+    "file": "webkit-430-login.png",
+    "state": "ready",
+    "width": 430,
+    "checks": ["演示登录可操作"]
+  },
+  {
+    "file": "webkit-430-detail.png",
+    "state": "ready",
+    "width": 430,
+    "checks": ["实际场次和岗位区已出现"]
+  },
+  {
+    "file": "webkit-430-form.png",
+    "state": "ready",
+    "width": 430,
+    "checks": ["八类题目已渲染", "提交操作存在"]
+  },
+  {
+    "file": "webkit-430-insurance.png",
+    "state": "ready",
+    "width": 430,
+    "checks": [
+      "统保2条、自购3条已加载",
+      "长名称及128字符保单号",
+      "三种审核状态",
+      "最后一条记录删除操作滚动可达"
+    ]
+  },
+  {
+    "file": "webkit-430-onsite.png",
+    "state": "ready",
+    "width": 430,
+    "checks": ["现场统计及生成考勤码操作已加载"]
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "codeAndTestCommit": "64498e7001956e3c0a7195ea55e4ecd0a91649a1",
+  "sourceFingerprint": "960a73efe4bd922933d5ab68cdd1597e23512870fa0498c9e5e19aa5de58c059",
+  "localCommand": "pnpm check",
+  "exitCode": 0,
+  "playwrightStats": {
+    "startTime": "2026-11-12T01:48:02.356Z",
+    "duration": 97239.299,
+    "expected": 52,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "manualVisualReview": [
+    {
+      "file": "chromium-320-insurance.png",
+      "sha256": "3f058f153bb9a91d29403b3ef39160d278768b8539e4e7937d3eb7ed4ba0cd3a"
+    },
+    {
+      "file": "webkit-390-insurance.png",
+      "sha256": "0aacf6df888df595f14eab730baeba8693cf6ae67a1d368d9fd1ba727c38e152"
+    },
+    {
+      "file": "chromium-390-insurance-empty.png",
+      "sha256": "ba9ba6a332e4ac93e6f62de807cfb1341a48eda06b922e810fae27d6337781b2"
+    },
+    {
+      "file": "chromium-390-insurance-error.png",
+      "sha256": "6d4b65e40e338d4b3d62c29c8efbd9f068b432a07b89eb7bb7800a1e2c7d9139"
+    },
+    {
+      "file": "chromium-390-insurance-forbidden.png",
+      "sha256": "c79a45c095a69da53f0fa726b7f28a40e2a84db8f736cb4616e799c352ab523f"
+    },
+    {
+      "file": "webkit-390-insurance-loading.png",
+      "sha256": "4027a3e05250fd342cb62b2adad05d47918fcf70b7ca48cc6362176d3e773d6e"
+    }
+  ],
+  "reviewScope": "Selected desktop screenshots only; no claim of reviewing every screenshot or real devices",
+  "ci": "Verified independently after push; see PR checks and delivery message"
+}
