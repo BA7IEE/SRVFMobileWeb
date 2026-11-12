@@ -109,6 +109,7 @@ describe('输入、日期与返回目标', () => {
     expect(fileError(new File(['a'], 'x.pdf', { type: 'application/pdf' }))).toBe('');
   });
   it('不能重复场次或跨场次岗位', () => {
+    const qualification = { result: 'pass' as const, unmetRules: [] };
     const sessions = [
       {
         id: 'session-a',
@@ -116,7 +117,8 @@ describe('输入、日期与返回目标', () => {
         startAt: '',
         endAt: '',
         locationRequired: false,
-        positions: [{ id: 'position-a', name: '' }],
+        qualification,
+        positions: [{ id: 'position-a', name: '', qualification }],
       },
     ];
     expect(

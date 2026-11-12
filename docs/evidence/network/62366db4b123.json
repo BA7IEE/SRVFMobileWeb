@@ -1,0 +1,95 @@
+{
+  "test": "R4 保险加载、空记录、服务错误、权限拒绝分别留证",
+  "browser": "158.0.8127.18",
+  "requests": [
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BA0bR8qp.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-Cijl-ktS.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CFMZMHOb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Cq07JDkX.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-m9rFDhHS.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DOsTWpIk.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BzyzcBBi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DdEAUThY.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-xwkt6yHE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BaTAeXRw.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsurancePage-D8AQ23DI.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/resource-BYz7sKT1.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-B9pc3136.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-Da9bh3dO.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-BXucfRA_.js",
+      "type": "script"
+    }
+  ],
+  "forbidden": [],
+  "cspViolations": [],
+  "pageErrors": [],
+  "apiRequests": 0,
+  "serviceWorkers": 0
+}

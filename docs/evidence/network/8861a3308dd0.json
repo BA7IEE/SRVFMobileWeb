@@ -1,0 +1,155 @@
+{
+  "test": "R2 启动身份读取首次失败，点击重新确认身份后恢复业务页",
+  "browser": "158.0.8127.18",
+  "requests": [
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BA0bR8qp.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-Cijl-ktS.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CFMZMHOb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-Cq07JDkX.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-m9rFDhHS.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DOsTWpIk.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BzyzcBBi.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DdEAUThY.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-xwkt6yHE.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/LoginPage-CPVJDGcm.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BaTAeXRw.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-Co_7Y1dH.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-B9pc3136.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-Da9bh3dO.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/",
+      "type": "document"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-BA0bR8qp.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DV56H3jc.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/mock-Cijl-ktS.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/fixtures-CYWfthBs.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-CFMZMHOb.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/SystemPage-CBYN_wo5.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DdEAUThY.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-BaTAeXRw.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DOsTWpIk.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/_plugin-vue_export-helper-DlAUqK2U.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ScenarioPanel-CEMYDbIW.css",
+      "type": "stylesheet"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/ActivitiesPage-Co_7Y1dH.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/PageState.vue_vue_type_script_setup_true_lang-B9pc3136.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/StatusBadge.vue_vue_type_script_setup_true_lang-Da9bh3dO.js",
+      "type": "script"
+    },
+    {
+      "path": "http://127.0.0.1:4173/assets/index-DUYDux6o.js",
+      "type": "script"
+    }
+  ],
+  "forbidden": [],
+  "cspViolations": [],
+  "pageErrors": [],
+  "apiRequests": 0,
+  "serviceWorkers": 0
+}

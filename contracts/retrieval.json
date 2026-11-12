@@ -228,5 +228,10 @@
     "sourcePath": "src/modules/attendances/dto/app/app-participation-ledger-totals.dto.ts",
     "sourceBlob": "a45542458edeeee0c2b6041e7d36933ccc41deff",
     "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/attendances/dto/app/app-participation-ledger-totals.dto.ts"
+  },
+  {
+    "sourcePath": "src/modules/activities/dto/app/app-activity-qualification.dto.ts",
+    "sourceBlob": "cdd081290350fc4be3c6352c8f0d96f78e9ee362",
+    "url": "https://github.com/BA7IEE/srvf-nest-api/blob/fcf4e5d5802c42a1503b205751f737e3badd6ffc/src/modules/activities/dto/app/app-activity-qualification.dto.ts"
   }
 ]

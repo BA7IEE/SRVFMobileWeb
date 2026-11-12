@@ -4,6 +4,8 @@
 
 场景面板可切换条件、身份和时钟；定义涉及的返回、输入、权限或查询动作需在页面执行，选择一个ID不代表该场景已经通过。设备成功与拒绝使用本地替身；真机、微信和真实API始终 NOT_RUN。
 
+审查整改增加 6 个定向测试控制，不改变上述 65 条基础验收定义：`AUTH-RESTORE-ONCE`（已有会话刷新后的首次身份读取失败）；`INS-LAYOUT`（两条统保、三条自购、128 字符保单号）；`INS-SLOW`（延迟两秒）；`INS-EMPTY`；`INS-ERROR`；`INS-FORBIDDEN`。对应 `e2e/review-regressions.spec.ts`、`e2e/layout.spec.ts`。会话组合的正式回归另见 `contract/auth-overlap.test.ts` 与 `unit/auth-restore-retry.test.ts`，不把场景面板数量当成测试数量。
+
 | ID          | 场景                         | 必须观察到                                        | 自动化承载                                                                                             |
 | ----------- | ---------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | AUTH-01     | 深链接未登录                 | 登录后回到允许的原活动                            | unit/auth.test.ts + contract/wire.test.ts + e2e/flows.spec.ts + e2e/safety.spec.ts                     |

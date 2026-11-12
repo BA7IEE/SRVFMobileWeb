@@ -1,0 +1,119 @@
+EXPECTED FAILURE before fixes; baseline fad130f8; newly added real Vitest tests.
+
+ RUN  v3.2.7 <repository>
+
+ ❯ tests/contract/auth-overlap.test.ts (3 tests | 3 failed) 7ms
+   × R1：没有先退出的重叠登录 > 旧续期success晚到，不能占用或清除新会话的续期 4ms
+     → expected Promise{…} not to be Promise{…} // Object.is equality
+   × R1：没有先退出的重叠登录 > 旧续期failure晚到，不能占用或清除新会话的续期 0ms
+     → expected Promise{…} not to be Promise{…} // Object.is equality
+   × R1：没有先退出的重叠登录 > 新登录失败后不能复用旧续期或恢复旧凭证 2ms
+     → expected Error: 身份已切换 { kind: 'cancelled' } to have property "kind" with value 'unauthenticated'
+ ❯ tests/unit/auth-restore-retry.test.ts (6 tests | 6 failed) 1511ms
+   × R2：启动失败后的真正重试 > getCurrentMember暂时失败后显式重试重新恢复 70ms
+     → expected "restoreSession" to be called 2 times, but got 1 times
+   × R2：启动失败后的真正重试 > getCapabilities暂时失败后显式重试重新恢复 96ms
+     → expected "restoreSession" to be called 2 times, but got 1 times
+   × R2：启动失败后的真正重试 > 五个无session的重试共享一次恢复，成功后不重复初始化 66ms
+     → expected "restoreSession" to be called 2 times, but got 1 times
+   × R2：启动失败后的真正重试 > 重试后unbound仍必须经过成员准入 73ms
+     → expected 'unavailable' to be 'blocked' // Object.is equality
+   × R2：启动失败后的真正重试 > 重试后inactive仍必须经过成员准入 67ms
+     → expected 'unavailable' to be 'blocked' // Object.is equality
+   × R2：启动失败后的真正重试 > 重试读身份期间退出，晚到结果不能再读能力或恢复旧账号 1138ms
+     → expected undefined to be type of 'function'
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 9 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/contract/auth-overlap.test.ts > R1：没有先退出的重叠登录 > 旧续期success晚到，不能占用或清除新会话的续期
+ FAIL  tests/contract/auth-overlap.test.ts > R1：没有先退出的重叠登录 > 旧续期failure晚到，不能占用或清除新会话的续期
+AssertionError: expected Promise{…} not to be Promise{…} // Object.is equality
+ ❯ tests/contract/auth-overlap.test.ts:30:22
+     28|     newReply.resolve(ok(token('B_NEXT')));
+     29|     const results=await Promise.allSettled([next,waiting,afterOldSettl…
+     30|     expect(next).not.toBe(old);
+       |                      ^
+     31|     expect(waiting).toBe(next);
+     32|     expect(afterOldSettles).toBe(next);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/9]⎯
+
+ FAIL  tests/contract/auth-overlap.test.ts > R1：没有先退出的重叠登录 > 新登录失败后不能复用旧续期或恢复旧凭证
+AssertionError: expected Error: 身份已切换 { kind: 'cancelled' } to have property "kind" with value 'unauthenticated'
+
+Expected: "unauthenticated"
+Received: "cancelled"
+
+ ❯ tests/contract/auth-overlap.test.ts:47:30
+     45|     oldReply.resolve(ok(token('A_LATE')));
+     46|     expect(await oldResult).toHaveProperty('kind','cancelled');
+     47|     expect(await nextResult).toHaveProperty('kind','unauthenticated');
+       |                              ^
+     48|     expect(next).not.toBe(old);
+     49|     expect(store.read()).toBeUndefined();
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/9]⎯
+
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > getCurrentMember暂时失败后显式重试重新恢复
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > getCapabilities暂时失败后显式重试重新恢复
+AssertionError: expected "restoreSession" to be called 2 times, but got 1 times
+ ❯ tests/unit/auth-restore-retry.test.ts:18:21
+     16|     await auth.restoreSession();expect(auth.state).toBe('unavailable')…
+     17|     await auth.revalidate();
+     18|     expect(restore).toHaveBeenCalledTimes(2);expect(auth.ready).toBe(t…
+       |                     ^
+     19|   });
+     20|   it('五个无session的重试共享一次恢复，成功后不重复初始化',async()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/9]⎯
+
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > 五个无session的重试共享一次恢复，成功后不重复初始化
+AssertionError: expected "restoreSession" to be called 2 times, but got 1 times
+ ❯ tests/unit/auth-restore-retry.test.ts:24:21
+     22|     vi.spyOn(ports.auth,'getCurrentMember').mockRejectedValueOnce(fail…
+     23|     await auth.restoreSession();await Promise.all(Array.from({length:5…
+     24|     expect(restore).toHaveBeenCalledTimes(2);expect(auth.ready).toBe(t…
+       |                     ^
+     25|     await auth.restoreSession();expect(restore).toHaveBeenCalledTimes(…
+     26|   });
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/9]⎯
+
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > 重试后unbound仍必须经过成员准入
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > 重试后inactive仍必须经过成员准入
+AssertionError: expected 'unavailable' to be 'blocked' // Object.is equality
+
+Expected: "blocked"
+Received: "unavailable"
+
+ ❯ tests/unit/auth-restore-retry.test.ts:32:24
+     30|     vi.spyOn(ports.auth,'getCurrentMember').mockRejectedValueOnce(fail…
+     31|     await auth.restoreSession();await auth.revalidate();
+     32|     expect(auth.state).toBe('blocked');expect(auth.ready).toBe(false);…
+       |                        ^
+     33|   });
+     34|   it('重试读身份期间退出，晚到结果不能再读能力或恢复旧账号',async()=>{
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/9]⎯
+
+ FAIL  tests/unit/auth-restore-retry.test.ts > R2：启动失败后的真正重试 > 重试读身份期间退出，晚到结果不能再读能力或恢复旧账号
+AssertionError: expected undefined to be type of 'function'
+
+Expected: "function"
+Received: "undefined"
+
+ ❯ tests/unit/auth-restore-retry.test.ts:40:42
+     38|     vi.spyOn(ports.auth,'getCurrentMember').mockRejectedValueOnce(fail…
+     39|     await auth.restoreSession();const retry=auth.revalidate();
+     40|     await vi.waitFor(()=>expect(release).toBeTypeOf('function'));
+       |                                          ^
+     41|     await auth.logout();release(current);await retry;
+     42|     expect(auth.state).toBe('anonymous');expect(auth.member).toBeUndef…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/9]⎯
+
+
+ Test Files  2 failed (2)
+      Tests  9 failed (9)
+   Start at  09:28:24
+   Duration  2.20s (transform 114ms, setup 20ms, collect 168ms, tests 1.52s, environment 629ms, prepare 91ms)

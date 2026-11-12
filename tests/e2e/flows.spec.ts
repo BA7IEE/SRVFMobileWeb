@@ -152,6 +152,7 @@ test('10 换账号与后退，旧保单、草稿、二维码不复现', async ({
 });
 test('11 普通产物未接线，URL与存储不能强开mock', async ({ page }) => {
   await page.goto('http://127.0.0.1:4174/?mock=1#/login');
+  await expect(page.getByRole('heading', { name: '服务尚未接通' })).toBeVisible();
   await page.evaluate(() => localStorage.setItem('VITE_DATA_SOURCE', 'mock'));
   await page.reload();
   await expect(page.getByRole('heading', { name: '服务尚未接通' })).toBeVisible();

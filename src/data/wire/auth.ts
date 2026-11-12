@@ -103,6 +103,7 @@ export class WireAuthCoordinator {
     if (errors.account || errors.password)
       throw fail('validation', errors.account || errors.password);
     const epoch = ++this.epoch;
+    this.flight = undefined;
     this.store.clear();
     const r = await this.transport.send({
       method: 'POST',
@@ -146,7 +147,7 @@ export class WireAuthCoordinator {
     const current = this.store.read();
     if (!current) return Promise.reject(fail('unauthenticated', '请重新认证'));
     const epoch = this.epoch;
-    this.flight = (async () => {
+    const pending = (async () => {
       try {
         const r = await this.transport.send(
           {
@@ -165,17 +166,20 @@ export class WireAuthCoordinator {
         if (epoch !== this.epoch) throw fail('cancelled', '身份已切换');
         this.store.replace(next);
       } catch (e) {
+        if (epoch !== this.epoch) throw fail('cancelled', '身份已切换');
         if (e instanceof DeliveryError && e.delivery === 'not-sent')
           throw fail('network', '续期明确未发出，可稍后重新确认');
         if (epoch === this.epoch) this.store.clear();
         if (e instanceof DeliveryError)
           throw fail('result-unknown', '续期可能已完成，请重新认证，不再自动使用旧凭证');
         throw e;
-      } finally {
-        if (epoch === this.epoch) this.flight = undefined;
       }
     })();
-    return this.flight;
+    const task = pending.finally(() => {
+      if (this.flight === task) this.flight = undefined;
+    });
+    this.flight = task;
+    return task;
   }
   async logout() {
     const prior = this.store.read();

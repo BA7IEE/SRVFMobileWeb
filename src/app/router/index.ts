@@ -119,7 +119,7 @@ router.beforeEach(async (to) => {
   if (!__MOCK__ && to.path !== '/system/not-configured' && to.path !== '/privacy')
     return '/system/not-configured';
   const auth = useAuth();
-  await auth.restoreSession();
+  if (auth.state !== 'unavailable') await auth.restoreSession();
   if (to.name === 'login' && auth.ready) return safeTarget(to.query.returnTo);
   if (to.meta.public) return true;
   if (auth.state === 'unavailable') return '/system/unavailable';

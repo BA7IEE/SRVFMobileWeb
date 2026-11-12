@@ -1,0 +1,98 @@
+[
+  {
+    "file": "chromium-320-insurance-loading.png",
+    "state": "loading",
+    "width": 320,
+    "checks": ["保险异步读取尚未完成"]
+  },
+  {
+    "file": "chromium-320-insurance-empty.png",
+    "state": "empty",
+    "width": 320,
+    "checks": ["两类记录均为空", "读取完成"]
+  },
+  {
+    "file": "chromium-320-insurance-error.png",
+    "state": "error",
+    "width": 320,
+    "checks": ["显示服务错误", "旧资料已清除"]
+  },
+  {
+    "file": "chromium-320-insurance-forbidden.png",
+    "state": "forbidden",
+    "width": 320,
+    "checks": ["显示权限拒绝", "未当作空记录或已授权"]
+  },
+  {
+    "file": "chromium-375-insurance-loading.png",
+    "state": "loading",
+    "width": 375,
+    "checks": ["保险异步读取尚未完成"]
+  },
+  {
+    "file": "chromium-375-insurance-empty.png",
+    "state": "empty",
+    "width": 375,
+    "checks": ["两类记录均为空", "读取完成"]
+  },
+  {
+    "file": "chromium-375-insurance-error.png",
+    "state": "error",
+    "width": 375,
+    "checks": ["显示服务错误", "旧资料已清除"]
+  },
+  {
+    "file": "chromium-375-insurance-forbidden.png",
+    "state": "forbidden",
+    "width": 375,
+    "checks": ["显示权限拒绝", "未当作空记录或已授权"]
+  },
+  {
+    "file": "chromium-390-insurance-loading.png",
+    "state": "loading",
+    "width": 390,
+    "checks": ["保险异步读取尚未完成"]
+  },
+  {
+    "file": "chromium-390-insurance-empty.png",
+    "state": "empty",
+    "width": 390,
+    "checks": ["两类记录均为空", "读取完成"]
+  },
+  {
+    "file": "chromium-390-insurance-error.png",
+    "state": "error",
+    "width": 390,
+    "checks": ["显示服务错误", "旧资料已清除"]
+  },
+  {
+    "file": "chromium-390-insurance-forbidden.png",
+    "state": "forbidden",
+    "width": 390,
+    "checks": ["显示权限拒绝", "未当作空记录或已授权"]
+  },
+  {
+    "file": "chromium-430-insurance-loading.png",
+    "state": "loading",
+    "width": 430,
+    "checks": ["保险异步读取尚未完成"]
+  },
+  {
+    "file": "chromium-430-insurance-empty.png",
+    "state": "empty",
+    "width": 430,
+    "checks": ["两类记录均为空", "读取完成"]
+  },
+  {
+    "file": "chromium-430-insurance-error.png",
+    "state": "error",
+    "width": 430,
+    "checks": ["显示服务错误", "旧资料已清除"]
+  },
+  {
+    "file": "chromium-430-insurance-forbidden.png",
+    "state": "forbidden",
+    "width": 430,
+    "checks": ["显示权限拒绝", "未当作空记录或已授权"]
+  }
+]

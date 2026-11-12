@@ -7,6 +7,7 @@ import { useAuth } from '../../auth/store';
 import { useResource } from '../../../shared/composables/resource';
 import type { Preferences, RegistrationResult as Result } from '../../../data/models';
 import { questionError, preferenceError } from '../../../shared/validation';
+import { qualificationAllowsSelection, qualificationMessage } from '../../../shared/qualification';
 import { appError } from '../../../shared/errors';
 import { getDraft, saveDraft, clearDraft } from '../drafts';
 import PageState from '../../../shared/components/PageState.vue';
@@ -47,6 +48,7 @@ onMounted(() => void load());
 const canSubmit = computed(
   () =>
     data.value?.activity.registration.state === 'allowed' &&
+    qualificationAllowsSelection(data.value?.form.qualification) &&
     data.value.insurance.status === 'eligible' &&
     !unknown.value &&
     !busy.value,
@@ -197,6 +199,9 @@ onUnmounted(() => window.removeEventListener('beforeunload', beforeUnload));
           </p>
           <van-form class="panel" :show-error-message="false" @submit="submit"
             ><h2>选择场次与岗位</h2>
+            <p v-if="data.form.qualification?.result !== 'pass'" class="notice">
+              {{ qualificationMessage(data.form.qualification) }}
+            </p>
             <session-position-selector
               v-model="preferences"
               :sessions="data.form.sessions"

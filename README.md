@@ -30,6 +30,7 @@ Node 22.22.3、pnpm 10.14.0 为本次实测环境。精确依赖见 package.json
 
 说明与证据：
 
+- [fad130f8 审查整改与新增证据](docs/review-remediation.md)
 - [执行报告](docs/execution-report.md)、[整体 review](docs/review.md)、[人工验收脚本](docs/acceptance.md)
 - [路由清单](docs/route-map.md)、[65 个场景与测试映射](docs/scenario-catalog.md)、[验证规则](docs/validation-rules.md)
 - [接口缺口与后端交接](docs/api-gap-register.md)、[接线准备](docs/integration-readiness.md)、[凭证 ADR](docs/adr-001-credentials.md)

@@ -22,7 +22,8 @@ import {
 import { fail } from '../../shared/errors';
 import { fileError, insuranceErrors, safeField, validDate } from '../../shared/validation';
 import type { InsuranceInput, PunchIntent, SelfInsurance } from '../models';
-import { createKnownReads, ledgerTotals, readForm } from './reads';
+import { createKnownReads, ledgerTotals } from './reads';
+import { activityDetail } from './activity';
 
 export function insuranceBody(input: InsuranceInput, version?: number) {
   const errors = insuranceErrors(input);
@@ -245,24 +246,7 @@ export function createWire(
     async getActivity(id: string) {
       const o = object(await json({ method: 'GET', path: base(id), retry: 'safe-read' }));
       directoryItem(o);
-      return {
-        id: text(o.id),
-        title: text(o.title),
-        description: nullableText(o.description),
-        requiresInsurance: bool(o.requiresInsurance),
-        registrationForm: readForm(o.registrationForm),
-        phase: enumValue(o.phase, ['upcoming', 'ongoing', 'ended']),
-        formVersion: o.formVersion === null ? null : integer(o.formVersion, 1),
-        sessions: array(o.sessions).map((x) => {
-          const s = object(x);
-          return {
-            id: text(s.id),
-            name: text(s.name),
-            startAt: iso(s.startAt),
-            endAt: iso(s.endAt),
-          };
-        }),
-      };
+      return activityDetail(o);
     },
     async listInsurances(pageNumber = 1) {
       return page(
