@@ -1,11 +1,11 @@
 {
-  "codeAndTestCommit": "b0b66599ccf63acc2c02ec6114d6837a87f1fc46",
+  "codeAndTestCommit": "b758bf98012cac05c31539e55b1c5291f4940215",
   "sourceFingerprint": "f63f7ae61ce64b918068becac9e1c3d477a7a251402df37bd39524bc5d0f44de",
   "localCommand": "pnpm check",
   "exitCode": 0,
   "playwrightStats": {
-    "startTime": "2026-11-12T05:41:10.865Z",
-    "duration": 97670.556,
+    "startTime": "2026-11-12T05:53:59.170Z",
+    "duration": 96042.159,
     "expected": 52,
     "skipped": 0,
     "unexpected": 0,
@@ -50,5 +50,14 @@
     "after": {
       "passed": 13
     }
+  },
+  "ciTestTimingFix": {
+    "failedPushRun": 43163476196,
+    "artifact": 13918683597,
+    "artifactSha256": "5dd9bcb390922ee5347959cd2e35baa475d4180bab6b040a7fee7ed27cb59dae",
+    "testCommit": "b758bf98012cac05c31539e55b1c5291f4940215",
+    "change": "Wait for initial unconfigured page before storage injection and reload; keep all assertions",
+    "independentRepeats": 10,
+    "automaticRetries": 0
   }
 }

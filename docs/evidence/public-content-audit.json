@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "scope": "current branch candidate files, review diff, synthetic fixtures/screenshots and fixed public source slices",
-  "codeAndTestCommit": "b0b66599ccf63acc2c02ec6114d6837a87f1fc46",
+  "codeAndTestCommit": "b758bf98012cac05c31539e55b1c5291f4940215",
   "candidateFiles": 306,
   "secretPatternHits": 0,
   "excludedLocalArtifactsIncluded": 0,
