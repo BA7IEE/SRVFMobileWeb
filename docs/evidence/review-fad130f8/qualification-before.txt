@@ -1,0 +1,55 @@
+EXPECTED FAILURE before qualification closure; baseline 11fbce7.
+
+ RUN  v3.2.7 <repository>
+
+ ❯ tests/unit/preference-qualification.test.ts (13 tests | 6 failed) 7ms
+   × 旧草稿的已选场次和岗位资格 > 'session' '资格缺失'时，最终校验要求重新核对 4ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   × 旧草稿的已选场次和岗位资格 > 'position' '资格缺失'时，最终校验要求重新核对 1ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   × 旧草稿的已选场次和岗位资格 > 'session' '资格为空'时，最终校验要求重新核对 0ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   × 旧草稿的已选场次和岗位资格 > 'position' '资格为空'时，最终校验要求重新核对 0ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   ✓ 旧草稿的已选场次和岗位资格 > 'session' '资格未通过'时，最终校验要求重新核对 0ms
+   ✓ 旧草稿的已选场次和岗位资格 > 'position' '资格未通过'时，最终校验要求重新核对 0ms
+   × 旧草稿的已选场次和岗位资格 > 'session' '资格状态未知'时，最终校验要求重新核对 0ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   × 旧草稿的已选场次和岗位资格 > 'position' '资格状态未知'时，最终校验要求重新核对 0ms
+     → expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+   ✓ 旧草稿的已选场次和岗位资格 > 场次'pass'、岗位'pass'仍允许提交 0ms
+   ✓ 旧草稿的已选场次和岗位资格 > 场次'pass'、岗位'warn'仍允许提交 0ms
+   ✓ 旧草稿的已选场次和岗位资格 > 场次'warn'、岗位'pass'仍允许提交 0ms
+   ✓ 旧草稿的已选场次和岗位资格 > 场次'warn'、岗位'warn'仍允许提交 0ms
+   ✓ 旧草稿的已选场次和岗位资格 > 未选场次和未选岗位的未知资格不影响有效志愿 0ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'session' '资格缺失'时，最终校验要求重新核对
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'position' '资格缺失'时，最终校验要求重新核对
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'session' '资格为空'时，最终校验要求重新核对
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'position' '资格为空'时，最终校验要求重新核对
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'session' '资格状态未知'时，最终校验要求重新核对
+ FAIL  tests/unit/preference-qualification.test.ts > 旧草稿的已选场次和岗位资格 > 'position' '资格状态未知'时，最终校验要求重新核对
+AssertionError: expected '' to be '所选场次或岗位的资格已变化，请重新核对' // Object.is equality
+
+- Expected
++ Received
+
+- 所选场次或岗位的资格已变化，请重新核对
+
+ ❯ tests/unit/preference-qualification.test.ts:34:61
+     32|       const draft = getDraft('qualification-regression');
+     33|       expect(draft.preferences).toEqual(preferences);
+     34|       expect(preferenceError(draft.preferences, [current])).toBe('所选场次…
+       |                                                             ^
+     35|     },
+     36|   );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  6 failed | 7 passed (13)
+   Start at  13:38:55
+   Duration  538ms (transform 43ms, setup 10ms, collect 22ms, tests 7ms, environment 278ms, prepare 59ms)

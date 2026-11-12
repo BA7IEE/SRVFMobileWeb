@@ -1,11 +1,11 @@
 {
-  "codeAndTestCommit": "64498e7001956e3c0a7195ea55e4ecd0a91649a1",
-  "sourceFingerprint": "960a73efe4bd922933d5ab68cdd1597e23512870fa0498c9e5e19aa5de58c059",
+  "codeAndTestCommit": "b0b66599ccf63acc2c02ec6114d6837a87f1fc46",
+  "sourceFingerprint": "f63f7ae61ce64b918068becac9e1c3d477a7a251402df37bd39524bc5d0f44de",
   "localCommand": "pnpm check",
   "exitCode": 0,
   "playwrightStats": {
-    "startTime": "2026-11-12T01:48:02.356Z",
-    "duration": 97239.299,
+    "startTime": "2026-11-12T05:41:10.865Z",
+    "duration": 97670.556,
     "expected": 52,
     "skipped": 0,
     "unexpected": 0,
@@ -38,5 +38,17 @@
     }
   ],
   "reviewScope": "Selected desktop screenshots only; no claim of reviewing every screenshot or real devices",
-  "ci": "Verified independently after push; see PR checks and delivery message"
+  "ci": "Verified independently after push; see PR checks and delivery message",
+  "manualVisualReviewReusedFromCommit": "64498e7001956e3c0a7195ea55e4ecd0a91649a1",
+  "manualVisualReviewScope": "The six previously viewed PNGs are byte-identical after this validation-only change; no new claim of manual visual inspection.",
+  "qualificationRegression": {
+    "baseline": "11fbce7",
+    "before": {
+      "failed": 6,
+      "passed": 7
+    },
+    "after": {
+      "passed": 13
+    }
+  }
 }

@@ -1,5 +1,5 @@
-Local pnpm check; exit 0; code/test/contract commit 64498e7001956e3c0a7195ea55e4ecd0a91649a1
-Source fingerprint 960a73efe4bd922933d5ab68cdd1597e23512870fa0498c9e5e19aa5de58c059
+Local pnpm check; exit 0; code/test/contract commit b0b66599ccf63acc2c02ec6114d6837a87f1fc46
+Source fingerprint f63f7ae61ce64b918068becac9e1c3d477a7a251402df37bd39524bc5d0f44de
 
 > srvf-mobile-web@0.1.0 check <repository>
 > pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit && pnpm test:contract && pnpm check:contract && pnpm check:boundaries && pnpm build && pnpm build:mock && pnpm check:bundle && pnpm check:tokens && pnpm test:e2e
@@ -25,24 +25,25 @@ All matched files use Prettier code style!
 
  RUN  v3.2.7 <repository>
 
- ✓ tests/unit/device.test.ts (3 tests) 4ms
- ✓ tests/unit/validation.test.ts (24 tests) 19ms
- ✓ tests/components/components.test.ts (6 tests) 38ms
- ✓ tests/unit/environment.test.ts (2 tests) 528ms
-   ✓ 构建数据源边界 > 显式api模式立即报错，不建立网络或回退演示  301ms
- ✓ tests/unit/auth-restore-retry.test.ts (6 tests) 954ms
- ✓ tests/unit/auth.test.ts (8 tests) 1368ms
+ ✓ tests/unit/device.test.ts (3 tests) 6ms
+ ✓ tests/unit/preference-qualification.test.ts (13 tests) 4ms
+ ✓ tests/unit/validation.test.ts (24 tests) 23ms
+ ✓ tests/components/components.test.ts (6 tests) 39ms
+ ✓ tests/unit/environment.test.ts (2 tests) 537ms
+   ✓ 构建数据源边界 > 显式api模式立即报错，不建立网络或回退演示  305ms
+ ✓ tests/unit/auth-restore-retry.test.ts (6 tests) 957ms
+ ✓ tests/unit/auth.test.ts (8 tests) 1362ms
    ✓ 会话生命周期 > 过期清理；临时失败不当成已授权  304ms
    ✓ 会话生命周期 > 取消与回执丢失都让所有等待者结束  302ms
- ✓ tests/unit/mock-flows.test.ts (18 tests) 2755ms
-   ✓ 可演练业务链 > 报名后场次签到/最短签退/签退；重复扫描不重复执行  491ms
-   ✓ 可演练业务链 > 表单升级拒绝旧版，回执丢失从原结果查证并刷新恢复  324ms
-   ✓ 可演练业务链 > 二维码动作、场次与版本不混用；撤销失效  355ms
+ ✓ tests/unit/mock-flows.test.ts (18 tests) 2753ms
+   ✓ 可演练业务链 > 报名后场次签到/最短签退/签退；重复扫描不重复执行  486ms
+   ✓ 可演练业务链 > 表单升级拒绝旧版，回执丢失从原结果查证并刷新恢复  321ms
+   ✓ 可演练业务链 > 二维码动作、场次与版本不混用；撤销失效  353ms
 
- Test Files  7 passed (7)
-      Tests  67 passed (67)
-   Start at  09:47:49
-   Duration  3.45s (transform 462ms, setup 67ms, collect 986ms, tests 5.67s, environment 2.35s, prepare 465ms)
+ Test Files  8 passed (8)
+      Tests  80 passed (80)
+   Start at  13:40:57
+   Duration  3.52s (transform 580ms, setup 99ms, collect 1.23s, tests 5.68s, environment 2.93s, prepare 600ms)
 
 
 > srvf-mobile-web@0.1.0 test:contract <repository>
@@ -53,13 +54,13 @@ All matched files use Prettier code style!
 
  ✓ tests/contract/auth-overlap.test.ts (3 tests) 4ms
  ✓ tests/contract/reads.test.ts (10 tests) 7ms
- ✓ tests/contract/wire.test.ts (35 tests) 20ms
+ ✓ tests/contract/wire.test.ts (35 tests) 19ms
  ✓ tests/contract/activity-form-bridge.test.ts (2 tests) 40ms
 
  Test Files  4 passed (4)
       Tests  50 passed (50)
-   Start at  09:47:53
-   Duration  630ms (transform 256ms, setup 22ms, collect 395ms, tests 71ms, environment 709ms, prepare 181ms)
+   Start at  13:41:01
+   Duration  635ms (transform 255ms, setup 33ms, collect 402ms, tests 70ms, environment 744ms, prepare 166ms)
 
 
 > srvf-mobile-web@0.1.0 check:contract <repository>
@@ -86,39 +87,39 @@ dist/assets/AccountPage-BgAO77Vf.css                                            
 dist/assets/index-DV56H3jc.css                                                        208.03 kB │ gzip: 55.44 kB
 dist/assets/_plugin-vue_export-helper-DlAUqK2U.js                                       0.09 kB │ gzip:  0.10 kB
 dist/assets/_commonjsHelpers-CqkleIqs.js                                                0.12 kB │ gzip:  0.13 kB
-dist/assets/StatusBadge.vue_vue_type_script_setup_true_lang-BchdfnUs.js                 0.26 kB │ gzip:  0.22 kB
+dist/assets/StatusBadge.vue_vue_type_script_setup_true_lang-Df6y-Mry.js                 0.26 kB │ gzip:  0.22 kB
 dist/assets/index-DUYDux6o.js                                                           0.32 kB │ gzip:  0.27 kB
-dist/assets/resource-CJKWGHfX.js                                                        0.51 kB │ gzip:  0.33 kB
-dist/assets/unconfigured-BqElyCZM.js                                                    0.81 kB │ gzip:  0.50 kB
-dist/assets/PrivacyPage-C5bqPXST.js                                                     0.99 kB │ gzip:  0.78 kB
-dist/assets/PageState.vue_vue_type_script_setup_true_lang-BpgucBu5.js                   1.11 kB │ gzip:  0.71 kB
-dist/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-DAyCjI_S.js    1.27 kB │ gzip:  0.86 kB
-dist/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-o7iLXdYT.js          1.28 kB │ gzip:  0.82 kB
-dist/assets/scanner-tkmNzpC8.js                                                         1.44 kB │ gzip:  0.88 kB
-dist/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-C5mjYEJJ.js             1.49 kB │ gzip:  0.91 kB
-dist/assets/ManagedActivitiesPage-DUQX6CJ6.js                                           1.61 kB │ gzip:  0.93 kB
-dist/assets/index-BZAGvnEs.js                                                           1.84 kB │ gzip:  0.95 kB
-dist/assets/MyActivitiesPage-CuiiumEk.js                                                1.93 kB │ gzip:  1.13 kB
-dist/assets/SystemPage-xAF-c2ll.js                                                      1.96 kB │ gzip:  1.19 kB
-dist/assets/index-BccDfMVA.js                                                           2.34 kB │ gzip:  1.11 kB
-dist/assets/ParticipationPage-D7x-s3Pc.js                                               2.70 kB │ gzip:  1.47 kB
-dist/assets/index-C3ubY8vq.js                                                           3.09 kB │ gzip:  1.66 kB
-dist/assets/ManagedRegistrationsPage-B8f_FpL8.js                                        3.34 kB │ gzip:  1.83 kB
-dist/assets/ActivitiesPage-97zXKCDf.js                                                  3.76 kB │ gzip:  2.04 kB
-dist/assets/AccountPage-DLwGlYs6.js                                                     3.96 kB │ gzip:  2.06 kB
-dist/assets/ScannerPanel.vue_vue_type_script_setup_true_lang-DBSOa8CW.js                4.19 kB │ gzip:  2.24 kB
-dist/assets/ActivityDetailPage-bxgJxh7x.js                                              4.21 kB │ gzip:  2.02 kB
-dist/assets/PeoplePage-BOwpeL8I.js                                                      4.76 kB │ gzip:  2.30 kB
-dist/assets/OnsitePage-CK7hAo2y.js                                                      4.99 kB │ gzip:  2.39 kB
-dist/assets/AttendancePage-BhT1f_S7.js                                                  6.14 kB │ gzip:  2.97 kB
-dist/assets/InsurancePage-CjkRKzaX.js                                                   7.36 kB │ gzip:  3.32 kB
-dist/assets/index-BKI9cduH.js                                                          10.69 kB │ gzip:  4.23 kB
-dist/assets/LoginPage-Bd3auLDY.js                                                      13.59 kB │ gzip:  5.83 kB
-dist/assets/RegisterPage-DhWQ3jA5.js                                                   14.89 kB │ gzip:  5.95 kB
+dist/assets/resource-DvnpW5Cn.js                                                        0.51 kB │ gzip:  0.32 kB
+dist/assets/unconfigured-vs6XGN3w.js                                                    0.81 kB │ gzip:  0.49 kB
+dist/assets/PrivacyPage-DF6y4g3l.js                                                     0.99 kB │ gzip:  0.77 kB
+dist/assets/PageState.vue_vue_type_script_setup_true_lang-BesTOJRn.js                   1.11 kB │ gzip:  0.71 kB
+dist/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-BVzS7EYb.js    1.27 kB │ gzip:  0.86 kB
+dist/assets/RegistrationResult.vue_vue_type_script_setup_true_lang--lhxWPOL.js          1.28 kB │ gzip:  0.82 kB
+dist/assets/scanner-DlIsCCDf.js                                                         1.44 kB │ gzip:  0.88 kB
+dist/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-Ds_Wib2G.js             1.49 kB │ gzip:  0.92 kB
+dist/assets/ManagedActivitiesPage-BUNHRqYs.js                                           1.61 kB │ gzip:  0.93 kB
+dist/assets/index-DHN5nhuv.js                                                           1.84 kB │ gzip:  0.95 kB
+dist/assets/MyActivitiesPage-Bn0ouYLO.js                                                1.93 kB │ gzip:  1.13 kB
+dist/assets/SystemPage-B-2gJpJ0.js                                                      1.96 kB │ gzip:  1.19 kB
+dist/assets/index-b8FgBMmW.js                                                           2.34 kB │ gzip:  1.11 kB
+dist/assets/ParticipationPage-C88R5kPg.js                                               2.70 kB │ gzip:  1.48 kB
+dist/assets/ManagedRegistrationsPage-CtVbXIjb.js                                        3.34 kB │ gzip:  1.83 kB
+dist/assets/index-BH0Ljdp0.js                                                           3.38 kB │ gzip:  1.79 kB
+dist/assets/ActivitiesPage-BoEYIrS0.js                                                  3.76 kB │ gzip:  2.04 kB
+dist/assets/AccountPage-BFiZIAJT.js                                                     3.96 kB │ gzip:  2.06 kB
+dist/assets/ScannerPanel.vue_vue_type_script_setup_true_lang-BCIst9Yo.js                4.19 kB │ gzip:  2.24 kB
+dist/assets/ActivityDetailPage-CBGwuvJ9.js                                              4.21 kB │ gzip:  2.02 kB
+dist/assets/PeoplePage-kLbbYZHk.js                                                      4.76 kB │ gzip:  2.30 kB
+dist/assets/OnsitePage-CfjWdHaR.js                                                      4.99 kB │ gzip:  2.39 kB
+dist/assets/AttendancePage-BJzLoYuJ.js                                                  6.14 kB │ gzip:  2.97 kB
+dist/assets/InsurancePage-DJ-ydEiW.js                                                   7.36 kB │ gzip:  3.32 kB
+dist/assets/index-Ck4Pah8y.js                                                          10.69 kB │ gzip:  4.23 kB
+dist/assets/LoginPage-CfLM1EnJ.js                                                      13.59 kB │ gzip:  5.83 kB
+dist/assets/RegisterPage-CgwZLjet.js                                                   14.60 kB │ gzip:  5.81 kB
 dist/assets/browser-CujOq0-h.js                                                        25.79 kB │ gzip: 10.14 kB
 dist/assets/jsQR-DTXHP3BW.js                                                          130.73 kB │ gzip: 47.47 kB
-dist/assets/index-BX4oglHk.js                                                         136.94 kB │ gzip: 53.52 kB
-✓ built in 1.07s
+dist/assets/index-Dl2S-P-O.js                                                         136.94 kB │ gzip: 53.51 kB
+✓ built in 1.09s
 
 > srvf-mobile-web@0.1.0 build:mock <repository>
 > node scripts/build.mjs mock
@@ -135,45 +136,45 @@ dist-mock/assets/AccountPage-BgAO77Vf.css                                       
 dist-mock/assets/index-DV56H3jc.css                                                        208.03 kB │ gzip: 55.44 kB
 dist-mock/assets/_plugin-vue_export-helper-DlAUqK2U.js                                       0.09 kB │ gzip:  0.10 kB
 dist-mock/assets/_commonjsHelpers-CqkleIqs.js                                                0.12 kB │ gzip:  0.13 kB
-dist-mock/assets/StatusBadge.vue_vue_type_script_setup_true_lang-DsAf237-.js                 0.26 kB │ gzip:  0.22 kB
+dist-mock/assets/StatusBadge.vue_vue_type_script_setup_true_lang-Da9bh3dO.js                 0.26 kB │ gzip:  0.22 kB
 dist-mock/assets/index-DUYDux6o.js                                                           0.32 kB │ gzip:  0.27 kB
-dist-mock/assets/resource-zHqemjVE.js                                                        0.51 kB │ gzip:  0.32 kB
-dist-mock/assets/PrivacyPage-C4uKAFHA.js                                                     0.99 kB │ gzip:  0.77 kB
-dist-mock/assets/PageState.vue_vue_type_script_setup_true_lang-BhCLjoec.js                   1.11 kB │ gzip:  0.70 kB
-dist-mock/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-C2SqXKPi.js    1.27 kB │ gzip:  0.86 kB
-dist-mock/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-DMpQ5Uvb.js          1.28 kB │ gzip:  0.81 kB
-dist-mock/assets/scanner-EQa0UFxu.js                                                         1.44 kB │ gzip:  0.88 kB
-dist-mock/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DkcQZQhM.js             1.49 kB │ gzip:  0.91 kB
-dist-mock/assets/ManagedActivitiesPage-CdVPVgJN.js                                           1.60 kB │ gzip:  0.92 kB
-dist-mock/assets/index-BUV0-mFR.js                                                           1.84 kB │ gzip:  0.95 kB
-dist-mock/assets/MyActivitiesPage-DIwbWKCL.js                                                1.93 kB │ gzip:  1.13 kB
-dist-mock/assets/SystemPage-Dl26eGJv.js                                                      1.95 kB │ gzip:  1.19 kB
-dist-mock/assets/index-CMMqJSD3.js                                                           2.34 kB │ gzip:  1.11 kB
-dist-mock/assets/ParticipationPage-CtDcp_D5.js                                               2.69 kB │ gzip:  1.47 kB
-dist-mock/assets/ComponentPreview-09ke35Z1.js                                                2.98 kB │ gzip:  1.44 kB
-dist-mock/assets/index-C3ubY8vq.js                                                           3.09 kB │ gzip:  1.66 kB
-dist-mock/assets/ManagedRegistrationsPage-DYlxzLCn.js                                        3.36 kB │ gzip:  1.84 kB
-dist-mock/assets/ScenarioPanel-BPjreKc_.js                                                   3.50 kB │ gzip:  1.79 kB
-dist-mock/assets/LoginPage-Vp8CGeUU.js                                                       3.64 kB │ gzip:  1.93 kB
-dist-mock/assets/ActivitiesPage-DNQB09_h.js                                                  3.76 kB │ gzip:  2.04 kB
-dist-mock/assets/AccountPage-KvN6x7wm.js                                                     3.98 kB │ gzip:  2.07 kB
-dist-mock/assets/ScannerPanel.vue_vue_type_script_setup_true_lang-D_8ImfSN.js                4.19 kB │ gzip:  2.23 kB
-dist-mock/assets/ActivityDetailPage-Ce6n3SLh.js                                              4.24 kB │ gzip:  2.03 kB
-dist-mock/assets/PeoplePage-BYfY1LvD.js                                                      4.82 kB │ gzip:  2.33 kB
-dist-mock/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-BYKlCc_1.js            4.92 kB │ gzip:  2.23 kB
-dist-mock/assets/OnsitePage-Ih9_bqWJ.js                                                      5.02 kB │ gzip:  2.40 kB
-dist-mock/assets/index-D35kBSWA.js                                                           5.38 kB │ gzip:  2.21 kB
-dist-mock/assets/index-Bi0EW2gN.js                                                           5.49 kB │ gzip:  2.44 kB
-dist-mock/assets/AttendancePage-C-bY6Z82.js                                                  6.21 kB │ gzip:  3.00 kB
+dist-mock/assets/resource-BYz7sKT1.js                                                        0.51 kB │ gzip:  0.32 kB
+dist-mock/assets/PrivacyPage-CpW7oG_B.js                                                     0.99 kB │ gzip:  0.77 kB
+dist-mock/assets/PageState.vue_vue_type_script_setup_true_lang-B9pc3136.js                   1.11 kB │ gzip:  0.71 kB
+dist-mock/assets/InsuranceRequirementCard.vue_vue_type_script_setup_true_lang-BXucfRA_.js    1.27 kB │ gzip:  0.86 kB
+dist-mock/assets/RegistrationResult.vue_vue_type_script_setup_true_lang-BZ2jT1HH.js          1.28 kB │ gzip:  0.81 kB
+dist-mock/assets/scanner-C7SevuUH.js                                                         1.44 kB │ gzip:  0.88 kB
+dist-mock/assets/CredentialPopup.vue_vue_type_script_setup_true_lang-DpigrYkt.js             1.49 kB │ gzip:  0.91 kB
+dist-mock/assets/ManagedActivitiesPage-D1T9ErzG.js                                           1.60 kB │ gzip:  0.92 kB
+dist-mock/assets/index-m9rFDhHS.js                                                           1.84 kB │ gzip:  0.95 kB
+dist-mock/assets/MyActivitiesPage-ihLFPbLa.js                                                1.93 kB │ gzip:  1.13 kB
+dist-mock/assets/SystemPage-CBYN_wo5.js                                                      1.95 kB │ gzip:  1.19 kB
+dist-mock/assets/index-DdEAUThY.js                                                           2.34 kB │ gzip:  1.11 kB
+dist-mock/assets/ParticipationPage-EC5NqJAq.js                                               2.69 kB │ gzip:  1.47 kB
+dist-mock/assets/ComponentPreview-DDny8ksi.js                                                2.98 kB │ gzip:  1.43 kB
+dist-mock/assets/ManagedRegistrationsPage-D6dA0atQ.js                                        3.36 kB │ gzip:  1.84 kB
+dist-mock/assets/index-CFMZMHOb.js                                                           3.38 kB │ gzip:  1.79 kB
+dist-mock/assets/ScenarioPanel-BaTAeXRw.js                                                   3.50 kB │ gzip:  1.79 kB
+dist-mock/assets/LoginPage-Cq07JDkX.js                                                       3.64 kB │ gzip:  1.93 kB
+dist-mock/assets/ActivitiesPage-Co_7Y1dH.js                                                  3.76 kB │ gzip:  2.04 kB
+dist-mock/assets/AccountPage-UIuLOWs-.js                                                     3.98 kB │ gzip:  2.06 kB
+dist-mock/assets/ScannerPanel.vue_vue_type_script_setup_true_lang-CUsfmO5z.js                4.19 kB │ gzip:  2.23 kB
+dist-mock/assets/ActivityDetailPage-DXjAt-Gw.js                                              4.24 kB │ gzip:  2.03 kB
+dist-mock/assets/PeoplePage-D5ycA5dm.js                                                      4.82 kB │ gzip:  2.33 kB
+dist-mock/assets/DynamicQuestions.vue_vue_type_script_setup_true_lang-CDwM3bvM.js            4.92 kB │ gzip:  2.23 kB
+dist-mock/assets/OnsitePage-KuJO0Xyw.js                                                      5.02 kB │ gzip:  2.40 kB
+dist-mock/assets/index-BzyzcBBi.js                                                           5.38 kB │ gzip:  2.21 kB
+dist-mock/assets/index-DOsTWpIk.js                                                           5.49 kB │ gzip:  2.45 kB
+dist-mock/assets/AttendancePage-BGQN_kvl.js                                                  6.21 kB │ gzip:  3.00 kB
 dist-mock/assets/fixtures-CYWfthBs.js                                                        6.42 kB │ gzip:  2.45 kB
-dist-mock/assets/InsurancePage-DRNek5SD.js                                                   7.38 kB │ gzip:  3.33 kB
-dist-mock/assets/index-Bx2XFIR3.js                                                          10.07 kB │ gzip:  4.08 kB
-dist-mock/assets/RegisterPage-Ddv_O1md.js                                                   10.21 kB │ gzip:  4.32 kB
+dist-mock/assets/InsurancePage-D8AQ23DI.js                                                   7.38 kB │ gzip:  3.33 kB
+dist-mock/assets/RegisterPage-BtCV07RJ.js                                                    9.93 kB │ gzip:  4.17 kB
+dist-mock/assets/index-xwkt6yHE.js                                                          10.07 kB │ gzip:  4.08 kB
 dist-mock/assets/browser-CujOq0-h.js                                                        25.79 kB │ gzip: 10.14 kB
-dist-mock/assets/mock-CRK7ycYI.js                                                           28.36 kB │ gzip: 11.25 kB
+dist-mock/assets/mock-Cijl-ktS.js                                                           28.36 kB │ gzip: 11.25 kB
 dist-mock/assets/jsQR-DTXHP3BW.js                                                          130.73 kB │ gzip: 47.47 kB
-dist-mock/assets/index-_DY7ao_T.js                                                         139.37 kB │ gzip: 54.55 kB
-✓ built in 1.12s
+dist-mock/assets/index-BA0bR8qp.js                                                         139.37 kB │ gzip: 54.56 kB
+✓ built in 1.17s
 
 > srvf-mobile-web@0.1.0 check:bundle <repository>
 > node scripts/check-bundle.mjs
@@ -181,15 +182,15 @@ dist-mock/assets/index-_DY7ao_T.js                                              
 PASS bundles {
   dist: {
     files: 39,
-    allJsCssGzip: 219170,
+    allJsCssGzip: 219171,
     decoderGzip: 47468,
-    withoutDecoderGzip: 171702
+    withoutDecoderGzip: 171703
   },
   'dist-mock': {
     files: 46,
-    allJsCssGzip: 238214,
+    allJsCssGzip: 238190,
     decoderGzip: 47468,
-    withoutDecoderGzip: 190746
+    withoutDecoderGzip: 190722
   }
 }
 
@@ -197,96 +198,96 @@ PASS bundles {
 > node scripts/check-tokens.mjs && node scripts/e2e.mjs tokens
 
 PASS brand values, references, palette boundaries and 5 foreground contrasts; computed Vant styles follow in browser
-[WebServer] (node:36545) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63407) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36546) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63409) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36553) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63416) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36554) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63417) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
 
 Running 1 test using 1 worker
 
-(node:36561) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:63424) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  ✓  1 [chromium] › tests/e2e/tokens.spec.ts:2:1 › SRVF tokens 在按钮、Tab、焦点和 Teleport 弹层中生效 (1.9s)
+  ✓  1 [chromium] › tests/e2e/tokens.spec.ts:2:1 › SRVF tokens 在按钮、Tab、焦点和 Teleport 弹层中生效 (2.0s)
 
-  1 passed (3.1s)
+  1 passed (3.2s)
 
 > srvf-mobile-web@0.1.0 test:e2e <repository>
 > node scripts/e2e.mjs
 
-[WebServer] (node:36600) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63463) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36601) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63464) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
-[WebServer] (node:36619) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (node:63480) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 [WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
 
 Running 52 tests using 2 workers
 
-(node:36627) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:63491) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-(node:36626) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:63490) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  ✓   2 [chromium] › tests/e2e/flows.spec.ts:12:1 › 01 深链接登录 → 报名 → 逐场结果 → 我的活动 (986ms)
-  ✓   3 [chromium] › tests/e2e/flows.spec.ts:21:1 › 02 保险登记待审 → 原报名草稿 → 测试审核 → 重验资格 (3.2s)
-  ✓   4 [chromium] › tests/e2e/flows.spec.ts:43:1 › 03 仅统保身份无需重复登记自购 (847ms)
+  ✓   2 [chromium] › tests/e2e/flows.spec.ts:12:1 › 01 深链接登录 → 报名 → 逐场结果 → 我的活动 (990ms)
+  ✓   3 [chromium] › tests/e2e/flows.spec.ts:21:1 › 02 保险登记待审 → 原报名草稿 → 测试审核 → 重验资格 (3.3s)
+  ✓   4 [chromium] › tests/e2e/flows.spec.ts:43:1 › 03 仅统保身份无需重复登记自购 (855ms)
   ✓   5 [chromium] › tests/e2e/flows.spec.ts:51:1 › 04 并发续期、会话过期、受控重新登录 (1.2s)
   ✓   6 [chromium] › tests/e2e/flows.spec.ts:60:1 › 05 签到 → 重复扫 → 最短时段 → 推时钟 → 签退 (3.1s)
   ✓   7 [chromium] › tests/e2e/flows.spec.ts:80:1 › 06 职责隔离、跨活动拒绝、撤权后清空名单 (4.4s)
-  ✓   8 [chromium] › tests/e2e/flows.spec.ts:102:1 › 07 代签原因必填、确认目标、名单状态一致 (742ms)
+  ✓   8 [chromium] › tests/e2e/flows.spec.ts:102:1 › 07 代签原因必填、确认目标、名单状态一致 (751ms)
   ✓   9 [chromium] › tests/e2e/flows.spec.ts:113:1 › 08 保险并发冲突先刷新，不强制覆盖 (2.0s)
   ✓  10 [chromium] › tests/e2e/flows.spec.ts:126:1 › 09 报名回执丢失先查询，刷新后不生成替代意图 (2.5s)
   ✓  11 [chromium] › tests/e2e/flows.spec.ts:141:1 › 10 换账号与后退，旧保单、草稿、二维码不复现 (1.8s)
-  ✓  12 [chromium] › tests/e2e/flows.spec.ts:153:1 › 11 普通产物未接线，URL与存储不能强开mock (150ms)
+  ✓  12 [chromium] › tests/e2e/flows.spec.ts:153:1 › 11 普通产物未接线，URL与存储不能强开mock (147ms)
   ✓  13 [chromium] › tests/e2e/flows.spec.ts:161:1 › 12 全流程静态网络与实际二维码图片识别 (1.8s)
   ✓   1 [chromium] › tests/e2e/layout.spec.ts:3:1 › 四种屏宽完成态截图，长文案多记录及页尾可达 (23.9s)
-  ✓  15 [chromium] › tests/e2e/safety.spec.ts:2:1 › 多场次多岗位志愿排序，逐场通过与候补保持区别 (903ms)
+  ✓  15 [chromium] › tests/e2e/safety.spec.ts:2:1 › 多场次多岗位志愿排序，逐场通过与候补保持区别 (920ms)
   ✓  14 [chromium] › tests/e2e/review-regressions.spec.ts:4:1 › R2 启动身份读取首次失败，点击重新确认身份后恢复业务页 (2.0s)
   ✓  16 [chromium] › tests/e2e/safety.spec.ts:18:1 › 无键保险创建回执未知，刷新后阻止替代登记 (2.0s)
   ✓  18 [chromium] › tests/e2e/safety.spec.ts:31:1 › 复制标签页恢复独立family，一页退出不会使旧页复活 (1.4s)
-  ✓  19 [chromium] › tests/e2e/safety.spec.ts:57:1 › 错误密码、未绑定与恶意返回目标均有可见反馈 (1.2s)
+  ✓  19 [chromium] › tests/e2e/safety.spec.ts:57:1 › 错误密码、未绑定与恶意返回目标均有可见反馈 (1.1s)
   ✓  20 [chromium] › tests/e2e/safety.spec.ts:71:1 › 八类长表单与本地文件，保留0且错误可恢复 (870ms)
   ✓  21 [chromium] › tests/e2e/safety.spec.ts:93:1 › 表单版本变化拒绝旧表单，刷新后保留安全输入 (2.5s)
-  ✓  22 [chromium] › tests/e2e/safety.spec.ts:107:1 › 批量部分失败、状态回显与筛选清空选择 (656ms)
-  ✓  23 [chromium] › tests/e2e/safety.spec.ts:118:1 › chunk失效提示恢复；BFCache恢复重新读取且保留会话草稿 (518ms)
-  ✓  24 [chromium] › tests/e2e/safety.spec.ts:131:1 › 相机授权一直未选择可离页，晚到流立即停止 (504ms)
-  ✓  25 [chromium] › tests/e2e/safety.spec.ts:172:1 › 本地相机拒绝有指引，服务失败可以重读，空态不冒充错误 (3.8s)
+  ✓  22 [chromium] › tests/e2e/safety.spec.ts:107:1 › 批量部分失败、状态回显与筛选清空选择 (660ms)
+  ✓  23 [chromium] › tests/e2e/safety.spec.ts:118:1 › chunk失效提示恢复；BFCache恢复重新读取且保留会话草稿 (538ms)
+  ✓  24 [chromium] › tests/e2e/safety.spec.ts:131:1 › 相机授权一直未选择可离页，晚到流立即停止 (497ms)
+  ✓  25 [chromium] › tests/e2e/safety.spec.ts:172:1 › 本地相机拒绝有指引，服务失败可以重读，空态不冒充错误 (3.7s)
   ✓  26 [chromium] › tests/e2e/tokens.spec.ts:2:1 › SRVF tokens 在按钮、Tab、焦点和 Teleport 弹层中生效 (1.3s)
-(node:36829) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(node:63682) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
   ✓  27 [webkit] › tests/e2e/flows.spec.ts:12:1 › 01 深链接登录 → 报名 → 逐场结果 → 我的活动 (1.8s)
-  ✓  28 [webkit] › tests/e2e/flows.spec.ts:21:1 › 02 保险登记待审 → 原报名草稿 → 测试审核 → 重验资格 (3.3s)
+  ✓  28 [webkit] › tests/e2e/flows.spec.ts:21:1 › 02 保险登记待审 → 原报名草稿 → 测试审核 → 重验资格 (4.2s)
   ✓  29 [webkit] › tests/e2e/flows.spec.ts:43:1 › 03 仅统保身份无需重复登记自购 (1.4s)
   ✓  30 [webkit] › tests/e2e/flows.spec.ts:51:1 › 04 并发续期、会话过期、受控重新登录 (1.3s)
-  ✓  17 [chromium] › tests/e2e/review-regressions.spec.ts:16:1 › R4 保险加载、空记录、服务错误、权限拒绝分别留证 (25.2s)
-(node:36881) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+  ✓  17 [chromium] › tests/e2e/review-regressions.spec.ts:16:1 › R4 保险加载、空记录、服务错误、权限拒绝分别留证 (25.1s)
+(node:63736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
 (Use `node --trace-warnings ...` to show where the warning was created)
-  ✓  31 [webkit] › tests/e2e/flows.spec.ts:60:1 › 05 签到 → 重复扫 → 最短时段 → 推时钟 → 签退 (3.6s)
-  ✓  33 [webkit] › tests/e2e/flows.spec.ts:80:1 › 06 职责隔离、跨活动拒绝、撤权后清空名单 (4.6s)
-  ✓  34 [webkit] › tests/e2e/flows.spec.ts:102:1 › 07 代签原因必填、确认目标、名单状态一致 (853ms)
+  ✓  31 [webkit] › tests/e2e/flows.spec.ts:60:1 › 05 签到 → 重复扫 → 最短时段 → 推时钟 → 签退 (4.0s)
+  ✓  33 [webkit] › tests/e2e/flows.spec.ts:80:1 › 06 职责隔离、跨活动拒绝、撤权后清空名单 (4.5s)
+  ✓  34 [webkit] › tests/e2e/flows.spec.ts:102:1 › 07 代签原因必填、确认目标、名单状态一致 (965ms)
   ✓  35 [webkit] › tests/e2e/flows.spec.ts:113:1 › 08 保险并发冲突先刷新，不强制覆盖 (2.1s)
-  ✓  36 [webkit] › tests/e2e/flows.spec.ts:126:1 › 09 报名回执丢失先查询，刷新后不生成替代意图 (2.4s)
+  ✓  36 [webkit] › tests/e2e/flows.spec.ts:126:1 › 09 报名回执丢失先查询，刷新后不生成替代意图 (2.5s)
   ✓  37 [webkit] › tests/e2e/flows.spec.ts:141:1 › 10 换账号与后退，旧保单、草稿、二维码不复现 (2.2s)
-  ✓  38 [webkit] › tests/e2e/flows.spec.ts:153:1 › 11 普通产物未接线，URL与存储不能强开mock (300ms)
-  ✓  39 [webkit] › tests/e2e/flows.spec.ts:161:1 › 12 全流程静态网络与实际二维码图片识别 (2.6s)
-  ✓  40 [webkit] › tests/e2e/review-regressions.spec.ts:4:1 › R2 启动身份读取首次失败，点击重新确认身份后恢复业务页 (2.2s)
-  ✓  32 [webkit] › tests/e2e/layout.spec.ts:3:1 › 四种屏宽完成态截图，长文案多记录及页尾可达 (25.9s)
-  ✓  42 [webkit] › tests/e2e/safety.spec.ts:2:1 › 多场次多岗位志愿排序，逐场通过与候补保持区别 (1.5s)
+  ✓  38 [webkit] › tests/e2e/flows.spec.ts:153:1 › 11 普通产物未接线，URL与存储不能强开mock (295ms)
+  ✓  39 [webkit] › tests/e2e/flows.spec.ts:161:1 › 12 全流程静态网络与实际二维码图片识别 (2.0s)
+  ✓  40 [webkit] › tests/e2e/review-regressions.spec.ts:4:1 › R2 启动身份读取首次失败，点击重新确认身份后恢复业务页 (1.7s)
+  ✓  32 [webkit] › tests/e2e/layout.spec.ts:3:1 › 四种屏宽完成态截图，长文案多记录及页尾可达 (25.4s)
+  ✓  42 [webkit] › tests/e2e/safety.spec.ts:2:1 › 多场次多岗位志愿排序，逐场通过与候补保持区别 (1.1s)
   ✓  43 [webkit] › tests/e2e/safety.spec.ts:18:1 › 无键保险创建回执未知，刷新后阻止替代登记 (2.2s)
   ✓  44 [webkit] › tests/e2e/safety.spec.ts:31:1 › 复制标签页恢复独立family，一页退出不会使旧页复活 (2.0s)
-  ✓  45 [webkit] › tests/e2e/safety.spec.ts:57:1 › 错误密码、未绑定与恶意返回目标均有可见反馈 (1.2s)
-  ✓  46 [webkit] › tests/e2e/safety.spec.ts:71:1 › 八类长表单与本地文件，保留0且错误可恢复 (1.3s)
-  ✓  47 [webkit] › tests/e2e/safety.spec.ts:93:1 › 表单版本变化拒绝旧表单，刷新后保留安全输入 (2.6s)
-  ✓  48 [webkit] › tests/e2e/safety.spec.ts:107:1 › 批量部分失败、状态回显与筛选清空选择 (1.2s)
-  ✓  49 [webkit] › tests/e2e/safety.spec.ts:118:1 › chunk失效提示恢复；BFCache恢复重新读取且保留会话草稿 (676ms)
-  ✓  50 [webkit] › tests/e2e/safety.spec.ts:131:1 › 相机授权一直未选择可离页，晚到流立即停止 (645ms)
-  ✓  51 [webkit] › tests/e2e/safety.spec.ts:172:1 › 本地相机拒绝有指引，服务失败可以重读，空态不冒充错误 (4.4s)
-  ✓  41 [webkit] › tests/e2e/review-regressions.spec.ts:16:1 › R4 保险加载、空记录、服务错误、权限拒绝分别留证 (25.4s)
+  ✓  45 [webkit] › tests/e2e/safety.spec.ts:57:1 › 错误密码、未绑定与恶意返回目标均有可见反馈 (1.3s)
+  ✓  46 [webkit] › tests/e2e/safety.spec.ts:71:1 › 八类长表单与本地文件，保留0且错误可恢复 (1.1s)
+  ✓  47 [webkit] › tests/e2e/safety.spec.ts:93:1 › 表单版本变化拒绝旧表单，刷新后保留安全输入 (3.1s)
+  ✓  48 [webkit] › tests/e2e/safety.spec.ts:107:1 › 批量部分失败、状态回显与筛选清空选择 (812ms)
+  ✓  49 [webkit] › tests/e2e/safety.spec.ts:118:1 › chunk失效提示恢复；BFCache恢复重新读取且保留会话草稿 (673ms)
+  ✓  50 [webkit] › tests/e2e/safety.spec.ts:131:1 › 相机授权一直未选择可离页，晚到流立即停止 (656ms)
+  ✓  51 [webkit] › tests/e2e/safety.spec.ts:172:1 › 本地相机拒绝有指引，服务失败可以重读，空态不冒充错误 (3.9s)
   ✓  52 [webkit] › tests/e2e/tokens.spec.ts:2:1 › SRVF tokens 在按钮、Tab、焦点和 Teleport 弹层中生效 (1.9s)
+  ✓  41 [webkit] › tests/e2e/review-regressions.spec.ts:16:1 › R4 保险加载、空记录、服务错误、权限拒绝分别留证 (27.4s)
 
   52 passed (1.6m)

@@ -1,5 +1,15 @@
 # fad130f8 审查整改报告
 
+## PR #1 复核后的资格边界收尾
+
+复核基线 `11fbce7ab9406219ee9a1b9a7930c8a73e3fedca`，本轮代码与测试提交 `b0b66599ccf63acc2c02ec6114d6837a87f1fc46`。仅收紧已选志愿的最终校验，复用选择组件的 `qualificationAllowsSelection`，场次和已选岗位都必须明确为 pass/warn。资格缺失、null、fail 或未知值一律提示重新核对；未选项的未知资格不影响有效志愿。结构错误仍保留原有场次/岗位提示。
+
+新增 `tests/unit/preference-qualification.test.ts` 共 13 条：真实读取旧草稿志愿，覆盖两个层级的四种无效资格、四种 pass/warn 组合和未选项反例。原代码 6 条失败、7 条通过，修复后 13 条通过；既有合法岗位 fixture 显式补 pass，未删除原断言。
+
+本轮 `pnpm check` 退出 0：**80 条单元/组件、50 条离线契约、52 次浏览器执行全部通过**，无重试或跳过。52 份网络记录的业务请求、外部尝试、CSP 违规和浏览器异常仍为 0。两种构建均匹配指纹 `f63f7ae61ce64b918068becac9e1c3d477a7a251402df37bd39524bc5d0f44de`。当前汇总和完整日志已更新；六张已人工查看的保险图重新生成后与上一轮逐字节一致，下文 67/50/52 与旧指纹保留为 R1—R4 历史记录。按本次用户复核意见，完成最终检查后将 PR 标记 Ready 并合并，不开启自动合并或扩展业务。真实 API、真机和手机微信依旧 NOT_RUN。
+
+---
+
 日期 2026-11-12，Asia/Shanghai。审查基线 `fad130f8f91f35f156a5f54577dcadbcdbdf51de`，修复代码与测试提交 `64498e7001956e3c0a7195ea55e4ecd0a91649a1`，分支 `fix/review-fad130f8`。后续证据提交只更新文档和生成结果；最终分支 HEAD 与 CI 单独核实。
 
 收到的 `SRVFMobileWeb_Review_Evidence_fad130f8.zip` SHA-256 为 `4ce8e57d549d2be9e170c21f9e158bff366b1f273f948820310575e5f1469277`。核对原始两个文件的 Git blob 后运行隔离脚本，确认 R1/R2；再在真实 Vitest/Pinia/传输边界内先补回归，旧代码 **9 条全部失败**，见 [修复前日志](evidence/review-fad130f8/regression-before.txt)。没有直接用附件中的源码覆盖工程，也没有把隔离脚本当作浏览器验收。
