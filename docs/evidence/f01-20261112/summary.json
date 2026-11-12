@@ -1,0 +1,69 @@
+{
+  "status": "PASS",
+  "date": "2026-11-12",
+  "timezone": "Asia/Shanghai",
+  "pullRequest": "https://github.com/BA7IEE/SRVFMobileWeb/pull/2",
+  "baseline": "248534ea647609875907f362e328c45c4c0744fb",
+  "codeAndTestCommit": "70f2c609a80353789ec565e0b386e4b4fd685fd8",
+  "command": "pnpm check",
+  "exitCode": 0,
+  "unitAndComponents": 116,
+  "offlineContracts": 50,
+  "browserExecutions": 80,
+  "browserCases": 40,
+  "newComponentRegressions": 11,
+  "newBrowserCases": 4,
+  "newBrowserExecutions": 8,
+  "browserRetries": 0,
+  "browserSkipped": 0,
+  "browserProjects": {
+    "chromium": "158.0.8127.18",
+    "webkit": "27.2"
+  },
+  "network": {
+    "networkFiles": 80,
+    "apiRequests": 0,
+    "externalAttempts": 0,
+    "cspViolations": 0,
+    "browserErrors": 0,
+    "serviceWorkers": 0
+  },
+  "sourceFingerprint": "d61de91452b323cc23a1f7d663faa389482f2f9ec99993f170fe051376d9a3ca",
+  "mockMatchesSource": true,
+  "ordinaryMatchesSource": true,
+  "bundles": {
+    "dist": {
+      "files": 40,
+      "allJsCssGzip": 226351,
+      "decoderGzip": 47468,
+      "withoutDecoderGzip": 178883
+    },
+    "dist-mock": {
+      "files": 47,
+      "allJsCssGzip": 245498,
+      "decoderGzip": 47468,
+      "withoutDecoderGzip": 198030
+    }
+  },
+  "artifactScreenshots": 82,
+  "artifactPaths": [
+    "test-results/results.json",
+    "test-results/**/network.json",
+    "test-results/managed-forbidden-*/*.png",
+    "playwright-report/"
+  ],
+  "representativeScreenshot": {
+    "file": "forbidden-visible-320.png",
+    "sha256": "029cea607b9a9ad10a360af680e677e31b0c4238ab8aa7c037c69d80ada7e860"
+  },
+  "manualVisualReview": [
+    "Chromium 320x568 local QR forbidden",
+    "Chromium/WebKit 320x568 old confirmation closed after forbidden"
+  ],
+  "historicalOrigin": {
+    "newInPr2": "Onsite local QR read clears data and thereby hides its data-gated error",
+    "existingInMain": "Onsite QR writes and People proxy forbidden already cleared data with hidden feedback; registration error was visible but had no safe return and could show empty list",
+    "expandedInPr2": "People staff scan shares proxy forbidden cleanup after execute paths were combined"
+  },
+  "notRun": ["realApi", "realAccounts", "realBusiness", "realDevices", "mobileWeChat", "deployment"]
+}

@@ -1,8 +1,7 @@
 import { test, expect, login, switchAccount, scenario } from './fixtures';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 test('四种屏宽完成态截图，长文案多记录及页尾可达', async ({ page }, testInfo) => {
   test.setTimeout(90000);
-  await mkdir('docs/evidence/screenshots', { recursive: true });
   const evidence: { file: string; state: 'ready'; width: number; checks: string[] }[] = [];
   async function capture(name: string, checks: string[]) {
     await expect(page.locator('.dev-panel')).toBeHidden();
@@ -15,7 +14,7 @@ test('四种屏宽完成态截图，长文案多记录及页尾可达', async ({
     const width = page.viewportSize()!.width;
     const file = `${testInfo.project.name}-${width}-${name}.png`;
     await page.screenshot({
-      path: `docs/evidence/screenshots/${file}`,
+      path: testInfo.outputPath(file),
       fullPage: true,
     });
     evidence.push({ file, state: 'ready', width, checks });
@@ -76,7 +75,7 @@ test('四种屏宽完成态截图，长文案多记录及页尾可达', async ({
     await expect(page.locator('main')).not.toBeEmpty();
   }
   await writeFile(
-    `docs/evidence/layout-${testInfo.project.name}.json`,
+    testInfo.outputPath(`layout-${testInfo.project.name}.json`),
     JSON.stringify(evidence, null, 2) + '\n',
   );
 });

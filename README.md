@@ -30,6 +30,8 @@ Node 22.22.3、pnpm 10.14.0 为本次实测环境。精确依赖见 package.json
 
 说明与证据：
 
+- [本轮移动端 UX/UI 与前端加固结果](docs/execution-report.md#2026-11-12-移动端-uxui-与前端加固本轮)，以及[准确验证汇总](docs/evidence/mobile-ux-20261112/summary.json)；下列审查报告保留历史数量。
+
 - [fad130f8 审查整改与新增证据](docs/review-remediation.md)
 - [执行报告](docs/execution-report.md)、[整体 review](docs/review.md)、[人工验收脚本](docs/acceptance.md)
 - [路由清单](docs/route-map.md)、[65 个场景与测试映射](docs/scenario-catalog.md)、[验证规则](docs/validation-rules.md)

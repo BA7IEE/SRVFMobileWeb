@@ -1,6 +1,6 @@
 import { test as base, expect, type Page } from '@playwright/test';
 import { mkdir, writeFile } from 'node:fs/promises';
-import { createHash } from 'node:crypto';
+import { dirname } from 'node:path';
 export const test = base.extend<{ networkEvidence: void }>({
   networkEvidence: [
     async ({ context, page, browser }, use, testInfo) => {
@@ -58,12 +58,10 @@ export const test = base.extend<{ networkEvidence: void }>({
         apiRequests: requests.filter((r) => r.path.includes('/api/')).length,
         serviceWorkers: context.serviceWorkers().length,
       };
-      const id = createHash('sha256')
-        .update(testInfo.project.name + testInfo.title)
-        .digest('hex')
-        .slice(0, 12);
-      await mkdir('docs/evidence/network', { recursive: true });
-      await writeFile(`docs/evidence/network/${id}.json`, JSON.stringify(evidence, null, 2) + '\n');
+      const file = testInfo.outputPath('network.json');
+      await mkdir(dirname(file), { recursive: true });
+      await writeFile(file, JSON.stringify(evidence, null, 2) + '\n');
+      await testInfo.attach('network-evidence', { path: file, contentType: 'application/json' });
       expect(forbidden, 'forbidden network attempts').toEqual([]);
       expect(csp, 'CSP network/form violations').toEqual([]);
       expect(errors, 'browser exceptions').toEqual([]);
@@ -93,7 +91,7 @@ export async function scenario(page: Page, id: string) {
   await page.getByLabel('选择场景').selectOption(id);
   await page.getByRole('button', { name: '应用场景', exact: true }).click();
   await expect(page.locator('.dev-panel')).toBeHidden();
-  await expect(page.locator('.van-overlay')).toBeHidden();
+  await expect(page.locator('.van-overlay:visible')).toHaveCount(0);
 }
 export async function switchAccount(page: Page, account: string) {
   await panel(page);

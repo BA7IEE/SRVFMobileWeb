@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import { getData } from '../../../data';
 import { useResource } from '../../../shared/composables/resource';
 import { decimal } from '../../../shared/time';
@@ -10,7 +10,24 @@ const { data, loading, error, load } = useResource(async () => ({
   summary: await getData().participation.getSummary(),
   records: await getData().participation.listRecords(),
 }));
-const detail = ref<ParticipationRecord>();
+const selected = ref<ParticipationRecord>();
+const detail = useResource(() =>
+  selected.value
+    ? getData().participation.getRecordDetail(selected.value.id)
+    : Promise.resolve(undefined),
+);
+const detailHeading = ref<HTMLElement>();
+async function openDetail(record: ParticipationRecord) {
+  detail.cancel();
+  selected.value = record;
+  void detail.load();
+  await nextTick();
+  detailHeading.value?.focus();
+}
+function closeDetail() {
+  selected.value = undefined;
+  detail.cancel();
+}
 onMounted(() => void load());
 </script>
 <template>
@@ -33,7 +50,11 @@ onMounted(() => void load());
               <p class="help">贡献净额</p>
             </div>
           </div>
-          <p class="safety-note">数据层提供汇总；页面不将打卡时间差或正向分录加总。</p>
+          <p class="help">打卡记录仍需认定，待认定不表示零小时。</p>
+          <details class="developer-details">
+            <summary>演示数据说明</summary>
+            <p class="help">数据层提供汇总；页面不将打卡时间差或正向分录加总。</p>
+          </details>
         </section>
         <page-state :empty="!data.records.length" empty-text="暂无参与记录"
           ><section v-for="r in data.records" :key="r.id" class="panel">
@@ -47,26 +68,31 @@ onMounted(() => void load());
             <p v-if="r.historical" class="help">历史活动信息受限，当前仅显示本人安全摘要。</p>
             <button
               class="text-button"
-              @click="
-                getData()
-                  .participation.getRecordDetail(r.id)
-                  .then((x) => (detail = x))
-              "
+              :aria-expanded="selected?.id === r.id"
+              aria-controls="participation-detail"
+              @click="openDetail(r)"
             >
               查看记录说明
             </button>
           </section></page-state
         >
-        <section v-if="detail" class="panel">
-          <h2>{{ detail.title }}</h2>
-          <p>
-            {{
-              detail.status === 'pending'
-                ? '正在处理，没有结果不表示零小时。'
-                : '本结果来自合成认定读面。真实净额、单位、版本与来源需后端联调确认。'
-            }}
-          </p>
-          <button class="text-button" @click="detail = undefined">关闭说明</button>
+        <section v-if="selected" id="participation-detail" class="panel">
+          <h2 ref="detailHeading" tabindex="-1">{{ selected.title }} · 记录说明</h2>
+          <p>{{ selected.session }}</p>
+          <page-state
+            :loading="detail.loading.value"
+            :error="detail.error.value"
+            @retry="detail.load"
+          >
+            <p v-if="detail.data.value">
+              {{
+                detail.data.value.status === 'pending'
+                  ? '正在处理，没有结果不表示零小时。'
+                  : '当前为演示认定结果，正式结果需以接通后的记录为准。'
+              }}
+            </p>
+          </page-state>
+          <button class="text-button" @click="closeDetail">关闭说明</button>
         </section></template
       ></page-state
     >

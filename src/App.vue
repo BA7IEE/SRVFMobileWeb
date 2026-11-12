@@ -5,6 +5,7 @@ import { Icon as VanIcon, Tabbar as VanTabbar, TabbarItem as VanTabbarItem } fro
 import { useAuth } from './features/auth/store';
 import { router } from './app/router';
 import { cleanupDevices } from './shared/storage';
+import { parentTarget, safeTarget } from './app/router/safe-target';
 const auth = useAuth();
 const route = useRoute();
 const chunkError = ref(false);
@@ -21,13 +22,15 @@ watch(
   () => auth.state,
   (state) => {
     if (route.meta.public) return;
-    if (state === 'expired' || state === 'anonymous') void router.replace('/login');
+    const query = { returnTo: safeTarget(route.path) };
+    if (state === 'expired' || state === 'anonymous')
+      void router.replace({ path: '/login', query });
     else if (state === 'blocked') void router.replace('/system/blocked');
-    else if (state === 'unavailable') void router.replace('/system/unavailable');
+    else if (state === 'unavailable') void router.replace({ path: '/system/unavailable', query });
   },
 );
 async function recover() {
-  if (!auth.session) return;
+  if (!auth.session || recovering.value) return;
   recovering.value = true;
   try {
     await auth.revalidate();
@@ -35,6 +38,12 @@ async function recover() {
   } finally {
     recovering.value = false;
   }
+}
+function back() {
+  const previous = router.options.history.state.back;
+  if (typeof previous === 'string' && previous.startsWith('/') && !previous.startsWith('/login'))
+    router.back();
+  else void router.replace(parentTarget(route.path));
 }
 function resume() {
   if (document.visibilityState === 'visible') void recover();
@@ -61,14 +70,15 @@ onUnmounted(() => {
 <template>
   <div class="app-shell" :class="{ 'has-tabs': tabs }">
     <div v-if="mock" class="mock-banner" role="status">
-      <van-icon name="info-o" /> 演示模式 · 数据不是真实记录
+      <span><van-icon name="info-o" /> 演示模式 · 数据不是真实记录</span>
+      <component :is="MockPanel" v-if="MockPanel" />
     </div>
     <header class="app-header">
       <button
         v-if="!route.meta.tab && route.name !== 'login'"
         class="icon-button"
         aria-label="返回"
-        @click="router.back()"
+        @click="back"
       >
         <van-icon name="arrow-left" />
       </button>
@@ -87,10 +97,13 @@ onUnmounted(() => {
       <router-view v-else :key="viewKey" />
     </main>
     <van-tabbar v-if="tabs" route safe-area-inset-bottom class="bottom-tabs">
-      <van-tabbar-item replace to="/activities" icon="calendar-o">活动</van-tabbar-item>
-      <van-tabbar-item replace to="/my/activities" icon="todo-list-o">我的活动</van-tabbar-item>
-      <van-tabbar-item replace to="/my" icon="user-o">我的</van-tabbar-item>
+      <van-tabbar-item replace to="/activities" icon="calendar-o" aria-label="活动"
+        >活动</van-tabbar-item
+      >
+      <van-tabbar-item replace to="/my/activities" icon="todo-list-o" aria-label="我的活动"
+        >我的活动</van-tabbar-item
+      >
+      <van-tabbar-item replace to="/my" icon="user-o" aria-label="我的">我的</van-tabbar-item>
     </van-tabbar>
-    <component :is="MockPanel" v-if="MockPanel" />
   </div>
 </template>

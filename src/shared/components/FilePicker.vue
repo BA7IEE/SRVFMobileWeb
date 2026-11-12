@@ -2,7 +2,13 @@
 import { ref, watch, onUnmounted } from 'vue';
 import { fileError } from '../validation';
 import { onSessionCleanup } from '../storage';
-const props = defineProps<{ modelValue?: File; id: string }>();
+const props = defineProps<{
+  modelValue?: File;
+  id: string;
+  invalid?: boolean;
+  labelledBy?: string;
+  errorId?: string;
+}>();
 const emit = defineEmits<{ 'update:modelValue': [File | undefined] }>();
 const error = ref('');
 const preview = ref<string>();
@@ -44,7 +50,15 @@ onUnmounted(() => {
       :aria-describedby="id + '-help'"
       @change="select"
     />
-    <button type="button" class="text-button file-choose" @click="fileInput?.click()">
+    <button
+      :id="id + '-choose'"
+      type="button"
+      class="text-button file-choose"
+      :aria-labelledby="labelledBy ? labelledBy + ' ' + id + '-choose' : undefined"
+      :aria-invalid="Boolean(invalid)"
+      :aria-describedby="[id + '-help', errorId].filter(Boolean).join(' ')"
+      @click="fileInput?.click()"
+    >
       {{ modelValue ? '重新选择本地文件' : '选择本地文件' }}
     </button>
     <p :id="id + '-help'" class="help">

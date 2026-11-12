@@ -108,10 +108,10 @@ export const router = createRouter({
       : []),
     { path: '/:pathMatch(.*)*', redirect: '/system/not-found' },
   ],
-  scrollBehavior(to, from, saved) {
+  scrollBehavior(to, _from, saved) {
+    // 活动列表在恢复筛选对应的分页内容后自行恢复位置。
+    if (to.name === 'activities') return false;
     if (saved) return saved;
-    if (to.name === 'activities' && from.name === 'activity')
-      return { top: Number(sessionStorage.getItem('srvf:ui:scroll') ?? 0) };
     return { top: 0 };
   },
 });
@@ -122,12 +122,15 @@ router.beforeEach(async (to) => {
   if (auth.state !== 'unavailable') await auth.restoreSession();
   if (to.name === 'login' && auth.ready) return safeTarget(to.query.returnTo);
   if (to.meta.public) return true;
-  if (auth.state === 'unavailable') return '/system/unavailable';
+  const returnTo = safeTarget(to.query.returnTo ?? to.path);
+  if (auth.state === 'unavailable') return { path: '/system/unavailable', query: { returnTo } };
   if (auth.state === 'blocked') return '/system/blocked';
   if (!auth.ready) return { name: 'login', query: { returnTo: safeTarget(to.path) } };
   try {
     await auth.ensureSession();
   } catch {
+    if (useAuth().state === 'unavailable')
+      return { path: '/system/unavailable', query: { returnTo } };
     return { name: 'login', query: { returnTo: safeTarget(to.path) } };
   }
   if (to.meta.managed && !auth.member?.managed) return '/system/forbidden';
@@ -137,7 +140,7 @@ router.beforeEach(async (to) => {
       if (scope[to.meta.scope as 'registration' | 'attendance'].state !== 'allowed')
         return '/system/forbidden';
     } catch {
-      return '/system/unavailable';
+      return { path: '/system/unavailable', query: { returnTo } };
     }
   }
   return true;

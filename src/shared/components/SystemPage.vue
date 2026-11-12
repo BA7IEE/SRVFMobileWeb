@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
+import { ref } from 'vue';
 import { useAuth } from '../../features/auth/store';
 import { router } from '../../app/router';
 import { Button as VanButton, Icon as VanIcon } from 'vant';
+import { safeTarget } from '../../app/router/safe-target';
 const route = useRoute();
 const auth = useAuth();
+const pending = ref(false);
 const reasons: Record<string, { title: string; message: string }> = {
   'not-configured': {
     title: '服务尚未接通',
@@ -26,10 +29,18 @@ const reasons: Record<string, { title: string; message: string }> = {
 };
 const info = reasons[String(route.params.reason)] ?? reasons['not-found']!;
 async function retry() {
-  await auth.revalidate();
-  if (auth.ready) void router.replace('/activities');
-  else if (auth.state === 'blocked') void router.replace('/system/blocked');
-  else if (auth.state === 'anonymous' || auth.state === 'expired') void router.replace('/login');
+  if (pending.value) return;
+  pending.value = true;
+  const returnTo = safeTarget(route.query.returnTo);
+  try {
+    await auth.revalidate();
+    if (auth.ready) await router.replace(returnTo);
+    else if (auth.state === 'blocked') await router.replace('/system/blocked');
+    else if (auth.state === 'anonymous' || auth.state === 'expired')
+      await router.replace({ path: '/login', query: { returnTo } });
+  } finally {
+    pending.value = false;
+  }
 }
 </script>
 <template>
@@ -38,7 +49,12 @@ async function retry() {
       <van-icon name="shield-o" />
       <h1>{{ info.title }}</h1>
       <p>{{ info.message }}</p>
-      <van-button v-if="route.params.reason === 'unavailable'" type="primary" @click="retry"
+      <van-button
+        v-if="route.params.reason === 'unavailable'"
+        type="primary"
+        :loading="pending"
+        :disabled="pending"
+        @click="retry"
         >重新确认身份</van-button
       ><router-link
         v-if="route.params.reason !== 'not-configured'"

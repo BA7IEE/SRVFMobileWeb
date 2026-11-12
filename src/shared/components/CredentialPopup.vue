@@ -11,6 +11,7 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ 'update:show': [boolean] }>();
 const url = ref<string>();
+const error = ref('');
 let epoch = 0;
 function release() {
   epoch++;
@@ -23,9 +24,14 @@ watch(
     release();
     if (!props.show || !props.payload) return;
     const id = epoch;
-    const next = await renderCredential(props.payload);
-    if (id !== epoch) URL.revokeObjectURL(next);
-    else url.value = next;
+    error.value = '';
+    try {
+      const next = await renderCredential(props.payload);
+      if (id !== epoch) URL.revokeObjectURL(next);
+      else url.value = next;
+    } catch {
+      if (id === epoch) error.value = '二维码暂时无法显示，请关闭后重试，或联系现场负责人。';
+    }
   },
   { immediate: true },
 );
@@ -54,6 +60,8 @@ onUnmounted(() => {
       <h1>{{ title }}</h1>
       <p class="notice">仅用于演示，不可用于真实考勤</p>
       <img v-if="url" :src="url" :alt="title + '（演示）'" class="qr-image" />
+      <p v-if="error" role="alert" class="error">{{ error }}</p>
+      <p v-else-if="!url" role="status">正在生成二维码…</p>
       <p>{{ description }}</p>
       <van-button type="primary" autofocus @click="emit('update:show', false)"
         >关闭二维码</van-button

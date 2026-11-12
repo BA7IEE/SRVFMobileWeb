@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { Button as VanButton, Form as VanForm, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
@@ -13,6 +13,7 @@ import StatusBadge from '../../../shared/components/StatusBadge.vue';
 import InsuranceRequirementCard from '../../../shared/components/InsuranceRequirementCard.vue';
 const route = useRoute();
 const auth = useAuth();
+const actorId = auth.member?.id;
 const activityId =
   typeof route.query.fromActivity === 'string' && /^[a-zA-Z0-9_-]+$/.test(route.query.fromActivity)
     ? route.query.fromActivity
@@ -32,9 +33,14 @@ const busy = ref(false);
 const conflict = ref(false);
 const unresolved = ref(false);
 let original = '';
+let active = true;
+onUnmounted(() => {
+  active = false;
+});
 const dirty = computed(() => editing.value && JSON.stringify(form.value) !== original);
 onMounted(() => void load());
-function edit(record?: SelfInsurance) {
+async function edit(record?: SelfInsurance) {
+  if (busy.value) return;
   existing.value = record;
   form.value = record
     ? { insurer: record.insurer, policy: record.policy, start: record.start, end: record.end }
@@ -45,8 +51,17 @@ function edit(record?: SelfInsurance) {
   conflict.value = false;
   unresolved.value = false;
   editing.value = true;
+  await nextTick();
+  focusField('insurer');
+}
+function focusField(key: string) {
+  if (!active) return;
+  const input = document.getElementById('insurance-' + key);
+  input?.scrollIntoView({ block: 'center' });
+  input?.focus({ preventScroll: true });
 }
 async function close() {
+  if (busy.value) return;
   if (dirty.value)
     try {
       await showConfirmDialog({
@@ -61,7 +76,11 @@ async function close() {
 async function save() {
   if (busy.value || conflict.value || unresolved.value) return;
   errors.value = insuranceErrors(form.value);
-  if (Object.keys(errors.value).length) return;
+  if (Object.keys(errors.value).length) {
+    await nextTick();
+    focusField(Object.keys(errors.value)[0]!);
+    return;
+  }
   busy.value = true;
   message.value = '';
   try {
@@ -74,12 +93,26 @@ async function save() {
     if (existing.value)
       await getData().insurance.updateSelf(existing.value.id, input, existing.value.version);
     else await getData().insurance.createSelf(input);
+    if (!active) return;
     editing.value = false;
     await load();
     message.value = '保险资料已登记（演示），等待审核。';
   } catch (e) {
+    if (!active) return;
     const err = appError(e);
     message.value = err.message;
+    if (err.fieldErrors) {
+      const fields = new Set(['insurer', 'policy', 'start', 'end']);
+      errors.value = Object.fromEntries(
+        Object.entries(err.fieldErrors).filter(
+          ([key, message]) => fields.has(key) && typeof message === 'string' && message.length > 0,
+        ),
+      );
+      if (Object.keys(errors.value).length) {
+        await nextTick();
+        focusField(Object.keys(errors.value)[0]!);
+      }
+    }
     conflict.value = err.kind === 'conflict';
     unresolved.value = err.kind === 'result-unknown';
   } finally {
@@ -87,11 +120,22 @@ async function save() {
   }
 }
 async function refreshConflict() {
-  await load();
-  const current = data.value?.overview.self.find((r) => r.id === existing.value?.id);
-  if (current) existing.value = current;
-  conflict.value = false;
-  message.value = '已读取当前版本，原输入已保留。请对照列表重新核对后保存。';
+  if (busy.value) return;
+  busy.value = true;
+  try {
+    await load();
+    if (error.value) return;
+    const current = data.value?.overview.self.find((r) => r.id === existing.value?.id);
+    if (!current) {
+      message.value = '原登记已不存在，请关闭编辑并核对当前列表。原输入尚未提交。';
+      return;
+    }
+    existing.value = current;
+    conflict.value = false;
+    message.value = '已读取当前版本，原输入已保留。请对照列表重新核对后保存。';
+  } finally {
+    busy.value = false;
+  }
 }
 async function remove(record: SelfInsurance) {
   if (busy.value) return;
@@ -103,6 +147,7 @@ async function remove(record: SelfInsurance) {
   } catch {
     return;
   }
+  if (!active || !auth.ready || auth.member?.id !== actorId) return;
   busy.value = true;
   try {
     await getData().insurance.deleteSelf(record.id, record.version);
@@ -157,7 +202,11 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
         <section class="panel">
           <div class="panel-heading">
             <h2>本人登记的自购保险</h2>
-            <button class="text-button" :disabled="data.overview.unresolvedCreate" @click="edit()">
+            <button
+              class="text-button"
+              :disabled="busy || data.overview.unresolvedCreate"
+              @click="edit()"
+            >
               新增登记
             </button>
           </div>
@@ -173,7 +222,7 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
             <p class="long-text">演示保单：{{ record.policy }}</p>
             <p>{{ record.start ?? '起保日未提供' }} 至 {{ record.end }}</p>
             <div class="row">
-              <button class="text-button" @click="edit(record)">修改资料</button
+              <button class="text-button" :disabled="busy" @click="edit(record)">修改资料</button
               ><button class="text-button danger-button" :disabled="busy" @click="remove(record)">
                 删除登记
               </button>
@@ -181,10 +230,10 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
             <hr class="separator" />
           </div>
         </section>
-        <van-form v-if="editing" class="panel" :show-error-message="false" @submit="save"
+        <van-form v-if="editing" class="panel" novalidate :show-error-message="false" @submit="save"
           ><div class="panel-heading">
             <h2>{{ existing ? '修改自购保险' : '新增自购保险' }}</h2>
-            <button type="button" class="text-button" @click="close">关闭</button>
+            <button type="button" class="text-button" :disabled="busy" @click="close">关闭</button>
           </div>
           <p class="help">修改已审核资料将重新进入待审核。</p>
           <div
@@ -202,12 +251,26 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
               v-model="form[field.key]"
               :type="field.type"
               :aria-invalid="Boolean(errors[field.key])"
+              :aria-describedby="errors[field.key] ? 'insurance-error-' + field.key : undefined"
               autocomplete="off"
             />
-            <p v-if="errors[field.key]" role="alert" class="field-error">{{ errors[field.key] }}</p>
+            <p
+              v-if="errors[field.key]"
+              :id="'insurance-error-' + field.key"
+              role="alert"
+              class="field-error"
+            >
+              {{ errors[field.key] }}
+            </p>
           </div>
           <p v-if="message" role="alert" class="error">{{ message }}</p>
-          <van-button v-if="conflict" plain @click="refreshConflict">刷新当前资料并核对</van-button
+          <van-button
+            v-if="conflict"
+            plain
+            :loading="busy"
+            :disabled="busy"
+            @click="refreshConflict"
+            >刷新当前资料并核对</van-button
           ><van-button
             v-else-if="unresolved"
             plain
@@ -220,7 +283,7 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
             type="primary"
             native-type="submit"
             :loading="busy"
-            :disabled="conflict || unresolved"
+            :disabled="busy || conflict || unresolved"
             >保存资料（演示）</van-button
           ></van-form
         >

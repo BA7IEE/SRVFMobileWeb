@@ -6,6 +6,12 @@ import RegistrationResult from '../../../shared/components/RegistrationResult.vu
 import PageState from '../../../shared/components/PageState.vue';
 import StatusBadge from '../../../shared/components/StatusBadge.vue';
 const view = ref('recent');
+const phaseLabels = {
+  open: '报名阶段',
+  closed: '报名已截止',
+  ended: '历史活动',
+  cancelled: '活动已取消',
+};
 const { data, loading, error, load } = useResource(() => getData().registrations.getMyActivities());
 const shown = computed(
   () => data.value?.filter((r) => view.value === 'all' || r.phase !== 'ended') ?? [],
@@ -32,7 +38,7 @@ onMounted(() => void load());
         <div class="panel-heading">
           <router-link :to="{ name: 'activity', params: { activityId: r.activityId } }"
             ><h2>{{ r.title }}</h2></router-link
-          ><status-badge>{{ r.phase === 'ended' ? '活动已结束' : '活动进行阶段' }}</status-badge>
+          ><status-badge>{{ phaseLabels[r.phase] }}</status-badge>
         </div>
         <registration-result :result="r" links /></div
     ></page-state>

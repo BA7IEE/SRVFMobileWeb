@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onUnmounted, ref } from 'vue';
 import { Button as VanButton, showConfirmDialog, showDialog } from 'vant';
 import { useAuth } from '../../auth/store';
 import { router } from '../../../app/router';
@@ -7,6 +7,7 @@ import { getData } from '../../../data';
 import { passwordError } from '../../../shared/validation';
 import { appError } from '../../../shared/errors';
 import CredentialPopup from '../../../shared/components/CredentialPopup.vue';
+import { onBackgroundCleanup, onSessionCleanup } from '../../../shared/storage';
 const auth = useAuth();
 const settings = ref(false);
 const old = ref('');
@@ -16,6 +17,27 @@ const message = ref('');
 const busy = ref(false);
 const show = ref(false);
 const credential = ref<string>();
+const codeBusy = ref(false);
+const codeError = ref('');
+let codeGeneration = 0;
+let active = true;
+function clearCode() {
+  codeGeneration++;
+  credential.value = undefined;
+  show.value = false;
+  codeBusy.value = false;
+}
+const unregisterBackground = onBackgroundCleanup(clearCode);
+const unregisterSession = onSessionCleanup(() => {
+  active = false;
+  clearCode();
+});
+onUnmounted(() => {
+  active = false;
+  clearCode();
+  unregisterBackground();
+  unregisterSession();
+});
 async function logout() {
   try {
     await showConfirmDialog({
@@ -47,8 +69,21 @@ async function change() {
   }
 }
 async function memberCode() {
-  credential.value = await getData().attendance.getMemberCredential();
-  show.value = true;
+  if (codeBusy.value) return;
+  codeBusy.value = true;
+  codeError.value = '';
+  const generation = codeGeneration;
+  try {
+    const value = await getData().attendance.getMemberCredential();
+    if (active && generation === codeGeneration) {
+      credential.value = value;
+      show.value = true;
+    }
+  } catch (e) {
+    if (active && generation === codeGeneration) codeError.value = appError(e).message;
+  } finally {
+    if (active && generation === codeGeneration) codeBusy.value = false;
+  }
 }
 </script>
 <template>
@@ -63,7 +98,8 @@ async function memberCode() {
       <router-link to="/my/insurance">我的保险</router-link
       ><router-link to="/my/participation">参与记录</router-link
       ><router-link v-if="auth.member?.managed" to="/managed/activities">我负责的活动</router-link
-      ><button class="text-button" @click="memberCode">本人成员码</button
+      ><button class="text-button" :disabled="codeBusy" @click="memberCode">
+        {{ codeBusy ? '正在读取成员码…' : '本人成员码' }}</button
       ><button class="text-button" @click="settings = !settings">账户设置</button
       ><button
         class="text-button"
@@ -78,6 +114,7 @@ async function memberCode() {
         帮助</button
       ><router-link to="/privacy">隐私说明（演示稿）</router-link>
     </section>
+    <p v-if="codeError" role="alert" class="error">{{ codeError }}，请重新点击本人成员码重试。</p>
     <form v-if="settings" class="panel" @submit.prevent="change">
       <h2>修改密码（仅模拟）</h2>
       <p class="help">请勿填写真实密码。</p>

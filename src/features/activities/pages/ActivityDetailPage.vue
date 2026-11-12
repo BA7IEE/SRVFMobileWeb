@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, onUnmounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import { Button as VanButton, showConfirmDialog, showDialog } from 'vant';
 import { getData } from '../../../data';
+import { useAuth } from '../../auth/store';
 import { useResource } from '../../../shared/composables/resource';
 import PageState from '../../../shared/components/PageState.vue';
 import InsuranceRequirementCard from '../../../shared/components/InsuranceRequirementCard.vue';
@@ -11,6 +12,11 @@ import StatusBadge from '../../../shared/components/StatusBadge.vue';
 import { beijing } from '../../../shared/time';
 import { appError } from '../../../shared/errors';
 const id = String(useRoute().params.activityId);
+const auth = useAuth();
+let active = true;
+onUnmounted(() => {
+  active = false;
+});
 const actionError = ref('');
 const pending = ref(false);
 const { data, loading, error, load } = useResource(async () => {
@@ -24,19 +30,28 @@ const { data, loading, error, load } = useResource(async () => {
 onMounted(() => void load());
 async function cancel() {
   if (pending.value) return;
+  pending.value = true;
+  actionError.value = '';
+  const epoch = auth.epoch;
   try {
     await showConfirmDialog({
       title: '取消本次报名',
       message: '取消后仍保留历史结果。请核对活动与场次，确定取消本次演示报名？',
     });
   } catch {
+    pending.value = false;
     return;
   }
-  pending.value = true;
+  if (!active || !auth.ready || auth.epoch !== epoch) {
+    pending.value = false;
+    return;
+  }
   try {
     await getData().registrations.cancel(id);
+    if (!active || auth.epoch !== epoch) return;
     await load();
   } catch (e) {
+    if (!active || auth.epoch !== epoch) return;
     actionError.value = appError(e).message;
   } finally {
     pending.value = false;
@@ -64,8 +79,10 @@ function share() {
           <h1>{{ data.activity.title }}</h1>
           <p>{{ data.activity.summary }}</p>
           <div class="stack muted">
-            <p>{{ beijing(data.activity.startAt) }} 至 {{ beijing(data.activity.endAt) }}</p>
-            <p>{{ data.activity.location }}</p>
+            <p>
+              活动时间：{{ beijing(data.activity.startAt) }} 至 {{ beijing(data.activity.endAt) }}
+            </p>
+            <p>活动地点：{{ data.activity.location }}</p>
           </div>
         </section>
         <p v-if="data.activity.historical" class="notice">
@@ -76,7 +93,8 @@ function share() {
           <h2>场次与岗位</h2>
           <div v-for="s in data.activity.sessions" :key="s.id" class="session-row">
             <h3>{{ s.name }}</h3>
-            <p class="muted">{{ beijing(s.startAt) }} 至 {{ beijing(s.endAt) }}</p>
+            <p class="muted">场次时间：{{ beijing(s.startAt) }} 至 {{ beijing(s.endAt) }}</p>
+            <p v-if="s.location" class="muted">场次地点：{{ s.location }}</p>
             <p>
               {{
                 s.positions.length ? s.positions.map((x) => x.name).join('、') : '本场次不分岗位'
@@ -91,15 +109,27 @@ function share() {
           <button class="text-button" @click="share">查看本站分享链接</button>
         </section>
         <p v-if="actionError" class="error" role="alert">{{ actionError }}</p>
+        <p v-if="data.activity.registration.state !== 'allowed'" class="notice">
+          {{ data.activity.registration.reason }}
+        </p>
+        <p v-else-if="data.insurance.status !== 'eligible'" class="notice">
+          请先处理上方保险条件，再继续报名。
+        </p>
         <div class="action-bar">
           <template v-if="data.result?.status === 'submitted'"
+            ><van-button type="primary" to="/my/activities">查看我的活动</van-button
             ><van-button
               v-if="data.result.canEdit"
               :to="{ name: 'register', params: { activityId: id } }"
               >修改报名</van-button
-            ><van-button v-if="data.result.canCancel" plain :loading="pending" @click="cancel"
-              >取消报名</van-button
-            ></template
+            ><button
+              v-if="data.result.canCancel"
+              class="text-button danger-button"
+              :disabled="pending"
+              @click="cancel"
+            >
+              {{ pending ? '正在取消…' : '取消报名' }}
+            </button></template
           ><template v-else
             ><van-button
               type="primary"
@@ -112,12 +142,6 @@ function share() {
             ></template
           >
         </div>
-        <p v-if="data.activity.registration.state !== 'allowed'" class="muted">
-          {{ data.activity.registration.reason }}
-        </p>
-        <p v-else-if="data.insurance.status !== 'eligible'" class="muted">
-          请先处理上方保险条件，再继续报名。
-        </p>
       </template></page-state
     >
   </div>

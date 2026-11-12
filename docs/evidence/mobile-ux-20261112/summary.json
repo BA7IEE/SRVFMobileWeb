@@ -1,0 +1,107 @@
+{
+  "status": "PASS",
+  "date": "2026-11-12",
+  "timezone": "Asia/Shanghai",
+  "baseline": "7218acc54f8c2f7bc85e0dbd33080d1d42fff50d",
+  "command": "pnpm check",
+  "exitCode": 0,
+  "unitAndComponents": 105,
+  "offlineContracts": 50,
+  "browserTests": 72,
+  "independentBrowserCases": 36,
+  "browserRetries": 0,
+  "browserSkipped": 0,
+  "browserProjects": {
+    "chromium": "158.0.8127.18",
+    "webkit": "27.2"
+  },
+  "network": {
+    "records": 72,
+    "apiRequests": 0,
+    "forbidden": 0,
+    "csp": 0,
+    "pageErrors": 0,
+    "serviceWorkers": 0
+  },
+  "sourceFingerprint": "77078dcaf70de93a9811f0617e16106e4779976f5e2573d38a2c0384325a71fd",
+  "mockBuildMatchesSource": true,
+  "ordinaryBuildMatchesSource": true,
+  "bundles": {
+    "dist": {
+      "files": 39,
+      "allJsCssGzip": 224515,
+      "decoderGzip": 47468,
+      "withoutDecoderGzip": 177047
+    },
+    "dist-mock": {
+      "files": 46,
+      "allJsCssGzip": 243570,
+      "decoderGzip": 47468,
+      "withoutDecoderGzip": 196102
+    }
+  },
+  "artifactScreenshots": 78,
+  "artifactPaths": [
+    "test-results/results.json",
+    "test-results/**/network.json",
+    "test-results/**/layout-*.json",
+    "test-results/**/insurance-states-*.json",
+    "test-results/**/*.png",
+    "playwright-report/"
+  ],
+  "representativeScreenshots": [
+    {
+      "file": "form-after-320.png",
+      "sha256": "23d6bd14930e9737915e780ccd799040f6ada79f6a7d02468bf0af736f5f2996"
+    },
+    {
+      "file": "form-before-320.png",
+      "sha256": "a4221e5414c6047bc9cbc82f2a83ffc3c58dad43b59f4e0711f5a8f2a3db89b6"
+    },
+    {
+      "file": "people-after-320.png",
+      "sha256": "14024d5c1b493876c03126f81858a638ab083e3e70a2b5f7b7627b5c78963148"
+    },
+    {
+      "file": "people-before-320.png",
+      "sha256": "3f9be5b4f3bf3820caa5e9769a2fee4c8e47d42d2f9d3809182d8c11462d1412"
+    }
+  ],
+  "manualVisualReview": [
+    "320px unfilled eight-question form before/after",
+    "320px onsite people before/after",
+    "320px form field focus and insurance editor",
+    "Chromium/WebKit final 320px filled form and WebKit 390px insurance error",
+    "WebKit 320px native select 46px height and local CSS arrow"
+  ],
+  "notRun": [
+    "realApi",
+    "realAccounts",
+    "realBusiness",
+    "realDevices",
+    "mobileWeChat",
+    "realSoftKeyboard",
+    "deployment",
+    "nativeSelectKeyboardInteraction"
+  ],
+  "earlierAttempts": [
+    {
+      "status": "INTERRUPTED",
+      "reason": "located click displacement and new selector issues; fixed without retries"
+    },
+    {
+      "status": "FAIL",
+      "browserPassed": 62,
+      "browserFailed": 10,
+      "reason": "blur validation moved checkbox during first click; fixed update timing"
+    },
+    {
+      "status": "FAIL",
+      "stage": "format:check",
+      "reason": "earlier generated evidence JSON formatting; restored historical files and moved new evidence to test artifacts"
+    }
+  ],
+  "codeAndTestBaseCommit": "8a70b30dd209a112d90ba47609761781830e04ab",
+  "followup": "WebKit native selects: 27px to 46px; browser assertions require at least 44px",
+  "pullRequest": "https://github.com/BA7IEE/SRVFMobileWeb/pull/2"
+}

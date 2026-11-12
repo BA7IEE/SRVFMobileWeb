@@ -75,6 +75,19 @@ input[type='radio'] {
   accent-color: var(--srvf-red);
   flex-shrink: 0;
 }
+/* WebKit 的原生 menulist 会忽略 min-height，使用本地下拉箭头保留触摸高度。 */
+select {
+  appearance: none;
+  padding-right: 36px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--srvf-fg-muted) 50%),
+    linear-gradient(135deg, var(--srvf-fg-muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 18px) 50%,
+    calc(100% - 12px) 50%;
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+}
 textarea {
   resize: vertical;
   min-height: 100px;
@@ -84,17 +97,24 @@ textarea {
   margin: 0 auto;
   min-height: 100dvh;
   background: var(--srvf-bg-page);
-  padding-bottom: 32px;
+  padding-bottom: calc(32px + env(safe-area-inset-bottom));
 }
 .has-tabs {
   padding-bottom: calc(104px + env(safe-area-inset-bottom));
 }
 .mock-banner {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
   background: var(--srvf-red-tint);
   color: var(--srvf-red-deep);
   text-align: center;
   font-size: 12px;
-  padding: 5px 8px;
+  padding: calc(4px + env(safe-area-inset-top)) 16px 4px;
 }
 .app-header {
   height: 64px;
@@ -177,6 +197,7 @@ h3 {
   justify-content: space-between;
   align-items: center;
   gap: 8px;
+  flex-wrap: wrap;
 }
 .field {
   display: grid;
@@ -252,11 +273,13 @@ h3 {
   align-items: center;
   gap: 6px;
   color: var(--srvf-fg-default);
-  font-size: 12px;
+  font-size: 14px;
   border: 1px solid var(--srvf-border-default);
   padding: 3px 8px;
   border-radius: 999px;
-  flex-shrink: 0;
+  max-width: 100%;
+  width: fit-content;
+  overflow-wrap: anywhere;
 }
 .status-badge::before {
   content: '';
@@ -264,6 +287,7 @@ h3 {
   height: 6px;
   background: var(--srvf-navy);
   border-radius: 50%;
+  flex-shrink: 0;
 }
 .status-badge[data-tone='success']::before {
   background: var(--srvf-status-active);
@@ -276,6 +300,7 @@ h3 {
 }
 .action-bar {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
   align-items: center;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
@@ -286,7 +311,7 @@ h3 {
   z-index: 5;
 }
 .action-bar > .van-button {
-  flex: 1;
+  flex: 1 1 120px;
 }
 .bottom-tabs {
   max-width: 560px;
@@ -304,6 +329,16 @@ h3 {
 }
 .van-dialog {
   max-width: calc(100vw - 32px);
+  max-height: calc(100dvh - 32px);
+  display: flex;
+  flex-direction: column;
+}
+.van-dialog__content {
+  overflow-y: auto;
+  min-height: 0;
+}
+.van-dialog__footer {
+  flex-shrink: 0;
 }
 .van-field__control {
   min-height: 44px;
@@ -331,6 +366,25 @@ h3 {
 .long-text {
   overflow-wrap: anywhere;
   white-space: pre-wrap;
+}
+h1,
+h2,
+h3,
+.activity-meta,
+.session-row {
+  overflow-wrap: anywhere;
+}
+input,
+textarea,
+select,
+[tabindex='-1'] {
+  scroll-margin-block: 80px 100px;
+}
+details.developer-details > summary {
+  min-height: var(--srvf-touch);
+  padding: 10px 0;
+  cursor: pointer;
+  color: var(--srvf-navy);
 }
 .metric-row {
   display: flex;
