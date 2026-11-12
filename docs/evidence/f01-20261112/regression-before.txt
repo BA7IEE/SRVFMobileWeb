@@ -1,0 +1,211 @@
+F01 定向回归修前记录。仅去除行尾空白；基线与中间实现分别标注。
+
+248534e 基线：先加8条成功加载后失权回归，8失败
+
+ RUN  v3.2.7 /Volumes/WorkSSD/Development/Repos/SRVFMobileWeb
+
+ ❯ tests/components/managed-forbidden.test.ts (8 tests | 8 failed) 121ms
+   × F01 成功加载后的局部失权 > 二维码局部读取forbidden后提示/返回可见，旧并发概览不能恢复，恢复只读不重放 61ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 二维码issue写入forbidden后有独立反馈，重读不会重复写 7ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 二维码revoke写入forbidden后有独立反馈，重读不会重复写 9ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 人员proxy写入forbidden后清理输入/回执，提示和返回可见且重读不重放 16ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 人员scan写入forbidden后清理输入/回执，提示和返回可见且重读不重放 8ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 名单读取forbidden作废旧在途代签成功，旧回执不能恢复名单或触发重读 5ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 报名审核forbidden不冒充空名单，提示/返回可见，恢复后无旧选择和旧结果 8ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+   × F01 成功加载后的局部失权 > 报名读取forbidden后晚到审核结果不能恢复结果和名单 6ms
+     → 失权提示必须独立于业务data可见: expected undefined to be defined
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 二维码局部读取forbidden后提示/返回可见，旧并发概览不能恢复，恢复只读不重放
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:146:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/8]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 二维码issue写入forbidden后有独立反馈，重读不会重复写
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 二维码revoke写入forbidden后有独立反馈，重读不会重复写
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:172:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/8]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 人员proxy写入forbidden后清理输入/回执，提示和返回可见且重读不重放
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 人员scan写入forbidden后清理输入/回执，提示和返回可见且重读不重放
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:189:7
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/8]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 名单读取forbidden作废旧在途代签成功，旧回执不能恢复名单或触发重读
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:206:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/8]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 报名审核forbidden不冒充空名单，提示/返回可见，恢复后无旧选择和旧结果
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:219:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/8]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 报名读取forbidden后晚到审核结果不能恢复结果和名单
+AssertionError: 失权提示必须独立于业务data可见: expected undefined to be defined
+ ❯ deniedVisible tests/components/managed-forbidden.test.ts:110:38
+    108|     .findAll('[role="alert"]')
+    109|     .find((x) => x.text().includes('当前活动的操作权限已失效'));
+    110|   expect(alert, '失权提示必须独立于业务data可见').toBeDefined();
+       |                                      ^
+    111|   expect(alert!.isVisible()).toBe(true);
+    112|   expect(
+ ❯ tests/components/managed-forbidden.test.ts:237:5
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/8]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  8 failed (8)
+   Start at  20:46:23
+   Duration  1.04s (transform 272ms, setup 11ms, collect 362ms, tests 121ms, environment 305ms, prepare 66ms)
+
+修复中间实现：旧finally会解锁恢复后的新写入，1失败/9通过
+
+ RUN  v3.2.7 /Volumes/WorkSSD/Development/Repos/SRVFMobileWeb
+
+ ❯ tests/components/managed-forbidden.test.ts (10 tests | 1 failed) 172ms
+   ✓ F01 成功加载后的局部失权 > 二维码局部读取forbidden后提示/返回可见，旧并发概览不能恢复，恢复只读不重放 70ms
+   ✓ F01 成功加载后的局部失权 > 概览读取失权后，旧二维码写入成功不能重开码图，失败重读仍保留提示 13ms
+   ✓ F01 成功加载后的局部失权 > 二维码issue写入forbidden后有独立反馈，重读不会重复写 10ms
+   ✓ F01 成功加载后的局部失权 > 二维码revoke写入forbidden后有独立反馈，重读不会重复写 9ms
+   ✓ F01 成功加载后的局部失权 > 人员proxy写入forbidden后清理输入/回执，提示和返回可见且重读不重放 20ms
+   ✓ F01 成功加载后的局部失权 > 人员scan写入forbidden后清理输入/回执，提示和返回可见且重读不重放 16ms
+   ✓ F01 成功加载后的局部失权 > 名单读取forbidden作废旧在途代签成功，旧回执不能恢复名单或触发重读 7ms
+   × F01 成功加载后的局部失权 > 失权后显式恢复并开始新代签，旧写收尾不能解锁新操作 11ms
+     → expected undefined to be defined
+   ✓ F01 成功加载后的局部失权 > 报名审核forbidden不冒充空名单，提示/返回可见，恢复后无旧选择和旧结果 9ms
+   ✓ F01 成功加载后的局部失权 > 报名读取forbidden后晚到审核结果不能恢复结果和名单 8ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 失权后显式恢复并开始新代签，旧写收尾不能解锁新操作
+AssertionError: expected undefined to be defined
+ ❯ tests/components/managed-forbidden.test.ts:255:46
+    253|     oldWrite.resolve({ action: 'check_in', message: '合成旧成功回执' });
+    254|     await flushPromises();
+    255|     expect(newSubmit.attributes('disabled')).toBeDefined();
+       |                                              ^
+    256|     expect(wrapper!.text()).not.toContain('合成旧成功回执');
+    257|     expect(api.proxy).toHaveBeenCalledTimes(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 9 passed (10)
+   Start at  20:53:10
+   Duration  1.05s (transform 274ms, setup 11ms, collect 373ms, tests 172ms, environment 278ms, prepare 42ms)
+
+修复中间实现：加入真实Vant确认清理回归，2失败/9通过
+
+ RUN  v3.2.7 /Volumes/WorkSSD/Development/Repos/SRVFMobileWeb
+
+ ❯ tests/components/managed-forbidden.test.ts (11 tests | 2 failed) 1193ms
+   ✓ F01 成功加载后的局部失权 > 二维码局部读取forbidden后提示/返回可见，旧并发概览不能恢复，恢复只读不重放 71ms
+   ✓ F01 成功加载后的局部失权 > 概览读取失权后，旧二维码写入成功不能重开码图，失败重读仍保留提示 12ms
+   ✓ F01 成功加载后的局部失权 > 二维码issue写入forbidden后有独立反馈，重读不会重复写 9ms
+   ✓ F01 成功加载后的局部失权 > 二维码revoke写入forbidden后有独立反馈，重读不会重复写 9ms
+   ✓ F01 成功加载后的局部失权 > 人员proxy写入forbidden后清理输入/回执，提示和返回可见且重读不重放 19ms
+   ✓ F01 成功加载后的局部失权 > 人员scan写入forbidden后清理输入/回执，提示和返回可见且重读不重放 15ms
+   ✓ F01 成功加载后的局部失权 > 名单读取forbidden作废旧在途代签成功，旧回执不能恢复名单或触发重读 6ms
+   × F01 成功加载后的局部失权 > 失权后显式恢复并开始新代签，旧写收尾不能解锁新操作 11ms
+     → expected undefined to be defined
+   ✓ F01 成功加载后的局部失权 > 报名审核forbidden不冒充空名单，提示/返回可见，恢复后无旧选择和旧结果 9ms
+   ✓ F01 成功加载后的局部失权 > 报名读取forbidden后晚到审核结果不能恢复结果和名单 7ms
+   × F01 成功加载后的局部失权 > 确认中读取失权会关闭真实Vant弹窗，移除其中的旧人员资料 1023ms
+     → expected '活动：合成活动\n场次：上午场\n人员：DEMO-001 合成成员\n参与…' not to contain 'person-a'
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 失权后显式恢复并开始新代签，旧写收尾不能解锁新操作
+AssertionError: expected undefined to be defined
+ ❯ tests/components/managed-forbidden.test.ts:255:46
+    253|     oldWrite.resolve({ action: 'check_in', message: '合成旧成功回执' });
+    254|     await flushPromises();
+    255|     expect(newSubmit.attributes('disabled')).toBeDefined();
+       |                                              ^
+    256|     expect(wrapper!.text()).not.toContain('合成旧成功回执');
+    257|     expect(api.proxy).toHaveBeenCalledTimes(2);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/2]⎯
+
+ FAIL  tests/components/managed-forbidden.test.ts > F01 成功加载后的局部失权 > 确认中读取失权会关闭真实Vant弹窗，移除其中的旧人员资料
+AssertionError: expected '活动：合成活动\n场次：上午场\n人员：DEMO-001 合成成员\n参与…' not to contain 'person-a'
+
+- Expected
++ Received
+
+- person-a
++ 活动：合成活动
++ 场次：上午场
++ 人员：DEMO-001 合成成员
++ 参与身份：person-a
++ 原因：合成现场核验原因
++ 不产生正式时长或贡献。
+
+ ❯ tests/components/managed-forbidden.test.ts:308:87
+    306|       await deniedVisible();
+    307|       await vi.waitFor(() => {
+    308|         expect(document.querySelector('.van-dialog__message')?.textCon…
+       |                                                                                       ^
+    309|           'person-a',
+    310|         );
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/2]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  2 failed | 9 passed (11)
+   Start at  20:53:46
+   Duration  2.06s (transform 286ms, setup 10ms, collect 376ms, tests 1.19s, environment 263ms, prepare 49ms)

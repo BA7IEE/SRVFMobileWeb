@@ -1,5 +1,7 @@
 # SRVFMobileWeb FRONTEND-FOUNDATION 执行报告
 
+> 最新 PR #2 F01 局部失权修复见[整改报告](review-remediation.md#pr-2-f01成功加载后的局部失权反馈2026-11-12)与[本次验证汇总](evidence/f01-20261112/summary.json)。下方 105/50/72 为 `248534e` 结束的上一轮历史结果，未覆盖 F01，本次完整结果为 116/50/80。
+
 ## 2026-11-12 移动端 UX/UI 与前端加固（本轮）
 
 本节是本轮结果，下方首次交付和 review-remediation 的数字仍是历史记录。开始与交付前两次 fetch 核对，远端 main 均为 `7218acc54f8c2f7bc85e0dbd33080d1d42fff50d`；开始时本地 main 同 SHA、工作区干净。新分支 `codex/mobile-ux-hardening`，业务/导航分组提交 `6ff3992`、`8a70b30`，随后追加 WebKit 原生下拉框触摸高度修复并重新验证，最终交付 SHA 见 PR head。
