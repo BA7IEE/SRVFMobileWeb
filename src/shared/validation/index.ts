@@ -1,4 +1,5 @@
 import type { Question, InsuranceInput, Preferences, SessionInfo } from '../../data/models';
+import { qualificationAllowsSelection } from '../qualification';
 export const FILE_LIMIT = 10 * 1024 * 1024;
 export const FILE_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'application/pdf'];
 export function validDate(value: unknown): value is string {
@@ -94,20 +95,21 @@ export function preferenceError(preferences: Preferences, sessions: SessionInfo[
   for (const p of preferences) {
     const s = sessions.find((s) => s.id === p.sessionId);
     if (
-      s?.qualification?.result === 'fail' ||
-      s?.positions.some(
-        (position) =>
-          p.positionIds.includes(position.id) && position.qualification?.result === 'fail',
-      )
-    )
-      return '所选场次或岗位的资格已变化，请重新核对';
-    if (
       !s ||
       new Set(p.positionIds).size !== p.positionIds.length ||
       p.positionIds.some((id) => !s.positions.some((x) => x.id === id)) ||
       (s.positions.length && !p.positionIds.length)
     )
       return '请核对场次和岗位志愿';
+    if (
+      !qualificationAllowsSelection(s.qualification) ||
+      s.positions.some(
+        (position) =>
+          p.positionIds.includes(position.id) &&
+          !qualificationAllowsSelection(position.qualification),
+      )
+    )
+      return '所选场次或岗位的资格已变化，请重新核对';
   }
   return '';
 }
