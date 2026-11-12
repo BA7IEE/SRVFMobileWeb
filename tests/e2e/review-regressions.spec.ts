@@ -1,5 +1,5 @@
 import { test, expect, login, scenario } from './fixtures';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { writeFile } from 'node:fs/promises';
 
 test('R2 启动身份读取首次失败，点击重新确认身份后恢复业务页', async ({ page }) => {
   await login(page);
@@ -15,7 +15,6 @@ test('R2 启动身份读取首次失败，点击重新确认身份后恢复业�
 
 test('R4 保险加载、空记录、服务错误、权限拒绝分别留证', async ({ page }, testInfo) => {
   test.setTimeout(90000);
-  await mkdir('docs/evidence/screenshots', { recursive: true });
   await login(page, 'demo_a', '/my/insurance');
   await expect(page.getByRole('heading', { name: '队伍统一保险' })).toBeVisible();
   await page.clock.install();
@@ -29,7 +28,7 @@ test('R4 保险加载、空记录、服务错误、权限拒绝分别留证', as
     const width = page.viewportSize()!.width;
     const file = `${testInfo.project.name}-${width}-insurance-${state}.png`;
     await page.screenshot({
-      path: `docs/evidence/screenshots/${file}`,
+      path: testInfo.outputPath(file),
       fullPage: true,
       animations: 'disabled',
     });
@@ -64,7 +63,7 @@ test('R4 保险加载、空记录、服务错误、权限拒绝分别留证', as
     await expect(page.getByRole('heading', { name: '队伍统一保险' })).toBeVisible();
   }
   await writeFile(
-    `docs/evidence/insurance-states-${testInfo.project.name}.json`,
+    testInfo.outputPath(`insurance-states-${testInfo.project.name}.json`),
     JSON.stringify(evidence, null, 2) + '\n',
   );
 });

@@ -7,6 +7,7 @@ import { router } from '../app/router';
 const controls = getData().controls!;
 const auth = useAuth();
 const show = ref(false);
+const trigger = ref<HTMLButtonElement>();
 const selected = ref(controls.getScenario());
 const account = ref('demo_a');
 const now = ref(controls.now());
@@ -44,8 +45,14 @@ function insurance() {
 }
 </script>
 <template>
-  <button class="dev-trigger" aria-label="打开演示场景面板" @click="show = true">场景</button
-  ><van-popup v-model:show="show" position="bottom" teleport="body" round
+  <button ref="trigger" class="dev-trigger" aria-label="打开演示场景面板" @click="show = true">
+    场景</button
+  ><van-popup
+    v-model:show="show"
+    position="bottom"
+    teleport="body"
+    round
+    @closed="trigger?.focus({ preventScroll: true })"
     ><section class="dev-panel">
       <div class="panel-heading">
         <h2>本地演示控制</h2>
@@ -96,17 +103,14 @@ function insurance() {
 </template>
 <style scoped>
 .dev-trigger {
-  position: fixed;
-  right: max(8px, calc((100vw - 560px) / 2 + 8px));
-  bottom: calc(84px + env(safe-area-inset-bottom));
-  z-index: 20;
-  background: var(--srvf-bg-surface);
-  border: 1px solid var(--srvf-control-border);
-  color: var(--srvf-fg-muted);
+  flex-shrink: 0;
+  background: transparent;
+  border: 1px solid var(--srvf-red-deep);
+  color: var(--srvf-red-deep);
   border-radius: 4px;
   min-width: 44px;
-  min-height: 44px;
-  font-size: 12px;
+  min-height: var(--srvf-touch);
+  font-size: 14px;
 }
 .dev-panel {
   padding: 16px 16px calc(24px + env(safe-area-inset-bottom));

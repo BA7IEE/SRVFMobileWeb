@@ -15,3 +15,14 @@ export function safeTarget(value: unknown): string {
   ];
   return patterns.some((p) => p.test(value)) ? value : '/activities';
 }
+
+export function parentTarget(path: string): string {
+  const safe = safeTarget(path);
+  if (/^\/activities\/[^/]+\/register$/.test(safe)) return safe.replace(/\/register$/, '');
+  if (safe.endsWith('/attendance')) return '/my/activities';
+  if (/^\/activities\/[^/]+$/.test(safe)) return '/activities';
+  if (safe.endsWith('/onsite/people')) return safe.replace(/\/people$/, '');
+  if (/^\/managed\/activities\/[^/]+\//.test(safe)) return '/managed/activities';
+  if (safe === '/managed/activities' || safe.startsWith('/my/')) return '/my';
+  return '/activities';
+}

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onUnmounted, ref } from 'vue';
+import { nextTick, onUnmounted, ref, watch } from 'vue';
 import { Button as VanButton } from 'vant';
 import { CameraAdapter } from '../../platform/camera';
 import { decodeFile, decodePixels } from '../../platform/scanner';
@@ -31,7 +31,7 @@ function recognized(code: string) {
   emit('recognized', code);
 }
 async function start() {
-  if (props.disabled) return;
+  if (props.disabled || state.value === 'requesting' || state.value === 'scanning') return;
   error.value = '';
   state.value = 'requesting';
   if (props.simulation === 'ignored') return;
@@ -54,10 +54,12 @@ async function start() {
     }
     video.value.srcObject = stream;
     await video.value.play();
+    if (id !== epoch) return;
     state.value = 'scanning';
     scan(id);
   } catch (e) {
     if (id === epoch) {
+      stop();
       state.value = 'unavailable';
       error.value = appError(e).message;
     }
@@ -89,7 +91,7 @@ async function file(event: Event) {
   const input = event.target as HTMLInputElement;
   const selected = input.files?.[0];
   input.value = '';
-  if (!selected) return;
+  if (!selected || props.disabled) return;
   stop();
   error.value = '';
   const id = epoch;
@@ -100,6 +102,12 @@ async function file(event: Event) {
     if (id === epoch) error.value = appError(e).message;
   }
 }
+watch(
+  () => props.disabled,
+  (disabled) => {
+    if (disabled) stop();
+  },
+);
 function visibility() {
   if (document.hidden) stop();
 }
