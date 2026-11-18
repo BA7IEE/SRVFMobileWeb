@@ -1,6 +1,7 @@
 import { ref, shallowRef, onMounted, onUnmounted } from 'vue';
 import { appError } from '../errors';
 import type { AppError } from '../../data/models';
+import { onSessionCleanup } from '../storage';
 export function useResource<T>(loader: () => Promise<T>) {
   const data = shallowRef<T>();
   const loading = ref(false);
@@ -22,13 +23,19 @@ export function useResource<T>(loader: () => Promise<T>) {
   function cancel() {
     generation++;
     data.value = undefined;
+    error.value = undefined;
     loading.value = false;
   }
   const resume = () => {
     void load();
   };
-  onMounted(() => window.addEventListener('srvf:resume', resume));
+  let unregister: (() => void) | undefined;
+  onMounted(() => {
+    unregister = onSessionCleanup(cancel);
+    window.addEventListener('srvf:resume', resume);
+  });
   onUnmounted(() => {
+    unregister?.();
     window.removeEventListener('srvf:resume', resume);
     cancel();
   });

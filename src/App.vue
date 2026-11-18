@@ -9,7 +9,8 @@ import { parentTarget, safeTarget } from './app/router/safe-target';
 const auth = useAuth();
 const route = useRoute();
 const chunkError = ref(false);
-const recovering = ref(false);
+const recoveringEpoch = ref<number>();
+const recovering = computed(() => recoveringEpoch.value === auth.epoch);
 const MockPanel = __MOCK__
   ? defineAsyncComponent(() => import('./devtools/ScenarioPanel.vue'))
   : undefined;
@@ -31,12 +32,13 @@ watch(
 );
 async function recover() {
   if (!auth.session || recovering.value) return;
-  recovering.value = true;
+  const epoch = auth.epoch;
+  recoveringEpoch.value = epoch;
   try {
     await auth.revalidate();
-    if (auth.ready) window.dispatchEvent(new Event('srvf:resume'));
+    if (epoch === auth.epoch && auth.ready) window.dispatchEvent(new Event('srvf:resume'));
   } finally {
-    recovering.value = false;
+    if (recoveringEpoch.value === epoch) recoveringEpoch.value = undefined;
   }
 }
 function back() {
@@ -94,7 +96,7 @@ onUnmounted(() => {
         <button class="text-button" @click="router.go(0)">重新加载</button>
       </div>
       <div v-else-if="auth.state === 'initializing'" class="panel">正在确认身份…</div>
-      <router-view v-else :key="viewKey" />
+      <router-view v-else-if="route.meta.public || auth.ready" :key="viewKey" />
     </main>
     <van-tabbar v-if="tabs" route safe-area-inset-bottom class="bottom-tabs">
       <van-tabbar-item replace to="/activities" icon="calendar-o" aria-label="活动"

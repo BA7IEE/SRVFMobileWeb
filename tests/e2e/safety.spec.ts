@@ -68,6 +68,24 @@ test('错误密码、未绑定与恶意返回目标均有可见反馈', async ({
   await page.getByRole('button', { name: '切换身份并清理当前上下文' }).click();
   await expect(page.getByRole('heading', { name: '当前成员无法准入' })).toBeVisible();
 });
+test('A 退出再登录 B，旧身份页面与缓存不回流', async ({ page }) => {
+  await login(page, 'demo_a', '/my');
+  const oldProfile = page.getByRole('heading', { name: '演示队员 A', exact: true });
+  await expect(oldProfile).toBeVisible();
+  await page.evaluate(() =>
+    sessionStorage.setItem('srvf:ui:activities:member-a', 'synthetic-a-only'),
+  );
+  await page.getByRole('button', { name: '退出 / 切换账号' }).click();
+  await confirm(page);
+  await expect(oldProfile).toHaveCount(0);
+  await login(page, 'demo_b', '/my');
+  await expect(page.getByRole('heading', { name: '演示队员 B', exact: true })).toBeVisible();
+  await page.goBack();
+  await expect(oldProfile).toHaveCount(0);
+  expect(await page.evaluate(() => Object.values(sessionStorage))).not.toContain(
+    'synthetic-a-only',
+  );
+});
 test('八类长表单与本地文件，保留0且错误可恢复', async ({ page }) => {
   await login(page, 'demo_a', '/activities/act-position/register');
   await page.getByLabel('参加本场次').check();
