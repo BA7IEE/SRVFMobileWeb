@@ -20,6 +20,7 @@ const error = ref('');
 const errors = computed(() =>
   submitted.value ? loginErrors(account.value, password.value) : { account: '', password: '' },
 );
+const mock = __MOCK__;
 const choices = getData().auth.getLoginOptions();
 async function submit() {
   if (composing.value || loading.value) return;
@@ -52,7 +53,7 @@ function choose(value: (typeof choices)[number]) {
       <h1>每一次行动，从这里开始</h1>
       <p class="muted">深圳公益救援队 · 队员移动端</p>
     </div>
-    <div class="notice">仅演示账号，请勿输入真实密码。此处不连接真实认证服务。</div>
+    <div v-if="mock" class="notice">仅演示账号，请勿输入真实密码。此处不连接真实认证服务。</div>
     <section class="panel">
       <h2>登录队员端</h2>
       <van-form
@@ -65,7 +66,7 @@ function choose(value: (typeof choices)[number]) {
           label="账号"
           name="account"
           autocomplete="off"
-          placeholder="请输入演示账号"
+          :placeholder="mock ? '请输入演示账号' : '请输入账号'"
           :error-message="errors.account"
           :show-error-message="true"
         /><van-field
@@ -74,23 +75,29 @@ function choose(value: (typeof choices)[number]) {
           name="password"
           autocomplete="off"
           :type="showPassword ? 'text' : 'password'"
-          placeholder="请输入演示密码"
+          :placeholder="mock ? '请输入演示密码' : '请输入密码'"
           :error-message="errors.password"
           :show-error-message="true"
         /><label class="check-label"
           ><input v-model="showPassword" type="checkbox" />显示密码</label
         >
         <p v-if="error || auth.message" role="alert" class="error">{{ error || auth.message }}</p>
-        <van-button type="primary" native-type="submit" block :loading="loading" :disabled="loading"
-          >演示登录</van-button
+        <van-button
+          type="primary"
+          native-type="submit"
+          block
+          :loading="loading"
+          :disabled="loading"
+          >{{ mock ? '演示登录' : '登录' }}</van-button
         ></van-form
       ><button
         class="text-button"
         @click="
           showDialog({
             title: '登录帮助',
-            message:
-              '仅可使用下方合成账号，选择后填入演示密码。正式登录方式待接线确认；本阶段不发送短信或重置真实密码。',
+            message: !mock
+              ? '请使用队员账号和密码。如无法登录，请联系管理员。'
+              : '仅可使用下方合成账号，选择后填入演示密码。正式登录方式待接线确认；本阶段不发送短信或重置真实密码。',
           })
         "
       >

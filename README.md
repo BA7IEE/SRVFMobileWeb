@@ -1,5 +1,7 @@
 # SRVFMobileWeb
 
+队员 H5 的同源 HTTPS 构建使用 `pnpm build:h5`，产物位于 `dist-h5/`。运行时需配对支持 H5 Cookie 会话的 Nest 后端，并在同一协议、主机和端口反向代理 `/api/`。现有未配置构建和合成演示仍可独立使用。部署与手机验收状态请按对应提交核实。[会话决定与运行条件](docs/adr-001-credentials.md)
+
 SRVF 队员移动端前端基础工程。使用 Vue 3、TypeScript、Vite、Vant 4、Pinia、Vue Router，按 Foundation V1.1 实现 13 个主页面和本地模拟流程。
 
 **当前只运行合成演示数据。没有连接真实业务 API，没有正式保险审核、报名、考勤或贡献入账。** 普通构建停在“服务尚未接通”。公开源码不等于公开部署，也不代表可投入业务使用。

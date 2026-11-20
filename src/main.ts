@@ -11,11 +11,12 @@ import { router } from './app/router';
 import { useAuth } from './features/auth/store';
 
 async function bootstrap() {
-  await initializeData();
   const app = createApp(App);
   const pinia = createPinia();
   app.use(pinia);
-  await useAuth(pinia).restoreSession();
+  const auth = useAuth(pinia);
+  await initializeData(() => auth.invalidate());
+  await auth.restoreSession();
   app.use(router);
   await router.isReady();
   app.mount('#app');

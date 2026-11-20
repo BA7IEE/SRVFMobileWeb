@@ -10,6 +10,7 @@ const { data, loading, error, load } = useResource(async () => ({
   summary: await getData().participation.getSummary(),
   records: await getData().participation.listRecords(),
 }));
+const mock = __MOCK__;
 const selected = ref<ParticipationRecord>();
 const detail = useResource(() =>
   selected.value
@@ -39,7 +40,7 @@ onMounted(() => void load());
     <page-state :loading="loading" :error="error" @retry="load"
       ><template v-if="data"
         ><section class="panel">
-          <h2>正式认定汇总（演示）</h2>
+          <h2>正式认定汇总{{ mock ? '（演示）' : '' }}</h2>
           <div class="metric-row">
             <div>
               <strong>{{ decimal(data.summary.hours, '小时') }}</strong>
@@ -51,7 +52,7 @@ onMounted(() => void load());
             </div>
           </div>
           <p class="help">打卡记录仍需认定，待认定不表示零小时。</p>
-          <details class="developer-details">
+          <details v-if="mock" class="developer-details">
             <summary>演示数据说明</summary>
             <p class="help">数据层提供汇总；页面不将打卡时间差或正向分录加总。</p>
           </details>
@@ -88,7 +89,9 @@ onMounted(() => void load());
               {{
                 detail.data.value.status === 'pending'
                   ? '正在处理，没有结果不表示零小时。'
-                  : '当前为演示认定结果，正式结果需以接通后的记录为准。'
+                  : !mock
+                    ? '本条来自本人已生效的账本分录。'
+                    : '当前为演示认定结果，正式结果需以接通后的记录为准。'
               }}
             </p>
           </page-state>

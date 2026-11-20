@@ -17,7 +17,7 @@ for (const file of files) {
       source,
     )
   )
-    violations.push(file + ': forbidden network primitive');
+    if (file !== 'src/data/h5/http.ts') violations.push(file + ': forbidden network primitive');
   if (/from\s*['"][^'"]*(?:admin|utils\/http|utils\/auth)/.test(source))
     violations.push(file + ': admin import');
   if (
@@ -34,5 +34,5 @@ for (const file of files) {
 }
 assert.deepEqual(violations, []);
 console.log(
-  `PASS boundaries: ${files.length} source files; no network transport or retired/admin imports`,
+  `PASS boundaries: ${files.length} source files; network limited to H5 transport, no retired/admin imports`,
 );

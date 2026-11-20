@@ -27,7 +27,8 @@ try {
 }
 const keyword = ref(typeof saved.keyword === 'string' ? saved.keyword : '');
 const type = ref(['培训', '演练', '服务'].includes(saved.type ?? '') ? saved.type! : '');
-const available = ref(saved.available === true);
+const mock = __MOCK__;
+const available = ref(mock && saved.available === true);
 const items = ref<ActivityListItem[]>([]);
 const error = ref<AppError>();
 const loading = ref(false);
@@ -119,7 +120,13 @@ onUnmounted(() => {
   sequence++;
   window.removeEventListener('srvf:resume', resume);
 });
-const phases = { open: '开放报名', closed: '报名截止', ended: '已结束', cancelled: '已取消' };
+const phases = {
+  published: '已发布',
+  open: '开放报名',
+  closed: '报名截止',
+  ended: '已结束',
+  cancelled: '已取消',
+};
 </script>
 <template>
   <div class="page">
@@ -141,7 +148,9 @@ const phases = { open: '开放报名', closed: '报名截止', ended: '已结束
         {{ t || '全部' }}
       </button>
     </div>
-    <label class="check-label"><input v-model="available" type="checkbox" />只看可报名活动</label>
+    <label v-if="mock" class="check-label"
+      ><input v-model="available" type="checkbox" />只看可报名活动</label
+    >
     <page-state
       :loading="loading && !items.length"
       :error="items.length ? undefined : error"

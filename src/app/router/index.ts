@@ -116,7 +116,7 @@ export const router = createRouter({
   },
 });
 router.beforeEach(async (to) => {
-  if (!__MOCK__ && to.path !== '/system/not-configured' && to.path !== '/privacy')
+  if (!__H5__ && !__MOCK__ && to.path !== '/system/not-configured' && to.path !== '/privacy')
     return '/system/not-configured';
   const auth = useAuth();
   if (auth.state !== 'unavailable') await auth.restoreSession();

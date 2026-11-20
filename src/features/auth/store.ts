@@ -41,8 +41,7 @@ export const useAuth = defineStore('auth', () => {
     if (!current()) return;
     const m = await getData().auth.getCurrentMember(s);
     if (!current()) return;
-    const cap = await getData().auth.getCapabilities(s);
-    if (!current()) return;
+
     if (m.admission !== 'active') {
       clear();
       const blockedEpoch = epoch.value;
@@ -51,6 +50,8 @@ export const useAuth = defineStore('auth', () => {
       await getData().auth.logout();
       return blockedEpoch;
     }
+    const cap = await getData().auth.getCapabilities(s);
+    if (!current()) return;
     session.value = s;
     member.value = { ...m, managed: cap.managed };
     state.value = m.admission === 'active' ? 'authenticated' : 'blocked';
@@ -64,7 +65,7 @@ export const useAuth = defineStore('auth', () => {
     } else {
       clear();
       state.value = 'expired';
-      void getData().auth.logout();
+      if (__MOCK__) void getData().auth.logout();
     }
   }
   function restoreSession() {
@@ -182,5 +183,9 @@ export const useAuth = defineStore('auth', () => {
     ensureSession,
     revalidate,
     rerender,
+    invalidate() {
+      clear();
+      state.value = 'anonymous';
+    },
   };
 });

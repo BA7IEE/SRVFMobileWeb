@@ -11,7 +11,7 @@ async function files(root) {
   ).flat();
 }
 const evidence = {};
-for (const dir of ['dist', 'dist-mock']) {
+for (const dir of ['dist', 'dist-mock', 'dist-h5']) {
   const paths = await files(dir);
   let gzip = 0;
   let scannerGzip = 0;
@@ -26,7 +26,7 @@ for (const dir of ['dist', 'dist-mock']) {
     }
     text += buf.toString('utf8');
   }
-  if (dir === 'dist') {
+  if (dir !== 'dist-mock') {
     for (const forbidden of [
       'demo-only',
       'demo_a',
@@ -38,6 +38,7 @@ for (const dir of ['dist', 'dist-mock']) {
     ])
       assert.ok(!text.includes(forbidden), `ordinary bundle leaked: ${forbidden}`);
     assert.ok(text.includes('服务尚未接通'));
+    assert.equal(text.includes('/api/auth/v1/h5/'), dir === 'dist-h5');
   } else {
     assert.ok(text.includes('SRVF-DEMO:'));
     assert.ok(text.includes('演示模式'));

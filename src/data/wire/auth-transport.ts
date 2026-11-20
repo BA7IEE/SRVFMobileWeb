@@ -9,7 +9,7 @@ const authPaths = new Map([
   ['/api/app/v1/me/capabilities', 'GET'],
 ]);
 
-/** The browser runtime and credential store remain unwired pending ADR 001 approval. */
+/** Legacy JSON transport for the offline contract suite. The H5 build uses the Cookie adapter. */
 export function createSameOriginAuthTransport(request: typeof fetch): Transport {
   return {
     async send(input, signal) {

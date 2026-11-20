@@ -71,9 +71,13 @@ function share() {
         <section class="detail-hero">
           <div class="panel-heading">
             <span class="section-label">{{ data.activity.type }}</span><status-badge>{{
-              { open: '开放报名', closed: '报名截止', ended: '已结束', cancelled: '已取消' }[
-                data.activity.phase
-              ]
+              {
+                published: '已发布',
+                open: '开放报名',
+                closed: '报名截止',
+                ended: '已结束',
+                cancelled: '已取消',
+              }[data.activity.phase]
             }}</status-badge>
           </div>
           <h1>{{ data.activity.title }}</h1>
