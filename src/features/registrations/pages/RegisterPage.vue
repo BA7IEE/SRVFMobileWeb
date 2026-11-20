@@ -16,6 +16,7 @@ import DynamicQuestions from '../../../shared/components/DynamicQuestions.vue';
 import SessionPositionSelector from '../../../shared/components/SessionPositionSelector.vue';
 import InsuranceRequirementCard from '../../../shared/components/InsuranceRequirementCard.vue';
 import RegistrationResult from '../../../shared/components/RegistrationResult.vue';
+const mock = __MOCK__;
 const auth = useAuth();
 const id = String(useRoute().params.activityId);
 const actorId = auth.member?.id;
@@ -120,7 +121,7 @@ async function submit() {
   try {
     await showConfirmDialog({
       title: '确认提交报名',
-      message: `${data.value.activity.title}\n${summary.value.join('\n\n')}\n\n提交只表示已收到，具体结果按场次展示。所有数据均为演示。`,
+      message: `${data.value.activity.title}\n${summary.value.join('\n\n')}\n\n提交只表示已收到，具体结果按场次展示。${mock ? '所有数据均为演示。' : ''}`,
     });
   } catch {
     busy.value = false;
@@ -216,7 +217,7 @@ onBeforeRouteLeave(async (to) => {
   if (!dirty.value) return true;
   try {
     await showConfirmDialog({
-      title: '保留演示草稿并离开？',
+      title: mock ? '保留演示草稿并离开？' : '保留报名草稿并离开？',
       message: '当前会话可恢复输入；刷新后敏感答案与附件需重新填写。',
     });
     saveDraft(draftKey, { answers: answers.value, preferences: preferences.value });
@@ -257,7 +258,9 @@ onUnmounted(() => {
         <template v-else
           ><insurance-requirement-card :eligibility="data.insurance" :activity-id="id" />
           <p class="notice">
-            只填写合成演示资料。场次选择保留在当前会话；敏感答案与本地附件刷新后需重新填写。
+            {{
+              mock ? '只填写合成演示资料。' : ''
+            }}场次选择保留在当前会话；敏感答案与本地附件刷新后需重新填写。
           </p>
           <van-form class="panel" novalidate :show-error-message="false" @submit="submit"
             ><h2>选择场次与岗位</h2>

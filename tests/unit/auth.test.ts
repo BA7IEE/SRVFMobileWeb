@@ -42,6 +42,32 @@ describe('会话生命周期', () => {
     expect(auth.member).toBeUndefined();
     expect(sessionStorage.getItem('srvf:mock:v1:session')).toBeNull();
   });
+  it.each(['success', 'failure'])('A 退出后，迟到的身份核验 %s 不影响 B', async (outcome) => {
+    const auth = useAuth();
+    const port = context.ports!.auth;
+    await auth.login('demo_a', 'demo-only');
+    const previous = { ...auth.member! };
+    let resolve!: (member: typeof previous) => void;
+    let reject!: (error: Error) => void;
+    const delayed = new Promise<typeof previous>((yes, no) => {
+      resolve = yes;
+      reject = no;
+    });
+    const me = vi.spyOn(port, 'getCurrentMember').mockReturnValueOnce(delayed);
+    const check = auth.revalidate();
+    await vi.waitFor(() => expect(me).toHaveBeenCalledTimes(1));
+    sessionStorage.setItem('srvf:ui:activities:member-a', 'synthetic-a');
+    await auth.logout();
+    await auth.login('demo_b', 'demo-only');
+    const current = { ...auth.member! };
+    expect(current.id).not.toBe(previous.id);
+    if (outcome === 'success') resolve(previous);
+    else reject(new Error('late synthetic error'));
+    await check;
+    expect(auth.state).toBe('authenticated');
+    expect(auth.member).toEqual(current);
+    expect(sessionStorage.getItem('srvf:ui:activities:member-a')).toBeNull();
+  });
   it('过期清理；临时失败不当成已授权', async () => {
     const auth = useAuth();
     await auth.login('demo_a', 'demo-only');

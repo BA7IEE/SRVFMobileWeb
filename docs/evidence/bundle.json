@@ -1,14 +1,14 @@
 {
   "dist": {
-    "files": 39,
-    "allJsCssGzip": 219171,
+    "files": 40,
+    "allJsCssGzip": 226583,
     "decoderGzip": 47468,
-    "withoutDecoderGzip": 171703
+    "withoutDecoderGzip": 179115
   },
   "dist-mock": {
-    "files": 46,
-    "allJsCssGzip": 238190,
+    "files": 47,
+    "allJsCssGzip": 245636,
     "decoderGzip": 47468,
-    "withoutDecoderGzip": 190722
+    "withoutDecoderGzip": 198168
   }
 }

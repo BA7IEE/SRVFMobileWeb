@@ -40,6 +40,8 @@ export function activityDetail(value: unknown) {
     capacity: capacity(o.capacity),
     registrationNotes: nullableString(o.registrationNotes),
     requiresInsurance: bool(o.requiresInsurance),
+    publicRegistrationOpen:
+      o.publicRegistrationOpen === undefined ? false : bool(o.publicRegistrationOpen),
     qualification: qualification(o.qualification),
     registrationForm: readForm(o.registrationForm),
     phase: enumValue(o.phase, ['upcoming', 'ongoing', 'ended']),
@@ -53,6 +55,7 @@ export function activityDetail(value: unknown) {
         startAt: iso(s.startAt),
         endAt: iso(s.endAt),
         location: text(s.locationText),
+        locationRequired: s.locationRequired === undefined ? null : bool(s.locationRequired),
         capacity: capacity(s.capacity),
         qualification: qualification(s.qualification),
         positions: array(s.positions).map((value) => {
@@ -113,8 +116,6 @@ export function activityRegistrationForm(
     sessions: detail.sessions.map((s) => ({
       ...s,
       positions: [...s.positions].sort((a, b) => a.sortOrder - b.sortOrder),
-      // The fixed App detail has no verified geolocation policy. Do not assume no location required.
-      locationRequired: null,
     })),
   };
 }

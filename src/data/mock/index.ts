@@ -197,7 +197,7 @@ export function createMockPorts(): Ports {
         await delay();
         const old = storedSession();
         if (!old) return null;
-        if (old.refreshExpiresAt <= now || expired) {
+        if ((old.refreshExpiresAt ?? 0) <= now || expired) {
           removeMock(sessionKey);
           return null;
         }
@@ -251,7 +251,7 @@ export function createMockPorts(): Ports {
         refreshed++;
         await new Promise((r) => setTimeout(r, 100));
         if (generation !== authGeneration) throw fail('cancelled', '会话已切换');
-        if (['AUTH-04', 'AUTH-11'].includes(scene) || expired || s.refreshExpiresAt <= now)
+        if (['AUTH-04', 'AUTH-11'].includes(scene) || expired || (s.refreshExpiresAt ?? 0) <= now)
           throw fail(
             'unauthenticated',
             scene === 'AUTH-11' ? '续期结果未确认，请重新登录' : '演示会话已过期',

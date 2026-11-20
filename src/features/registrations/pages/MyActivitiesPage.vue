@@ -7,6 +7,7 @@ import PageState from '../../../shared/components/PageState.vue';
 import StatusBadge from '../../../shared/components/StatusBadge.vue';
 const view = ref('recent');
 const phaseLabels = {
+  published: '已发布',
   open: '报名阶段',
   closed: '报名已截止',
   ended: '历史活动',

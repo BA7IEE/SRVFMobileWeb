@@ -25,7 +25,8 @@
     "check:tokens": "node scripts/check-tokens.mjs && node scripts/e2e.mjs tokens",
     "check:bundle": "node scripts/check-bundle.mjs",
     "check:boundaries": "node scripts/check-boundaries.mjs",
-    "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit && pnpm test:contract && pnpm check:contract && pnpm check:boundaries && pnpm build && pnpm build:mock && pnpm check:bundle && pnpm check:tokens && pnpm test:e2e"
+    "check": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:unit && pnpm test:contract && pnpm check:contract && pnpm check:boundaries && pnpm build && pnpm build:mock && pnpm build:h5 && pnpm check:bundle && pnpm check:tokens && pnpm test:e2e",
+    "build:h5": "node scripts/build.mjs h5"
   },
   "dependencies": {
     "jsqr": "^1.4.0",

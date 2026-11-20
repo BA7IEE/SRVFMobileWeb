@@ -1,7 +1,15 @@
+<script setup lang="ts">
+const live = __H5__;
+</script>
 <template>
   <article class="page">
     <h1>隐私与使用说明</h1>
-    <section class="panel">
+    <section v-if="live" class="panel">
+      <h2>队员登录与设备权限</h2>
+      <p>同源服务通过安全 Cookie 恢复登录。退出会撤销当前登录并清理页面资料。</p>
+      <p>相机和定位按操作申请，离开页面后释放。请只提交办理报名或考勤所需信息。</p>
+    </section>
+    <section v-else class="panel">
       <h2>当前为演示稿</h2>
       <p>本版本仅供合成数据演练。请勿输入真实账号、密码、保单或上传真实个人资料。</p>
       <p>不连接真实业务服务，不发送短信、微信授权、保险审核、报名或考勤请求。</p>

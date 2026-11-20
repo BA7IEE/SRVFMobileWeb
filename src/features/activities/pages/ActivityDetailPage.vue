@@ -13,6 +13,7 @@ import { beijing } from '../../../shared/time';
 import { appError } from '../../../shared/errors';
 const id = String(useRoute().params.activityId);
 const auth = useAuth();
+const h5 = __H5__;
 let active = true;
 onUnmounted(() => {
   active = false;
@@ -71,9 +72,13 @@ function share() {
         <section class="detail-hero">
           <div class="panel-heading">
             <span class="section-label">{{ data.activity.type }}</span><status-badge>{{
-              { open: '开放报名', closed: '报名截止', ended: '已结束', cancelled: '已取消' }[
-                data.activity.phase
-              ]
+              {
+                published: '已发布',
+                open: '开放报名',
+                closed: '报名截止',
+                ended: '已结束',
+                cancelled: '已取消',
+              }[data.activity.phase]
             }}</status-badge>
           </div>
           <h1>{{ data.activity.title }}</h1>
@@ -94,6 +99,17 @@ function share() {
           <div v-for="s in data.activity.sessions" :key="s.id" class="session-row">
             <h3>{{ s.name }}</h3>
             <p class="muted">场次时间：{{ beijing(s.startAt) }} 至 {{ beijing(s.endAt) }}</p>
+            <router-link
+              v-if="
+                h5 &&
+                data.result?.status === 'submitted' &&
+                data.result.serverStatus !== 'reject' &&
+                !data.activity.historical
+              "
+              :to="{ name: 'attendance', params: { activityId: id, sessionId: s.id } }"
+              class="text-button"
+              >查看本场次考勤</router-link
+            >
             <p v-if="s.location" class="muted">场次地点：{{ s.location }}</p>
             <p>
               {{

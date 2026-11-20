@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { writeFile } from 'node:fs/promises';
 import { fingerprint } from './source-fingerprint.mjs';
 const mode = process.argv[2];
-if (!['mock', 'unconfigured'].includes(mode)) throw new Error('invalid build mode');
+if (!['mock', 'h5', 'unconfigured'].includes(mode)) throw new Error('invalid build mode');
 if (process.env.VITE_DATA_SOURCE && process.env.VITE_DATA_SOURCE !== mode)
   throw new Error('外部环境与显式构建模式冲突');
 const result = spawnSync(
@@ -12,7 +12,7 @@ const result = spawnSync(
 );
 if (result.status === 0)
   await writeFile(
-    `${mode === 'mock' ? 'dist-mock' : 'dist'}/.source-stamp.json`,
+    `${mode === 'mock' ? 'dist-mock' : mode === 'h5' ? 'dist-h5' : 'dist'}/.source-stamp.json`,
     JSON.stringify({ fingerprint: await fingerprint(), mode }) + '\n',
   );
 process.exit(result.status ?? 1);

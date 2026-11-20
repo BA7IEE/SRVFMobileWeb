@@ -140,7 +140,7 @@ export class WireAuthCoordinator {
     if (epoch !== this.epoch) throw fail('cancelled', '身份已切换');
     if (!m.canUseApp || !caps.canUseApp) throw fail('forbidden', '当前成员不可准入');
     this.store.replace(c);
-    return m;
+    return { ...m, managed: caps.managed };
   }
   refresh(signal?: AbortSignal) {
     if (this.flight) return this.flight;

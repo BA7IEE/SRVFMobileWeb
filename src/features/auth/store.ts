@@ -28,29 +28,34 @@ export const useAuth = defineStore('auth', () => {
   );
   function clear() {
     epoch.value++;
-    cleanupSession();
     member.value = undefined;
     session.value = undefined;
     refreshing = undefined;
     restore = undefined;
     initialized = true;
     revision.value++;
+    cleanupSession();
   }
-  async function identify(s: Session, id: number) {
+  async function identify(s: Session, id: number, rechecking = false) {
+    const current = () => id === epoch.value && (!rechecking || session.value === s);
+    if (!current()) return;
     const m = await getData().auth.getCurrentMember(s);
-    if (id !== epoch.value) return;
-    const cap = await getData().auth.getCapabilities(s);
-    if (id !== epoch.value) return;
+    if (!current()) return;
+
     if (m.admission !== 'active') {
       clear();
+      const blockedEpoch = epoch.value;
       member.value = { ...m, managed: false };
       state.value = 'blocked';
       await getData().auth.logout();
-      return;
+      return blockedEpoch;
     }
+    const cap = await getData().auth.getCapabilities(s);
+    if (!current()) return;
     session.value = s;
     member.value = { ...m, managed: cap.managed };
     state.value = m.admission === 'active' ? 'authenticated' : 'blocked';
+    return id;
   }
   function handle(error: unknown) {
     const e = appError(error);
@@ -60,7 +65,7 @@ export const useAuth = defineStore('auth', () => {
     } else {
       clear();
       state.value = 'expired';
-      void getData().auth.logout();
+      if (__MOCK__) void getData().auth.logout();
     }
   }
   function restoreSession() {
@@ -100,7 +105,7 @@ export const useAuth = defineStore('auth', () => {
     const id = epoch.value;
     try {
       const s = await getData().auth.login(account, password);
-      await identify(s, id);
+      if ((await identify(s, id)) !== epoch.value) throw fail('cancelled', '身份已切换');
     } catch (e) {
       if (id === epoch.value) {
         state.value = 'anonymous';
@@ -136,7 +141,9 @@ export const useAuth = defineStore('auth', () => {
     return refreshing;
   }
   async function ensureSession() {
-    if (!session.value) return;
+    const id = epoch.value;
+    if (refreshing) await refreshing;
+    if (id !== epoch.value || !session.value) return;
     if (
       session.value.expiresAt <= Date.parse(getData().controls?.now() ?? new Date().toISOString())
     )
@@ -148,11 +155,14 @@ export const useAuth = defineStore('auth', () => {
       return;
     }
     const id = epoch.value;
+    let checked: Session | undefined;
     try {
       await ensureSession();
-      if (session.value) await identify(session.value, id);
+      if (id !== epoch.value) return;
+      checked = session.value;
+      if (checked) await identify(checked, id, true);
     } catch (e) {
-      if (id === epoch.value) handle(e);
+      if (id === epoch.value && (!checked || session.value === checked)) handle(e);
     }
   }
   function rerender() {
@@ -173,5 +183,9 @@ export const useAuth = defineStore('auth', () => {
     ensureSession,
     revalidate,
     rerender,
+    invalidate() {
+      clear();
+      state.value = 'anonymous';
+    },
   };
 });

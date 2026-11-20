@@ -8,6 +8,7 @@ import { passwordError } from '../../../shared/validation';
 import { appError } from '../../../shared/errors';
 import CredentialPopup from '../../../shared/components/CredentialPopup.vue';
 import { onBackgroundCleanup, onSessionCleanup } from '../../../shared/storage';
+const mock = __MOCK__;
 const auth = useAuth();
 const settings = ref(false);
 const old = ref('');
@@ -41,14 +42,18 @@ onUnmounted(() => {
 async function logout() {
   try {
     await showConfirmDialog({
-      title: '退出当前演示账号？',
+      title: mock ? '退出当前演示账号？' : '退出当前账号？',
       message:
         '将清理当前账号的临时资料、草稿、二维码与设备资源。未确认操作需重新登录后从原记录核对。',
     });
   } catch {
     return;
   }
-  await auth.logout();
+  try {
+    await auth.logout();
+  } catch {
+    await showDialog({ message: '本机已退出，服务器撤销回执未收到。下次登录时会再次确认退出。' });
+  }
   await router.replace('/login');
 }
 async function change() {
@@ -61,6 +66,11 @@ async function change() {
     old.value = '';
     next.value = '';
     repeat.value = '';
+    if (!mock) {
+      await auth.logout();
+      await router.replace('/login');
+      return;
+    }
     message.value = '密码修改流程已演示，不会更改真实账号或固定演示密码。';
   } catch (e) {
     message.value = appError(e).message;
@@ -106,27 +116,32 @@ async function memberCode() {
         @click="
           showDialog({
             title: '使用帮助',
-            message:
-              '活动按场次报名和考勤。保险登记后需等待审核，现场操作后正式结果待认定。此版本只做合成演示，真实业务问题请联系管理员。',
+            message: mock
+              ? '活动按场次报名和考勤。保险登记后需等待审核，现场操作后正式结果待认定。此版本只做合成演示，真实业务问题请联系管理员。'
+              : '活动按场次报名和考勤，现场回执与正式认定分别展示。',
           })
         "
       >
         帮助</button
-      ><router-link to="/privacy">隐私说明（演示稿）</router-link>
+      ><router-link to="/privacy">隐私说明{{ mock ? '（演示稿）' : '' }}</router-link>
     </section>
     <p v-if="codeError" role="alert" class="error">{{ codeError }}，请重新点击本人成员码重试。</p>
     <form v-if="settings" class="panel" @submit.prevent="change">
-      <h2>修改密码（仅模拟）</h2>
+      <h2>修改密码{{ mock ? '（仅模拟）' : '' }}</h2>
       <p class="help">请勿填写真实密码。</p>
       <label class="field"
-        >原演示密码<input v-model="old" type="password" autocomplete="off" /></label
+        >{{ mock ? '原演示密码' : '原密码'
+        }}<input v-model="old" type="password" autocomplete="off" /></label
       ><label class="field"
-        >新演示密码<input v-model="next" type="password" autocomplete="off" /></label
+        >{{ mock ? '新演示密码' : '新密码'
+        }}<input v-model="next" type="password" autocomplete="off" /></label
       ><label class="field"
         >再次输入新密码<input v-model="repeat" type="password" autocomplete="off"
       /></label>
       <p v-if="message" class="error" role="status">{{ message }}</p>
-      <van-button type="primary" native-type="submit" :loading="busy">演示修改密码</van-button>
+      <van-button type="primary" native-type="submit" :loading="busy">{{
+        mock ? '演示修改密码' : '修改密码'
+      }}</van-button>
     </form>
     <van-button plain @click="logout">退出 / 切换账号</van-button
     ><credential-popup

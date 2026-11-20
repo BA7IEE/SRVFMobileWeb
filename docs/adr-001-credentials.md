@@ -1,21 +1,13 @@
-# ADR 001：凭证与多标签页
+# ADR 001 队员 H5 会话
 
-状态：mock 策略已实施；真实凭证存储方案为提案，**尚未批准，阻止真实接线**。
+维护者于 2026-11-20 批准第一版采用同源 HTTPS 和安全 Cookie 恢复会话。该决定覆盖 SRVFMobileWeb 的真实构建。代码合并、配对部署和手机实机验收分别留证。
 
-| 方案                | 体验                     | 风险与条件                                                            |
-| ------------------- | ------------------------ | --------------------------------------------------------------------- |
-| 仅内存              | 刷新后重新认证，关页丢失 | 缩短持久暴露时间；XSS 仍可读取当前运行状态                            |
-| 限定 sessionStorage | 本标签页刷新可恢复       | XSS 可读；复制标签页可能复制 family，必须重新认证或唯一刷新协调       |
-| 安全 Cookie         | 可结合服务端会话恢复     | 前端不能创建 HttpOnly；需后端、域名、SameSite、CSRF、跨域方案共同支持 |
+页面与 `/api/` 必须共用 HTTPS 协议、主机和端口。反向代理保留 Host、覆盖转发协议，后端只信任指定代理。H5 复用 Nest 现有登录、轮换与撤销事务。[后端契约](https://github.com/BA7IEE/srvf-nest-api/blob/479594029d46bb9ab0e00e01411368830e2e6a24/docs/handoff/h5-session.md)
 
-本阶段真实 `CredentialStore` 只实现可替换的 MemoryCredentialStore，且仅在 FakeTransport 测试中使用。拟议真实首发优先内存 + 明确关页/刷新重新认证；该提案未经确认，不启用实际 token。若后续要求免重新登录，必须单独批准 Cookie 或会话存储及跨标签协调，不能沿用 mock。
+- 登录只向同源 H5 login 提交账号密码。短期 Bearer 仅在本页内存，用于 App 接口。页面刷新时调用无请求体的 H5 refresh 恢复。
+- 服务端维护 opaque refresh family，以 HttpOnly、Secure、SameSite=Strict 的 host-only Cookie 传输，Path=/。每次成功刷新都轮换，保留最初的绝对期限。服务端校验 Origin、HTTPS 与浏览器提供的 Fetch Metadata。
+- 同源标签页通过 Web Locks 串行登录、刷新与退出。IndexedDB 只保存一个随机代际标记（含已退出状态）。其他标签页收到 BroadcastChannel 通知后清掉旧身份，每次业务请求前后还会核对代际。H5 不读写 localStorage 或 sessionStorage。浏览器无法提供协调能力时，显示不可用。
+- 退出先清除页面身份，再调用 H5 logout 撤销 family。未收到回执时保留本机退出标记，下一次显式登录前重试退出。改密、账号禁用、重放和凭证轮换遵从 P0-E；已签发的 access 按服务端契约自然到期。业务写入不自动重放。
+- 使用 `pnpm build:h5` 生成 `dist-h5/`。部署响应头的 CSP 必须允许 `connect-src 'self'`。回退时可恢复原有未配置静态产物。模拟构建继续使用合成数据。
 
-模拟会话在 `srvf:mock:v1:session` 保存合成 actor 引用、随机会话 ID、两个到期时间，另有命名空间版本和 TTL。它不是安全凭证，不保存输入密码。恢复时重新生成本页独立会话 ID，避免把复制的 ID 当作共享 refresh family。每页独立获得会话；退出以本页为界，其他页不自动复活当前页。真实标签页复制必须重新登录获得独立 family，或另行实现共享 family 的唯一刷新协调者。
-
-Auth store 初始化只恢复一次；同页并发刷新共用一个 Promise。所有等待者在成功、拒绝、取消和临时失败时结束。sessionEpoch 拒绝上个身份的迟到结果；mock 适配器另有 generation，退出后迟到结果也不能重新落演示存储。真实 refresh 响应可能丢失时清除可用凭证并要求重新认证，明确未发出时保留内存凭证供受控重试，不自动循环。
-
-成功刷新原子替换 access 与 refresh，保留 family 绝对到期。403 不触发全局刷新，已发送写入不加入读取重放队列。没有证实错误类别的 401 不凭 HTTP 状态猜测。
-
-退出清理本页身份、权限、本人偏好、草稿、内存答案、二维码、对象 URL、设备资源与等待任务。合成场景数据库可跨演示身份继续流程，页面缓存按 actor 隔离。无法取得原始二维码、坐标或文件会话时不伪造原键重放。
-
-未引入后台 `authorized-token / user-info / multiple-tabs` 存储键，也不复制后台原始权限缓存。
+首发需要在实际 HTTPS 拓扑和手机浏览器分别验证 Cookie、跨标签、刷新、注销及业务页面。模拟器与离线测试单列。

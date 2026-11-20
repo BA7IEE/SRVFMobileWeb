@@ -28,7 +28,7 @@ export type CurrentMember = {
   admission: 'active' | 'unbound' | 'inactive';
   managed: boolean;
 };
-export type Session = { id: string; actor: string; expiresAt: number; refreshExpiresAt: number };
+export type Session = { id: string; actor: string; expiresAt: number; refreshExpiresAt?: number };
 export type Qualification = {
   result: 'pass' | 'warn' | 'fail';
   unmetRules: {
@@ -69,7 +69,7 @@ export type ActivityListItem = {
   id: string;
   title: string;
   type: string;
-  phase: 'open' | 'closed' | 'ended' | 'cancelled';
+  phase: 'published' | 'open' | 'closed' | 'ended' | 'cancelled';
   startAt: string;
   endAt: string;
   location: string;
@@ -124,6 +124,7 @@ export type RegistrationResult = {
   title: string;
   phase: ActivityListItem['phase'];
   status: 'submitted' | 'cancelled';
+  serverStatus?: 'pending' | 'pass' | 'reject' | 'cancelled' | 'waitlisted';
   sessions: {
     id: string;
     name: string;

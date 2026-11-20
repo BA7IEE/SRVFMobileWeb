@@ -34,6 +34,7 @@ export function writeMock(key: string, value: unknown) {
   }
 }
 export function removeMock(key: string) {
+  if (__H5__) return;
   try {
     sessionStorage.removeItem(prefix + key);
   } catch {
@@ -56,7 +57,7 @@ export function onSessionCleanup(fn: () => void) {
 export function cleanupSession() {
   cleanupDevices();
   try {
-    for (const key of Object.keys(sessionStorage))
+    for (const key of __H5__ ? [] : Object.keys(sessionStorage))
       if (key.startsWith('srvf:ui:')) sessionStorage.removeItem(key);
   } catch {
     /* 存储不可用时仍清理内存和设备资源 */

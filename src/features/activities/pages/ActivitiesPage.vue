@@ -20,14 +20,15 @@ let saved: {
   scroll?: number;
 } = {};
 try {
-  const raw: unknown = JSON.parse(sessionStorage.getItem(key) ?? '{}');
+  const raw: unknown = __H5__ ? {} : JSON.parse(sessionStorage.getItem(key) ?? '{}');
   if (raw && typeof raw === 'object') saved = raw as typeof saved;
 } catch {
   /* 存储不可用或偏好损坏时使用默认值 */
 }
 const keyword = ref(typeof saved.keyword === 'string' ? saved.keyword : '');
 const type = ref(['培训', '演练', '服务'].includes(saved.type ?? '') ? saved.type! : '');
-const available = ref(saved.available === true);
+const mock = __MOCK__;
+const available = ref(mock && saved.available === true);
 const items = ref<ActivityListItem[]>([]);
 const error = ref<AppError>();
 const loading = ref(false);
@@ -41,7 +42,7 @@ const restorePages = Number.isInteger(saved.page) ? Math.min(50, Math.max(1, sav
 const restoreScroll =
   typeof saved.scroll === 'number' && Number.isFinite(saved.scroll) ? Math.max(0, saved.scroll) : 0;
 function persist(scroll = window.scrollY) {
-  if (!auth.ready || auth.epoch !== epoch) return;
+  if (__H5__ || !auth.ready || auth.epoch !== epoch) return;
   try {
     sessionStorage.setItem(
       key,
@@ -119,7 +120,13 @@ onUnmounted(() => {
   sequence++;
   window.removeEventListener('srvf:resume', resume);
 });
-const phases = { open: '开放报名', closed: '报名截止', ended: '已结束', cancelled: '已取消' };
+const phases = {
+  published: '已发布',
+  open: '开放报名',
+  closed: '报名截止',
+  ended: '已结束',
+  cancelled: '已取消',
+};
 </script>
 <template>
   <div class="page">
@@ -141,7 +148,9 @@ const phases = { open: '开放报名', closed: '报名截止', ended: '已结束
         {{ t || '全部' }}
       </button>
     </div>
-    <label class="check-label"><input v-model="available" type="checkbox" />只看可报名活动</label>
+    <label v-if="mock" class="check-label"
+      ><input v-model="available" type="checkbox" />只看可报名活动</label
+    >
     <page-state
       :loading="loading && !items.length"
       :error="items.length ? undefined : error"

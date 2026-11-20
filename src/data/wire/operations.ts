@@ -243,10 +243,28 @@ export function createWire(
         directoryItem,
       );
     },
+    async registrationInsurance(id: string) {
+      const result = object(
+        await json({
+          method: 'GET',
+          path: base(id) + '/registration-insurance',
+          retry: 'safe-read',
+        }),
+      );
+      return { required: bool(result.required), eligible: bool(result.eligible) };
+    },
     async getActivity(id: string) {
       const o = object(await json({ method: 'GET', path: base(id), retry: 'safe-read' }));
-      directoryItem(o);
-      return activityDetail(o);
+      return {
+        ...directoryItem(o),
+        ...activityDetail(o),
+        registrationDeadline:
+          o.registrationDeadline === null
+            ? null
+            : o.registrationDeadline === undefined
+              ? undefined
+              : iso(o.registrationDeadline),
+      };
     },
     async listInsurances(pageNumber = 1) {
       return page(
@@ -436,12 +454,13 @@ export function createWire(
         ledgerTotals: ledgerTotals(o.ledgerTotals),
       };
     },
-    async ledger(a?: string) {
+    async ledger(a?: string, pageNumber = 1) {
       return page(
         await json({
           method: 'GET',
           path:
-            '/api/app/v1/my/participation-ledger' + query({ activityId: a, page: 1, pageSize: 20 }),
+            '/api/app/v1/my/participation-ledger' +
+            query({ activityId: a, page: integer(pageNumber, 1), pageSize: 20 }),
           retry: 'safe-read',
         }),
         (item) => {

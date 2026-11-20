@@ -14,6 +14,7 @@ import ScannerPanel from '../../../shared/components/ScannerPanel.vue';
 import CredentialPopup from '../../../shared/components/CredentialPopup.vue';
 import { onSessionCleanup, onBackgroundCleanup } from '../../../shared/storage';
 const route = useRoute();
+const mock = __MOCK__;
 const id = String(route.params.activityId);
 const sessionId = String(route.params.sessionId);
 const { data, loading, error, load } = useResource(async () => {
@@ -101,7 +102,7 @@ async function scan(credential: string) {
   const action = snapshot.state.next;
   try {
     await showConfirmDialog({
-      title: `确认本场次${actionName.value}（演示）`,
+      title: `确认本场次${actionName.value}${mock ? '（演示）' : ''}`,
       message: `${snapshot.activity.title}\n${snapshot.session.name}\n不会产生正式时长或贡献。`,
     });
   } catch {
@@ -181,14 +182,18 @@ const example = __MOCK__
           <p>{{ data.session.name }}</p>
         </div>
         <section class="panel">
-          <h2>{{ data.state.present ? '当前在场（演示）' : '当前不在场' }}</h2>
+          <h2>
+            {{ data.state.present ? (mock ? '当前在场（演示）' : '当前在场') : '当前不在场' }}
+          </h2>
           <p v-if="!data.state.present">
             {{
               data.state.hasHistory === true
                 ? '已有历史现场服务段，不代表从未签到'
                 : data.state.hasHistory === null
                   ? '历史服务段暂无法确认'
-                  : '尚无演示现场记录'
+                  : mock
+                    ? '尚无演示现场记录'
+                    : '尚无现场记录'
             }}
           </p>
           <p>下一步：{{ actionName }}</p>
@@ -226,7 +231,9 @@ const example = __MOCK__
         </p>
         <p v-if="message" role="alert" class="error-box">{{ message }}</p>
         <div v-if="receipt" class="panel" role="status">
-          <h2>{{ receipt.action === 'check_in' ? '签到' : '签退' }}已记录（演示）</h2>
+          <h2>
+            {{ receipt.action === 'check_in' ? '签到' : '签退' }}已记录{{ mock ? '（演示）' : '' }}
+          </h2>
           <p>{{ receipt.message }}</p>
           <p class="muted">{{ beijing(receipt.at) }}</p>
         </div>
