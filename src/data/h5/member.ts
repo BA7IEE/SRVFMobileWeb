@@ -46,12 +46,16 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
   };
   ports.registrations.getForm = async (id) => activityRegistrationForm(await wire.getActivity(id));
   ports.insurance.getEligibilityForActivity = async (id) => {
-    const d = await wire.getActivity(id);
+    const { required, eligible } = await wire.registrationInsurance(id);
     return {
       activityId: id,
-      required: d.requiresInsurance,
-      status: d.requiresInsurance ? 'unknown' : 'eligible',
-      explanation: d.requiresInsurance ? '尚无本人保险资格预检结果' : '活动未要求保险',
+      required,
+      status: eligible ? 'eligible' : 'ineligible',
+      explanation: !required
+        ? '活动未要求保险'
+        : eligible
+          ? '本人保险覆盖本次活动'
+          : '本人保险未覆盖本次活动',
       checkedAt: new Date().toISOString(),
     };
   };

@@ -20,7 +20,7 @@ let saved: {
   scroll?: number;
 } = {};
 try {
-  const raw: unknown = JSON.parse(sessionStorage.getItem(key) ?? '{}');
+  const raw: unknown = __H5__ ? {} : JSON.parse(sessionStorage.getItem(key) ?? '{}');
   if (raw && typeof raw === 'object') saved = raw as typeof saved;
 } catch {
   /* 存储不可用或偏好损坏时使用默认值 */
@@ -42,7 +42,7 @@ const restorePages = Number.isInteger(saved.page) ? Math.min(50, Math.max(1, sav
 const restoreScroll =
   typeof saved.scroll === 'number' && Number.isFinite(saved.scroll) ? Math.max(0, saved.scroll) : 0;
 function persist(scroll = window.scrollY) {
-  if (!auth.ready || auth.epoch !== epoch) return;
+  if (__H5__ || !auth.ready || auth.epoch !== epoch) return;
   try {
     sessionStorage.setItem(
       key,

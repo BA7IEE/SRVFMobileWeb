@@ -243,6 +243,16 @@ export function createWire(
         directoryItem,
       );
     },
+    async registrationInsurance(id: string) {
+      const result = object(
+        await json({
+          method: 'GET',
+          path: base(id) + '/registration-insurance',
+          retry: 'safe-read',
+        }),
+      );
+      return { required: bool(result.required), eligible: bool(result.eligible) };
+    },
     async getActivity(id: string) {
       const o = object(await json({ method: 'GET', path: base(id), retry: 'safe-read' }));
       return {

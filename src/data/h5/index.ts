@@ -8,29 +8,35 @@ import { createWire } from '../wire/operations';
 import { connectMember } from './member';
 import { request } from './http';
 
-const generationKey = 'srvf:h5:session-generation';
+import { browserGeneration } from './generation';
 const lockName = 'srvf:h5:session';
 const changed = () => fail('cancelled', '登录身份已变化，请重新进入');
 const ended = () => fail('unauthenticated', '请重新登录');
 
-export function createH5Ports(onIdentityChange: () => void): Ports {
+export function createH5Ports(
+  onIdentityChange: () => void,
+  markerStore = browserGeneration(),
+): Ports {
   let access: { token: string; session: Session } | undefined;
-  const generation = () => localStorage.getItem(generationKey) ?? '';
-  function rotateMarker(state: 'active' | 'closed') {
-    const marker = state + ':' + crypto.randomUUID();
-    localStorage.setItem(generationKey, marker);
+  async function rotateMarker(state: 'active' | 'closed') {
     access = undefined;
+    const marker = state + ':' + crypto.randomUUID();
+    await markerStore.write(marker);
     return marker;
   }
-  window.addEventListener('storage', (event) => {
-    if (
-      event.storageArea === localStorage &&
-      (event.key === null || event.key === generationKey) &&
-      (!access || access.session.id !== generation())
-    ) {
-      access = undefined;
-      onIdentityChange();
-    }
+  markerStore.onChange(() => {
+    void markerStore
+      .read()
+      .then((marker) => {
+        if (access && access.session.id !== marker) {
+          access = undefined;
+          onIdentityChange();
+        }
+      })
+      .catch(() => {
+        access = undefined;
+        onIdentityChange();
+      });
   });
   async function lock<T>(work: () => Promise<T>): Promise<T> {
     if (!isSecureContext || location.protocol !== 'https:' || !navigator.locks)
@@ -60,7 +66,7 @@ export function createH5Ports(onIdentityChange: () => void): Ports {
   }
   async function recover(prior?: Session) {
     return lock(async () => {
-      const marker = generation();
+      const marker = await markerStore.read();
       if (prior && (marker !== prior.id || access?.session.id !== marker)) throw changed();
       if (marker.startsWith('closed:')) return null;
       if (prior && access && prior !== access.session && access.session.expiresAt > Date.now())
@@ -68,29 +74,25 @@ export function createH5Ports(onIdentityChange: () => void): Ports {
       try {
         const r = await cookie('refresh');
         if (r.status === 401 && object(r.body).code === 10007) {
-          rotateMarker('closed');
+          await rotateMarker('closed');
           return null;
         }
-        return accept(envelope(r), marker || rotateMarker('active'));
+        return accept(envelope(r), marker || (await rotateMarker('active')));
       } catch (error) {
         // Response loss leaves rotation ambiguous. Require explicit login on every tab.
-        rotateMarker('closed');
+        await rotateMarker('closed');
         throw error;
       }
     });
   }
   function current(session?: Session) {
-    if (
-      !access ||
-      access.session.id !== generation() ||
-      (session && session.id !== access.session.id)
-    )
-      throw ended();
+    if (!access || (session && session.id !== access.session.id)) throw ended();
     return access;
   }
   const transport: Transport = {
     async send(r, signal) {
       let actor = current();
+      if (actor.session.id !== (await markerStore.read())) throw ended();
       if (actor.session.expiresAt <= Date.now()) {
         const next = await recover(actor.session);
         if (!next) {
@@ -111,6 +113,7 @@ export function createH5Ports(onIdentityChange: () => void): Ports {
         body: r.body === undefined ? undefined : JSON.stringify(r.body),
       });
       current(actor.session);
+      if (actor.session.id !== (await markerStore.read())) throw ended();
       if (
         response.status === 401 &&
         object(response.body).code === 40100 &&
@@ -140,10 +143,10 @@ export function createH5Ports(onIdentityChange: () => void): Ports {
     restoreSession: () => recover(),
     async login(username, password) {
       return lock(async () => {
-        rotateMarker('closed');
+        await rotateMarker('closed');
         envelope(await cookie('logout'));
         const data = envelope(await cookie('login', { username, password }));
-        return accept(data, rotateMarker('active'));
+        return accept(data, await rotateMarker('active'));
       });
     },
     async refreshSession(s) {
@@ -156,8 +159,8 @@ export function createH5Ports(onIdentityChange: () => void): Ports {
       access = undefined;
       if (!marker) return;
       return lock(async () => {
-        if (marker !== generation()) return;
-        rotateMarker('closed');
+        if (marker !== (await markerStore.read())) return;
+        await rotateMarker('closed');
         envelope(await cookie('logout'));
       });
     },

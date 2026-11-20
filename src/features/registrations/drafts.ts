@@ -8,7 +8,7 @@ onSessionCleanup(() => {
   for (const key of keys) removeMock('draft:' + key);
   keys.clear();
   try {
-    for (const key of Object.keys(sessionStorage))
+    for (const key of __H5__ ? [] : Object.keys(sessionStorage))
       if (key.startsWith('srvf:ui:')) sessionStorage.removeItem(key);
   } catch {
     /* 存储不可用 */

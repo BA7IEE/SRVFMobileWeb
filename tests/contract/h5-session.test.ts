@@ -9,9 +9,18 @@ function reply(code: number, data: unknown, status = 200) {
     headers: { 'Content-Type': 'application/json' },
   });
 }
+let marker = '';
+const store = {
+  read: async () => marker,
+  write: async (value: string) => {
+    marker = value;
+  },
+  onChange: () => {},
+};
 const session = () =>
   reply(0, { tokenType: 'Bearer', accessToken: crypto.randomUUID(), expiresIn: '15m' });
 beforeEach(() => {
+  marker = '';
   localStorage.clear();
   vi.stubGlobal('isSecureContext', true);
   let tail: Promise<unknown> = Promise.resolve();
@@ -28,7 +37,7 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllGlobals());
 describe('H5 同源会话', () => {
-  it('无体恢复，Cookie 只用于认证动作，Web Storage 只有随机代际', async () => {
+  it('无体恢复，Cookie 只用于认证动作，Web Storage 保持空', async () => {
     const calls: { path: string; credentials: unknown; body: boolean }[] = [];
     vi.stubGlobal('fetch', async (url: URL, init: RequestInit) => {
       calls.push({
@@ -49,7 +58,7 @@ describe('H5 同源会话', () => {
         appAccessReason: null,
       });
     });
-    const { auth } = createH5Ports(() => {});
+    const { auth } = createH5Ports(() => {}, store);
     const s = await auth.restoreSession();
     if (!s) throw Error('未恢复');
     await auth.getCurrentMember(s);
@@ -57,10 +66,8 @@ describe('H5 同源会话', () => {
       { path: '/api/auth/v1/h5/refresh', credentials: 'same-origin', body: false },
       { path: '/api/app/v1/me', credentials: 'omit', body: false },
     ]);
-    expect(Object.keys(localStorage)).toEqual(['srvf:h5:session-generation']);
-    expect(
-      /^active:[\da-f-]{36}$/.test(localStorage.getItem('srvf:h5:session-generation') ?? ''),
-    ).toBe(true);
+    expect(localStorage.length).toBe(0);
+    expect(/^active:[\da-f-]{36}$/.test(marker)).toBe(true);
     expect(sessionStorage.length).toBe(0);
   });
   it('另一个标签换账号之后拒绝旧页读写与退出', async () => {
@@ -72,8 +79,8 @@ describe('H5 同源会话', () => {
       }
       return session();
     });
-    const a = createH5Ports(() => {}).auth,
-      b = createH5Ports(() => {}).auth;
+    const a = createH5Ports(() => {}, store).auth,
+      b = createH5Ports(() => {}, store).auth;
     const prior = await a.restoreSession();
     if (!prior) throw Error('未恢复');
     await b.login('member', 'fixture');
@@ -87,7 +94,7 @@ describe('H5 同源会话', () => {
       count++;
       throw new TypeError('offline');
     });
-    const { auth } = createH5Ports(() => {});
+    const { auth } = createH5Ports(() => {}, store);
     await expect(auth.restoreSession()).rejects.toMatchObject({ kind: 'result-unknown' });
     expect(await auth.restoreSession()).toBeNull();
     expect(count).toBe(1);
