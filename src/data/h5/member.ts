@@ -26,10 +26,7 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
   };
   ports.activities.getDetail = async (id) => {
     const d = await wire.getActivity(id);
-    const open =
-      d.registrationMode === 'open_apply' &&
-      d.phase !== 'ended' &&
-      (d.registrationDeadline === null || Date.parse(d.registrationDeadline ?? '') > Date.now());
+    const open = d.publicRegistrationOpen;
     return {
       ...item(d),
       description: d.description ?? '',

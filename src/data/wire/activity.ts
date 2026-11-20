@@ -40,6 +40,8 @@ export function activityDetail(value: unknown) {
     capacity: capacity(o.capacity),
     registrationNotes: nullableString(o.registrationNotes),
     requiresInsurance: bool(o.requiresInsurance),
+    publicRegistrationOpen:
+      o.publicRegistrationOpen === undefined ? false : bool(o.publicRegistrationOpen),
     qualification: qualification(o.qualification),
     registrationForm: readForm(o.registrationForm),
     phase: enumValue(o.phase, ['upcoming', 'ongoing', 'ended']),

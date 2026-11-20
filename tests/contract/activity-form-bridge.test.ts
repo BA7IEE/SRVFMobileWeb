@@ -93,6 +93,15 @@ describe('R3：原始响应到岗位选择再到报名命令', () => {
       wrapper.unmount();
     }
   });
+  it.each([true, false])('模板没有报名模式时仍尊重服务端公开报名判定 %s', async (open) => {
+    const body = structuredClone(fixture);
+    Object.assign(body.data, { registrationMode: null, publicRegistrationOpen: open });
+    const wire = createWire(
+      new FakeTransport([{ status: 200, contentType: 'application/json', body }]),
+      () => 'SYNTHETIC',
+    );
+    expect((await wire.getActivity('activity-wire')).publicRegistrationOpen).toBe(open);
+  });
   it.each([true, false])('使用服务端定位策略 %s', async (required) => {
     const body = structuredClone(fixture);
     Object.assign(body.data.sessions[0]!, { locationRequired: required });
