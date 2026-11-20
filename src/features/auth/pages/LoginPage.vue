@@ -118,7 +118,9 @@ function choose(value: (typeof choices)[number]) {
         </button>
       </div>
     </section>
-    <router-link to="/privacy" class="text-button">协议与隐私说明（演示稿）</router-link>
+    <router-link to="/privacy" class="text-button"
+      >协议与隐私说明{{ mock ? '（演示稿）' : '' }}</router-link
+    >
   </div>
 </template>
 <style scoped>

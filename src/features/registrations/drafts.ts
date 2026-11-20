@@ -17,6 +17,7 @@ onSessionCleanup(() => {
 export function getDraft(key: string): Draft {
   const old = memory.get(key);
   if (old) return old;
+  if (!__MOCK__) return { answers: {}, preferences: [] };
   const persisted = readMock(
     'draft:' + key,
     (x): x is { preferences: Preferences } =>
@@ -27,7 +28,7 @@ export function getDraft(key: string): Draft {
 export function saveDraft(key: string, value: Draft) {
   memory.set(key, value);
   keys.add(key);
-  writeMock('draft:' + key, { preferences: value.preferences });
+  if (__MOCK__) writeMock('draft:' + key, { preferences: value.preferences });
 }
 export function clearDraft(key: string) {
   memory.delete(key);

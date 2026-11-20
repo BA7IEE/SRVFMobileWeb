@@ -123,11 +123,11 @@ async function memberCode() {
         "
       >
         帮助</button
-      ><router-link to="/privacy">隐私说明（演示稿）</router-link>
+      ><router-link to="/privacy">隐私说明{{ mock ? '（演示稿）' : '' }}</router-link>
     </section>
     <p v-if="codeError" role="alert" class="error">{{ codeError }}，请重新点击本人成员码重试。</p>
     <form v-if="settings" class="panel" @submit.prevent="change">
-      <h2>修改密码（仅模拟）</h2>
+      <h2>修改密码{{ mock ? '（仅模拟）' : '' }}</h2>
       <p class="help">请勿填写真实密码。</p>
       <label class="field"
         >{{ mock ? '原演示密码' : '原密码'

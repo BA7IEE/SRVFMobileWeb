@@ -33,5 +33,12 @@ export async function request(path: string, init: RequestInit): Promise<WireResp
   const contentType = response.headers.get('Content-Type') ?? '';
   if (!contentType.toLowerCase().startsWith('application/json'))
     throw fail('contract-mismatch', '队员接口未返回 JSON');
-  return { status: response.status, contentType, body: await response.json() };
+  try {
+    return { status: response.status, contentType, body: await response.json() };
+  } catch {
+    throw fail(
+      init.method === 'GET' ? 'contract-mismatch' : 'result-unknown',
+      '响应正文不完整，请查回原操作',
+    );
+  }
 }
