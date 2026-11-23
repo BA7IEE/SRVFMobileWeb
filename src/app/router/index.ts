@@ -61,6 +61,12 @@ export const router = createRouter({
       meta: { title: '我的', tab: 'account' },
     },
     {
+      path: '/managed/work',
+      name: 'ordinary-activity-work',
+      component: () => import('../../features/managed/pages/OrdinaryActivityPage.vue'),
+      meta: { title: '活动办理', managed: true },
+    },
+    {
       path: '/managed/activities',
       name: 'managed',
       component: () => import('../../features/managed/pages/ManagedActivitiesPage.vue'),

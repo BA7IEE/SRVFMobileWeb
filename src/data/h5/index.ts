@@ -5,6 +5,7 @@ import { createUnconfiguredPorts } from '../unconfigured';
 import { capabilities, duration, me } from '../wire/auth';
 import { envelope, object, text, type Transport } from '../wire/core';
 import { createWire } from '../wire/operations';
+import { ordinaryActivities } from '../wire/ordinary-activity';
 import { connectMember } from './member';
 import { request } from './http';
 
@@ -202,5 +203,6 @@ export function createH5Ports(
     return { hours: r.totalServiceHours, points: r.contributionPoints, source: '本人参与汇总' };
   };
   connectMember(ports, wire);
+  ports.ordinaryActivities = ordinaryActivities(transport);
   return ports;
 }
