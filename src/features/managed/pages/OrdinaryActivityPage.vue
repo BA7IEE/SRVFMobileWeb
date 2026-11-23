@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, reactive, ref } from 'vue';
-import { showConfirmDialog } from 'vant';
+import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import type { OrdinaryActivityPort } from '../../../data/wire/ordinary-activity';
 import { appError } from '../../../shared/errors';
