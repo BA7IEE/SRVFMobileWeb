@@ -3,7 +3,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import type { OrdinaryActivityPort } from '../../../data/wire/ordinary-activity';
-import { appError } from '../../../shared/errors';
+import { appError, fail } from '../../../shared/errors';
 
 const port = getData().ordinaryActivities;
 type Output<K extends keyof OrdinaryActivityPort> = Awaited<ReturnType<OrdinaryActivityPort[K]>>;
@@ -14,6 +14,7 @@ const selected = ref<Output<'detail'>>(),
   sessions = ref<Output<'sessions'>>([]);
 const positions = ref<Record<string, Output<'positions'>>>({});
 const registrations = ref<Output<'registrations'>>([]);
+const currentActivityId = ref<string>();
 const busy = ref(false),
   message = ref(''),
   needsReadback = ref(false),
@@ -63,6 +64,7 @@ function clearDetails() {
 }
 async function read(id?: string) {
   if (!port) return;
+  currentActivityId.value = id;
   clearDetails();
   const [list, opts] = await Promise.all([port.activities(), port.options()]);
   activities.value = list;
@@ -82,7 +84,10 @@ async function read(id?: string) {
     session.endAt = local(d.endAt);
     session.locationText = d.location;
   } else if (d.canManage) {
-    registrations.value = await port.registrations(id);
+    const rows = await port.registrations(id);
+    if (new Set(rows.map((row) => row.id)).size !== rows.length)
+      throw fail('contract-mismatch', '名单中有重复的报名记录，请刷新核对');
+    registrations.value = rows;
   }
   selected.value = d;
 }
@@ -99,13 +104,14 @@ async function reload(id?: string) {
     busy.value = false;
   }
 }
-async function command(send: () => Promise<string>, success: string) {
+async function command(send: () => Promise<string>, success: string, verifyReadback?: () => void) {
   if (locked.value || !port) return;
   busy.value = true;
   message.value = '';
   try {
     const id = await send();
     await read(id);
+    verifyReadback?.();
     message.value = success;
   } catch (e) {
     needsReadback.value = true;
@@ -185,17 +191,31 @@ async function submit() {
 }
 async function admit(r: Output<'registrations'>[number]) {
   const d = selected.value;
-  if (!port || !d || !d.canManage || d.mode !== 'qualification_rank' || r.status !== 'pending')
+  if (
+    locked.value ||
+    !port ||
+    !d?.canManage ||
+    d.mode !== 'qualification_rank' ||
+    r.status !== 'pending'
+  )
     return;
   try {
     await showConfirmDialog({ title: '确认录取', message: d.title + ' · ' + r.name });
   } catch {
     return;
   }
-  await command(async () => {
-    await port.admit(d.id, r.id);
-    return d.id;
-  }, '已录取');
+  if (selected.value !== d || !registrations.value.includes(r)) return;
+  await command(
+    async () => {
+      await port.admit(d.id, r.id);
+      return d.id;
+    },
+    '已录取',
+    () => {
+      if (!registrations.value.some((row) => row.id === r.id && row.status === 'pass'))
+        throw fail('contract-mismatch', '录取回执与当前报名名单不一致');
+    },
+  );
 }
 onMounted(() => void reload());
 </script>
@@ -206,7 +226,9 @@ onMounted(() => void reload());
     <template v-else>
       <p v-if="message" role="status" class="notice">{{ message }}</p>
       <div class="row">
-        <button class="text-button" :disabled="busy" @click="reload(selected?.id)">刷新记录</button>
+        <button class="text-button" :disabled="busy" @click="reload(currentActivityId)">
+          刷新记录
+        </button>
         <button
           v-if="organizations.length"
           class="text-button"
