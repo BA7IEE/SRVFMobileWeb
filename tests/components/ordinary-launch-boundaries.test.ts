@@ -629,3 +629,85 @@ describe('普通活动手工录取页', () => {
     expect(findButton('录取')).toBeUndefined();
   });
 });
+
+describe('手工录取后连续缺少目标报名', () => {
+  const other = {
+    activityId: activity,
+    registrationId: 'synthetic-other-row',
+    member: { label: '第二位队员' },
+    statusCode: 'pending',
+  };
+  function notices() {
+    return wrapper
+      .findAll('[role=status]')
+      .map((item) => item.text())
+      .join(' ');
+  }
+
+  it('刷新仍缺原报名时保留该队员的提示，再读到通过只产生一次 PATCH', async () => {
+    const onlyOther = page([other]);
+    const t = await openManager([
+      admitted,
+      ...activityReads(onlyOther),
+      ...activityReads(onlyOther),
+      ...activityReads(roster('pass')),
+    ]);
+    await click('录取');
+    expect(notices()).toContain('请刷新核对');
+    const afterAdmission = t.requests.length;
+    await click('刷新记录');
+    expect(t.requests.slice(afterAdmission).map((r) => r.method)).toEqual(Array(4).fill('GET'));
+    expect(notices()).toContain('核对');
+    expect(notices()).toContain('合成队员');
+    expect(wrapper.text()).toContain('第二位队员 · 待录取');
+    expect(findButton('录取')!.element.disabled).toBe(false);
+    vi.mocked(showConfirmDialog).mockRejectedValueOnce('cancel');
+    await click('录取');
+    expect(showConfirmDialog).toHaveBeenLastCalledWith(
+      expect.objectContaining({ message: expect.stringContaining('第二位队员') }),
+    );
+    expect(notices()).toContain('合成队员');
+    await click('刷新记录');
+    expect(t.requests.slice(afterAdmission).map((r) => r.method)).toEqual(Array(8).fill('GET'));
+    expect(writes(t).map((r) => r.method)).toEqual(['PATCH']);
+    expect(wrapper.text()).toContain('合成队员 · 已通过');
+    expect(notices()).not.toContain('核对');
+    expect(findButton('录取')).toBeUndefined();
+  });
+
+  it('办理其他报名不会覆盖原报名提示，重读原行为待录取后可重新确认', async () => {
+    const onlyOther = page([other]);
+    const t = await openManager([
+      admitted,
+      ...activityReads(onlyOther),
+      ...activityReads(onlyOther),
+      ok({ activityId: activity, registrationId: other.registrationId, statusCode: 'pass' }),
+      ...activityReads(page([{ ...other, statusCode: 'pass' }])),
+      ...activityReads(roster('pending')),
+      admitted,
+      ...activityReads(roster('pass')),
+    ]);
+    await click('录取');
+    await click('刷新记录');
+    await click('录取');
+    expect(wrapper.text()).toContain('第二位队员 · 已通过');
+    expect(notices()).toContain('合成队员');
+    expect(notices()).toContain('核对');
+    const afterOther = t.requests.length;
+    await click('刷新记录');
+    expect(t.requests.slice(afterOther).map((r) => r.method)).toEqual(Array(4).fill('GET'));
+    expect(notices()).not.toContain('请刷新核对');
+    expect(wrapper.text()).toContain('合成队员 · 待录取');
+    expect(findButton('录取')!.element.disabled).toBe(false);
+    expect(showConfirmDialog).toHaveBeenCalledTimes(2);
+    expect(writes(t)).toHaveLength(2);
+    await click('录取');
+    expect(showConfirmDialog).toHaveBeenCalledTimes(3);
+    expect(writes(t).map((r) => [r.method, r.path.split('/').at(-2)])).toEqual([
+      ['PATCH', registration],
+      ['PATCH', other.registrationId],
+      ['PATCH', registration],
+    ]);
+    expect(wrapper.text()).toContain('合成队员 · 已通过');
+  });
+});
