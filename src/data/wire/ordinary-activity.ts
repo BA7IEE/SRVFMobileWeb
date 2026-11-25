@@ -78,6 +78,7 @@ export function ordinaryActivities(transport: Transport) {
       // The scoped detail query intentionally hides missing and inaccessible activities alike.
       if (error.code === 20001 && error.data === null && text(error.message))
         throw fail('forbidden', '没有本活动的报名管理职责');
+      throw fail('not-found', '无法确认本场报名管理入口');
     }
     const entry = object(envelope(response));
     if (object(entry.activity).id !== id) throw fail('contract-mismatch', '活动回执不一致');

@@ -142,6 +142,7 @@ describe('报名管理直达', () => {
   it.each([
     [404, 20001, '活动不存在', null, '/system/forbidden'],
     [404, 40400, '记录不存在', null, '/system/unavailable'],
+    [404, 40300, '无权', null, '/system/unavailable'],
     [404, 20001, '', null, '/system/unavailable'],
     [404, 20001, '活动不存在', {}, '/system/unavailable'],
     [503, 20001, '活动不存在', null, '/system/unavailable'],
