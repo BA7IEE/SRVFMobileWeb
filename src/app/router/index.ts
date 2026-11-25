@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from 'vue-router';
 import { useAuth } from '../../features/auth/store';
 import { getData } from '../../data';
 import { safeTarget } from './safe-target';
+import { appError } from '../../shared/errors';
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
@@ -75,7 +76,10 @@ export const router = createRouter({
     {
       path: '/managed/activities/:activityId/registrations',
       name: 'manage-registrations',
-      component: () => import('../../features/managed/pages/ManagedRegistrationsPage.vue'),
+      component: () =>
+        getData().ordinaryActivities
+          ? import('../../features/managed/pages/RegistrationRosterPage.vue')
+          : import('../../features/managed/pages/ManagedRegistrationsPage.vue'),
       meta: { title: '报名管理', scope: 'registration' },
     },
     {
@@ -141,11 +145,20 @@ router.beforeEach(async (to) => {
   }
   if (to.meta.managed && !auth.member?.managed) return '/system/forbidden';
   if (to.meta.scope) {
+    const id = String(to.params.activityId);
+    const ports = getData();
     try {
-      const scope = await getData().managed.getScope(String(to.params.activityId));
+      if (to.meta.scope === 'registration' && ports.ordinaryActivities) {
+        if (!auth.member?.managed) return '/system/forbidden';
+        await ports.ordinaryActivities.registrationActivity(id);
+        return true;
+      }
+      const scope = await ports.managed.getScope(id);
       if (scope[to.meta.scope as 'registration' | 'attendance'].state !== 'allowed')
         return '/system/forbidden';
-    } catch {
+    } catch (error) {
+      if (to.meta.scope === 'registration' && appError(error).kind === 'forbidden')
+        return '/system/forbidden';
       return { path: '/system/unavailable', query: { returnTo } };
     }
   }
