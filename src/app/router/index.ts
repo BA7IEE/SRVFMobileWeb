@@ -70,7 +70,10 @@ export const router = createRouter({
     {
       path: '/managed/activities',
       name: 'managed',
-      component: () => import('../../features/managed/pages/ManagedActivitiesPage.vue'),
+      component: () =>
+        getData().managed.listPage
+          ? import('../../features/managed/pages/ResponsibleActivitiesPage.vue')
+          : import('../../features/managed/pages/ManagedActivitiesPage.vue'),
       meta: { title: '我负责的活动', managed: true },
     },
     {
