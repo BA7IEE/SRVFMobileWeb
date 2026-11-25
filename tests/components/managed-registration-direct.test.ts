@@ -21,6 +21,7 @@ let globallyManaged: boolean;
 let scope: unknown;
 let responseActivity: string;
 let failure: number;
+let detailOverride: Response | undefined;
 let rowActivity: string;
 let wrapper: VueWrapper | undefined;
 
@@ -50,6 +51,7 @@ beforeEach(async () => {
   scope = duty;
   responseActivity = rowActivity = activity;
   failure = 0;
+  detailOverride = undefined;
   requests.length = 0;
   vi.spyOn(window, 'scrollTo').mockImplementation(() => {});
   vi.stubGlobal('isSecureContext', true);
@@ -78,6 +80,7 @@ beforeEach(async () => {
           },
         ],
       });
+    if (path === detailPath && detailOverride) return detailOverride.clone();
     if (path === detailPath)
       return failure
         ? reply(null, failure)
@@ -136,6 +139,27 @@ async function enter(path = target) {
 const rosterReads = () => requests.filter((r) => r.startsWith('GET ' + rosterPath + '?'));
 
 describe('报名管理直达', () => {
+  it.each([
+    [404, 20001, '活动不存在', null, '/system/forbidden'],
+    [404, 40400, '记录不存在', null, '/system/unavailable'],
+    [404, 20001, '', null, '/system/unavailable'],
+    [404, 20001, '活动不存在', {}, '/system/unavailable'],
+    [503, 20001, '活动不存在', null, '/system/unavailable'],
+  ] as const)('单场详情错误信封 %i/%i/%s/%j', async (status, code, message, data, expected) => {
+    detailOverride = new Response(JSON.stringify({ code, message, data }), {
+      status,
+      headers: { 'Content-Type': 'application/json' },
+    });
+    expect(await enter()).toBe(expected);
+    if (expected === '/system/forbidden') expect(wrapper!.text()).toContain('暂无此活动的操作权限');
+    expect(requests.filter((r) => r === 'GET ' + detailPath)).toHaveLength(1);
+    expect(rosterReads()).toHaveLength(0);
+  });
+  it('单场详情缺少职责字段时保留服务异常', async () => {
+    scope = undefined;
+    expect(await enter()).toBe('/system/unavailable');
+    expect(rosterReads()).toHaveLength(0);
+  });
   it('有该场职责时直达并显示同场非空名单', async () => {
     expect(await enter()).toBe(target);
     expect(wrapper!.text()).toContain('合成队员');

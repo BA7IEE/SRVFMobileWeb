@@ -45,15 +45,17 @@ function detail(value: unknown) {
   };
 }
 export function ordinaryActivities(transport: Transport) {
-  async function call(method: WireRequest['method'], path: string, body?: unknown) {
-    const response = await transport.send({
+  function send(method: WireRequest['method'], path: string, body?: unknown) {
+    return transport.send({
       method,
       path,
       body,
       accept: 'application/json',
       retry: method === 'GET' ? 'safe-read' : 'none',
     });
-    return envelope(response);
+  }
+  async function call(method: WireRequest['method'], path: string, body?: unknown) {
+    return envelope(await send(method, path, body));
   }
   async function list<T>(url: string, decode: (item: unknown) => T) {
     const rows: T[] = [];
@@ -65,8 +67,19 @@ export function ordinaryActivities(transport: Transport) {
     }
   }
   const at = (id: string) => root + '/' + pathId(id);
-  async function readActivity(id: string) {
-    const entry = object(await call('GET', at(id)));
+  async function readActivity(id: string, scope?: 'registration') {
+    const response = await send('GET', at(id));
+    if (
+      scope === 'registration' &&
+      response.status === 404 &&
+      response.contentType.split(';')[0]?.trim().toLowerCase() === 'application/json'
+    ) {
+      const error = object(response.body);
+      // The scoped detail query intentionally hides missing and inaccessible activities alike.
+      if (error.code === 20001 && error.data === null && text(error.message))
+        throw fail('forbidden', '没有本活动的报名管理职责');
+    }
+    const entry = object(envelope(response));
     if (object(entry.activity).id !== id) throw fail('contract-mismatch', '活动回执不一致');
     return entry;
   }
@@ -101,8 +114,8 @@ export function ordinaryActivities(transport: Transport) {
       return detail(await readActivity(id));
     },
     async registrationActivity(id: string) {
-      const entry = await readActivity(id);
-      if (entry.myResponsibility == null) throw fail('forbidden', '没有本活动的报名管理职责');
+      const entry = await readActivity(id, 'registration');
+      if (entry.myResponsibility === null) throw fail('forbidden', '没有本活动的报名管理职责');
       const duty = object(entry.myResponsibility);
       enumValue(duty.responsibilityType, ['owner', 'collaborator']);
       if (!bool(duty.canManageRegistrations)) throw fail('forbidden', '没有本活动的报名管理职责');
