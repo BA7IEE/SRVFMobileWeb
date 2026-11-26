@@ -8,7 +8,11 @@ defineEmits<{ retry: [] }>();
   <div v-if="loading" class="panel empty-state" role="status">
     <van-loading vertical>正在读取…</van-loading>
   </div>
-  <div v-else-if="error" class="panel" role="alert">
+  <div v-else-if="error" class="panel state-error" role="alert">
+    <van-icon
+      :name="error.kind === 'result-unknown' ? 'question-o' : 'warning-o'"
+      aria-hidden="true"
+    />
     <h2>{{ error.kind === 'result-unknown' ? '结果暂未确认' : '暂时无法继续' }}</h2>
     <p>{{ error.message }}</p>
     <van-button plain @click="$emit('retry')">{{
@@ -16,7 +20,7 @@ defineEmits<{ retry: [] }>();
     }}</van-button>
   </div>
   <div v-else-if="empty" class="panel empty-state">
-    <van-icon name="notes-o" />
+    <van-icon name="notes-o" aria-hidden="true" />
     <h2>{{ emptyText ?? '暂无记录' }}</h2>
     <p class="muted">可调整筛选，或稍后再来查看。</p>
     <slot name="empty" />

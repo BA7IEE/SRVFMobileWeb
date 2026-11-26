@@ -112,7 +112,8 @@ async function memberCode() {
       ><router-link v-if="auth.member?.managed" to="/managed/activities">我负责的活动</router-link
       ><button class="text-button" :disabled="codeBusy" @click="memberCode">
         {{ codeBusy ? '正在读取成员码…' : '本人成员码' }}</button
-      ><button class="text-button" @click="settings = !settings">账户设置</button
+      ><button class="text-button" :aria-expanded="settings" @click="settings = !settings">
+        账户设置</button
       ><button
         class="text-button"
         @click="
@@ -156,28 +157,75 @@ async function memberCode() {
 </template>
 <style scoped>
 .account-summary {
-  border-top: 4px solid var(--srvf-red);
+  grid-template-columns: 56px minmax(0, 1fr);
+  column-gap: var(--srvf-space-md);
+  row-gap: 2px;
+  align-items: center;
+  padding: var(--srvf-space-lg) var(--srvf-space-md);
+  box-shadow:
+    inset 0 4px 0 var(--srvf-red),
+    var(--srvf-shadow-card);
+}
+.account-summary > :not(.avatar) {
+  grid-column: 2;
+}
+.account-summary h1 {
+  font-size: var(--srvf-text-lg);
+}
+.account-summary p {
+  font-size: var(--srvf-text-sm);
+  font-variant-numeric: tabular-nums;
 }
 .avatar {
-  width: 48px;
-  height: 48px;
+  grid-row: 1 / span 3;
+  width: 56px;
+  height: 56px;
   display: grid;
   place-items: center;
   background: var(--srvf-navy-tint);
   color: var(--srvf-navy);
-  border-radius: 8px;
+  border-radius: 50%;
   font-size: 22px;
   font-weight: 700;
 }
 .account-links {
   gap: 0;
+  padding: var(--srvf-space-xxs) var(--srvf-space-md);
 }
 .account-links > a,
 .account-links > button {
-  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  justify-self: stretch;
+  width: 100%;
+  min-height: 52px;
   padding: 12px 0;
   color: var(--srvf-fg-default);
-  font-size: 16px;
-  border-bottom: 1px solid var(--srvf-border-default);
+  font-size: var(--srvf-text-base);
+  font-weight: 500;
+  text-align: left;
+  border-bottom: var(--srvf-hairline) solid var(--srvf-border-default);
+  border-radius: 0;
+}
+.account-links > :last-child {
+  border-bottom: 0;
+}
+.account-links > a::after,
+.account-links > button::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  margin-right: 4px;
+  border-top: 1.5px solid var(--srvf-fg-muted);
+  border-right: 1.5px solid var(--srvf-fg-muted);
+  transform: rotate(45deg);
+  flex-shrink: 0;
+}
+.account-links > button[aria-expanded='true']::after {
+  transform: rotate(135deg);
+}
+.account-links > button:disabled {
+  color: var(--srvf-fg-muted);
 }
 </style>

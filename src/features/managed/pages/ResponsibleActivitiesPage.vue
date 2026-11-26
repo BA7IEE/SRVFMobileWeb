@@ -39,7 +39,7 @@ onMounted(() => void load());
       empty-text="当前没有可管理的活动"
       @retry="load"
     >
-      <section v-for="row in data?.items" :key="row.activityId" class="panel">
+      <section v-for="row in data?.items" :key="row.activityId" class="panel managed-card">
         <h2>{{ row.title }}</h2>
         <p class="muted">{{ roles[row.relationship] }}</p>
         <status-badge>{{ states[row.statusCode] ?? '未知状态' }}</status-badge>
@@ -53,6 +53,7 @@ onMounted(() => void load());
     </page-state>
     <nav
       v-if="!error && (pageNumber > 1 || (data && data.total > data.pageSize))"
+      class="pager"
       aria-label="活动分页"
     >
       <button
