@@ -124,14 +124,14 @@ function share() {
           <p class="long-text">{{ data.activity.description }}</p>
           <button class="text-button" @click="share">查看本站分享链接</button>
         </section>
-        <p v-if="actionError" class="error" role="alert">{{ actionError }}</p>
-        <p v-if="data.activity.registration.state !== 'allowed'" class="notice">
-          {{ data.activity.registration.reason }}
-        </p>
-        <p v-else-if="data.insurance.status !== 'eligible'" class="notice">
-          请先处理上方保险条件，再继续报名。
-        </p>
         <div class="action-bar">
+          <p v-if="actionError" class="error action-hint" role="alert">{{ actionError }}</p>
+          <p v-if="data.activity.registration.state !== 'allowed'" class="notice action-hint">
+            {{ data.activity.registration.reason }}
+          </p>
+          <p v-else-if="data.insurance.status !== 'eligible'" class="notice action-hint">
+            请先处理上方保险条件，再继续报名。
+          </p>
           <template v-if="data.result?.status === 'submitted'"
             ><van-button type="primary" to="/my/activities">查看我的活动</van-button
             ><van-button
