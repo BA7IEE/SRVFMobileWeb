@@ -8,4 +8,51 @@
   --srvf-touch: 44px;
   --srvf-text-success: #21633e;
   --srvf-text-pending: #805000;
+
+  /* 间距：4 的倍数，页面边距统一 16px */
+  --srvf-space-xxs: 4px;
+  --srvf-space-xs: 8px;
+  --srvf-space-sm: 12px;
+  --srvf-space-md: 16px;
+  --srvf-space-lg: 20px;
+  --srvf-space-xl: 24px;
+  --srvf-space-xxl: 32px;
+
+  /* 字号与行高：标题紧、正文松 */
+  --srvf-text-xl: 24px;
+  --srvf-leading-tight: 1.35;
+  --srvf-leading-body: 1.6;
+
+  /* 圆角分层：控件 < 卡片 < 弹层，徽标为胶囊 */
+  --srvf-radius-control: 8px;
+  --srvf-radius-card: 12px;
+  --srvf-radius-sheet: 16px;
+  --srvf-radius-pill: 999px;
+
+  /* 表面与描边 */
+  --srvf-bg-subtle: #f7f8fa;
+  --srvf-bg-pressed: #eceff3;
+  --srvf-border-strong: #cfd5de;
+  --srvf-hairline: 1px;
+  --srvf-shadow-card: 0 1px 2px rgb(10 20 38 / 5%);
+  --srvf-shadow-bar: 0 -4px 16px rgb(10 20 38 / 6%);
+  --srvf-shadow-header: 0 1px 0 rgb(10 20 38 / 6%);
+
+  /* 状态底色：文字保持深色，色块与标记形状共同表达状态 */
+  --srvf-tint-success: #e7f3ec;
+  --srvf-tint-pending: #fcf1de;
+  --srvf-tint-error: var(--srvf-red-tint);
+  --srvf-tint-info: var(--srvf-navy-tint);
+  --srvf-tint-neutral: #eef0f3;
+
+  /* 布局尺寸 */
+  --srvf-header-height: 52px;
+  --srvf-tabbar-height: 56px;
+  --srvf-page-max: 560px;
+}
+/* 高倍屏使用物理 1px 细线 */
+@media (min-resolution: 2dppx) {
+  :root {
+    --srvf-hairline: 0.5px;
+  }
 }

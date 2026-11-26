@@ -35,7 +35,7 @@ onMounted(() => void load());
       :empty="!shown.length"
       empty-text="暂无报名关联的活动"
       @retry="load"
-      ><div v-for="r in shown" :key="r.id" class="stack">
+      ><div v-for="r in shown" :key="r.id" class="stack my-activity">
         <div class="panel-heading">
           <router-link :to="{ name: 'activity', params: { activityId: r.activityId } }"
             ><h2>{{ r.title }}</h2></router-link

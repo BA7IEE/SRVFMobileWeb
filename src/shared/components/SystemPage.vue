@@ -27,7 +27,15 @@ const reasons: Record<string, { title: string; message: string }> = {
     message: '会话读取暂不可用，请重试。此状态不表示已经退出或已经授权。',
   },
 };
-const info = reasons[String(route.params.reason)] ?? reasons['not-found']!;
+const reason = String(route.params.reason);
+const info = reasons[reason] ?? reasons['not-found']!;
+const icons: Record<string, string> = {
+  'not-configured': 'info-o',
+  forbidden: 'lock',
+  'not-found': 'search',
+  blocked: 'shield-o',
+  unavailable: 'warning-o',
+};
 async function retry() {
   if (pending.value) return;
   pending.value = true;
@@ -45,29 +53,31 @@ async function retry() {
 </script>
 <template>
   <div class="page">
-    <section class="panel empty-state">
-      <van-icon name="shield-o" />
+    <section class="panel empty-state system-state" :data-reason="reason">
+      <van-icon :name="icons[reason] ?? 'search'" aria-hidden="true" />
       <h1>{{ info.title }}</h1>
       <p>{{ info.message }}</p>
-      <van-button
-        v-if="route.params.reason === 'unavailable'"
-        type="primary"
-        :loading="pending"
-        :disabled="pending"
-        @click="retry"
-        >重新确认身份</van-button
-      ><router-link
-        v-if="route.params.reason !== 'not-configured'"
-        to="/activities"
-        class="text-button"
-        >返回活动</router-link
-      ><button
-        v-if="auth.member"
-        class="text-button"
-        @click="auth.logout().then(() => router.replace('/login'))"
-      >
-        退出当前账号</button
-      ><router-link to="/privacy">隐私说明（演示稿）</router-link>
+      <div class="state-actions">
+        <van-button
+          v-if="route.params.reason === 'unavailable'"
+          type="primary"
+          :loading="pending"
+          :disabled="pending"
+          @click="retry"
+          >重新确认身份</van-button
+        ><router-link
+          v-if="route.params.reason !== 'not-configured'"
+          to="/activities"
+          class="text-button"
+          >返回活动</router-link
+        ><button
+          v-if="auth.member"
+          class="text-button"
+          @click="auth.logout().then(() => router.replace('/login'))"
+        >
+          退出当前账号</button
+        ><router-link to="/privacy" class="state-footnote">隐私说明（演示稿）</router-link>
+      </div>
     </section>
   </div>
 </template>

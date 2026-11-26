@@ -135,9 +135,13 @@ function choose(value: (typeof choices)[number]) {
   text-align: left;
   background: var(--srvf-bg-page);
   border: 1px solid var(--srvf-border-default);
-  border-radius: 4px;
+  border-radius: var(--srvf-radius-control);
   min-height: 64px;
   padding: 12px;
+  color: var(--srvf-fg-default);
+}
+.identity-option:active {
+  background: var(--srvf-bg-pressed);
 }
 .identity-option strong {
   font-size: 14px;

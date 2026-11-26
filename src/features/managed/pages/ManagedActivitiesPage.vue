@@ -23,7 +23,7 @@ onMounted(() => void load());
       :empty="!data?.length"
       empty-text="当前没有可管理的活动"
       @retry="load"
-      ><section v-for="item in data" :key="item.activity.id" class="panel">
+      ><section v-for="item in data" :key="item.activity.id" class="panel managed-card">
         <h2>{{ item.activity.title }}</h2>
         <p class="muted">{{ item.activity.location }}</p>
         <router-link
