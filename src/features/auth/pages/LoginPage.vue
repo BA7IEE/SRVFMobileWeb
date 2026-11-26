@@ -57,7 +57,6 @@ function choose(value: (typeof choices)[number]) {
     <section class="panel">
       <h2>登录队员端</h2>
       <van-form
-        :show-error-message="false"
         @submit="submit"
         @compositionstart="composing = true"
         @compositionend="composing = false"

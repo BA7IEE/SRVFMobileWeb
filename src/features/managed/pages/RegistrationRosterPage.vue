@@ -63,9 +63,18 @@ onMounted(() => void load());
         <p v-else class="list-count">没有符合条件的报名记录</p>
         <div v-for="row in visible" :key="row.id" class="list-row">
           <span>{{ row.name }}</span>
-          <status-badge :tone="row.status === 'pass' ? 'success' : 'neutral'">{{
-            labels[row.status] ?? '未知状态'
-          }}</status-badge>
+          <status-badge
+            :tone="
+              row.status === 'pass'
+                ? 'success'
+                : row.status === 'pending' || row.status === 'waitlisted'
+                  ? 'pending'
+                  : row.status === 'reject'
+                    ? 'error'
+                    : 'neutral'
+            "
+            >{{ labels[row.status] ?? '未知状态' }}</status-badge
+          >
         </div>
       </section>
     </page-state>

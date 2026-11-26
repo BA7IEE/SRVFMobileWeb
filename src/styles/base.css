@@ -202,7 +202,7 @@ legend {
   overflow-wrap: anywhere;
 }
 .field-error:not(:empty)::before,
-p.error::before {
+.error[role='alert']::before {
   content: '!';
   content: '!' / '';
   display: inline-grid;
@@ -609,7 +609,7 @@ h3,
   justify-self: stretch;
   text-align: center;
 }
-.state-actions > a:first-of-type:not(.van-button) {
+.state-actions > a:first-of-type:not(.van-button, .state-footnote) {
   border: 1px solid var(--srvf-border-strong);
   border-radius: var(--srvf-radius-control);
   min-height: 48px;
@@ -1043,4 +1043,79 @@ details.developer-details > summary {
 }
 .state-error > .text-button {
   margin-top: calc(var(--srvf-space-xxs) * -1);
+}
+
+/* 原生文件选择：统一成次要按钮外观，文字说明由浏览器按系统语言提供 */
+input[type='file']:not(.visually-hidden) {
+  padding: 6px;
+  min-height: 48px;
+  border-style: dashed;
+  background: var(--srvf-bg-subtle);
+  color: var(--srvf-fg-muted);
+  font-size: var(--srvf-text-sm);
+}
+input[type='file']::file-selector-button {
+  min-height: 34px;
+  margin-right: var(--srvf-space-sm);
+  padding: 0 var(--srvf-space-md);
+  border: 1px solid var(--srvf-border-strong);
+  border-radius: var(--srvf-radius-control);
+  background: var(--srvf-bg-surface);
+  color: var(--srvf-fg-default);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.panel video:not([hidden]) {
+  display: block;
+  width: 100%;
+  border-radius: var(--srvf-radius-control);
+  background: var(--srvf-fg-default);
+}
+/* 未加 class 的表单行（如活动办理页）与折叠区 */
+.stack > label:not([class]) {
+  display: grid;
+  gap: var(--srvf-space-xs);
+  font-size: var(--srvf-text-sm);
+  font-weight: 600;
+}
+.panel details {
+  border-top: var(--srvf-hairline) solid var(--srvf-border-default);
+  padding-top: var(--srvf-space-xxs);
+}
+.panel details > summary {
+  min-height: var(--srvf-touch);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: var(--srvf-navy);
+  font-weight: 600;
+}
+.panel details[open] > summary {
+  margin-bottom: var(--srvf-space-xs);
+}
+.panel ul {
+  margin: 0;
+  padding-left: 1.25em;
+}
+.panel li + li {
+  margin-top: var(--srvf-space-xxs);
+}
+.list-row > .status-badge {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.state-error[data-kind='forbidden'] > .van-icon {
+  background: var(--srvf-tint-error);
+  color: var(--srvf-red-deep);
+}
+/* 操作栏内的条件说明：紧贴被禁用或受限的主操作 */
+.action-bar > .action-hint {
+  flex: 1 1 100%;
+  margin: 0;
+  padding: var(--srvf-space-xs) var(--srvf-space-sm);
+  font-size: 13px;
+}
+.action-bar > .error.action-hint {
+  padding: 0;
 }

@@ -8,9 +8,15 @@ defineEmits<{ retry: [] }>();
   <div v-if="loading" class="panel empty-state" role="status">
     <van-loading vertical>正在读取…</van-loading>
   </div>
-  <div v-else-if="error" class="panel state-error" role="alert">
+  <div v-else-if="error" class="panel state-error" :data-kind="error.kind" role="alert">
     <van-icon
-      :name="error.kind === 'result-unknown' ? 'question-o' : 'warning-o'"
+      :name="
+        error.kind === 'result-unknown'
+          ? 'question-o'
+          : error.kind === 'forbidden'
+            ? 'lock'
+            : 'warning-o'
+      "
       aria-hidden="true"
     />
     <h2>{{ error.kind === 'result-unknown' ? '结果暂未确认' : '暂时无法继续' }}</h2>
