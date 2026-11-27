@@ -105,6 +105,15 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
     return rows.find((x) => x.status !== 'cancelled') ?? rows[0] ?? null;
   };
   ports.activities.getMyParticipationContext = ports.registrations.getResult;
+  ports.attendance.getMyHiddenSession = async (activityId, sessionId) => {
+    // A session identity may outlive a registration. Confirm current approval or responsibility.
+    const state = await ports.attendance.getMyState(activityId, sessionId);
+    const registrations = await own(activityId).catch(() => []);
+    const passed = registrations.find((row) => row.serverStatus === 'pass');
+    if (passed) return { title: passed.title, state };
+    const scope = await wire.getManagedResponsibility(activityId).catch(() => null);
+    return scope && scope.attendance.state !== 'unknown' ? { title: scope.title, state } : null;
+  };
   ports.registrations.submit = async (intent) => {
     const receipt = await wire.register(intent.activityId, {
       operationKey: intent.key,

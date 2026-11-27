@@ -36,6 +36,10 @@ export type Ports = {
   };
   attendance: {
     getMyState(activityId: string, sessionId: string): Promise<M.PunchState>;
+    getMyHiddenSession?(
+      activityId: string,
+      sessionId: string,
+    ): Promise<{ title: string; state: M.PunchState } | null>;
     submitPunch(intent: M.PunchIntent): Promise<M.PunchReceipt>;
     getMemberCredential(): Promise<string>;
   };

@@ -151,9 +151,9 @@ describe('固定读取与命令补充切片', () => {
           },
         ]),
       ),
-      ok({ activity: { id: 'activity-test' }, myResponsibility: null }),
+      ok({ activity: { id: 'activity-test', title: '合成' }, myResponsibility: null }),
       ok({
-        activity: { id: 'activity-test' },
+        activity: { id: 'activity-test', title: '合成' },
         myResponsibility: {
           responsibilityType: 'collaborator',
           canManageRegistrations: true,
@@ -165,6 +165,7 @@ describe('固定读取与命令补充切片', () => {
     expect((await w.listManagedActivities()).items[0]!.relationship).toBe('collaborator');
     expect((await w.getManagedResponsibility('activity-test')).attendance.state).toBe('unknown');
     expect(await w.getManagedResponsibility('activity-test')).toEqual({
+      title: '合成',
       registration: { state: 'allowed' },
       attendance: { state: 'denied' },
     });
