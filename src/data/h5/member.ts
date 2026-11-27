@@ -1,5 +1,5 @@
 import type { Ports } from '../ports';
-import type { ActivityListItem, RegistrationResult } from '../models';
+import type { ActivityListItem, RegistrationResult, SelfInsurance } from '../models';
 import { createWire } from '../wire/operations';
 import { activityRegistrationForm } from '../wire/activity';
 import { fail } from '../../shared/errors';
@@ -42,6 +42,26 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
     };
   };
   ports.registrations.getForm = async (id) => activityRegistrationForm(await wire.getActivity(id));
+  ports.insurance.getMyOverview = async () => {
+    const self: SelfInsurance[] = [];
+    for (let page = 1; ; page++) {
+      const result = await wire.listInsurances(page);
+      const expectedCount = Math.max(0, Math.min(20, result.total - (page - 1) * 20));
+      if (result.page !== page || result.pageSize !== 20 || result.items.length !== expectedCount)
+        throw fail('contract-mismatch', '保险分页回执不一致');
+      self.push(...result.items);
+      if (page * result.pageSize >= result.total) return { self, team: null };
+    }
+  };
+  ports.insurance.createSelf = async (input) => {
+    await wire.createInsurance(input);
+  };
+  ports.insurance.updateSelf = async (id, input, version) => {
+    await wire.updateInsurance(id, input, version);
+  };
+  ports.insurance.deleteSelf = async (id, version) => {
+    await wire.deleteInsurance(id, version);
+  };
   ports.insurance.getEligibilityForActivity = async (id) => {
     const { required, eligible } = await wire.registrationInsurance(id);
     return {

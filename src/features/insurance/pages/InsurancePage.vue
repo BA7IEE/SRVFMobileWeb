@@ -13,6 +13,7 @@ import StatusBadge from '../../../shared/components/StatusBadge.vue';
 import InsuranceRequirementCard from '../../../shared/components/InsuranceRequirementCard.vue';
 const route = useRoute();
 const auth = useAuth();
+const h5 = __H5__;
 const actorId = auth.member?.id;
 const activityId =
   typeof route.query.fromActivity === 'string' && /^[a-zA-Z0-9_-]+$/.test(route.query.fromActivity)
@@ -96,7 +97,7 @@ async function save() {
     if (!active) return;
     editing.value = false;
     await load();
-    message.value = '保险资料已登记（演示），等待审核。';
+    message.value = h5 ? '保险资料已保存。' : '保险资料已登记（演示），等待审核。';
   } catch (e) {
     if (!active) return;
     const err = appError(e);
@@ -142,7 +143,9 @@ async function remove(record: SelfInsurance) {
   try {
     await showConfirmDialog({
       title: '删除自购保险登记？',
-      message: '删除可能影响本活动报名条件，确定删除这条演示记录？',
+      message: h5
+        ? '删除可能影响活动报名资格，确定删除这条登记？'
+        : '删除可能影响本活动报名条件，确定删除这条演示记录？',
     });
   } catch {
     return;
@@ -171,7 +174,11 @@ onBeforeRouteLeave(async () => {
     return false;
   }
 });
-const labels = { pending: '待审核', verified: '已审核（演示）', rejected: '审核未通过' };
+const labels = {
+  pending: '待审核',
+  verified: h5 ? '已审核' : '已审核（演示）',
+  rejected: '审核未通过',
+};
 </script>
 <template>
   <div class="page">
@@ -179,7 +186,9 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
       <h1>我的保险</h1>
       <p class="muted">统保与自购分别查看，保障以本次活动条件为准。</p>
     </div>
-    <p class="notice">请勿填写真实保单。登记不代表审核通过，不提供保险购买或自动投保。</p>
+    <p class="notice">
+      {{ h5 ? '' : '请勿填写真实保单。' }}登记不代表审核通过，不提供保险购买或自动投保。
+    </p>
     <page-state :loading="loading" :error="error" @retry="load"
       ><template v-if="data">
         <insurance-requirement-card
@@ -219,7 +228,7 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
             <status-badge :tone="record.review === 'verified' ? 'success' : 'pending'">{{
               labels[record.review]
             }}</status-badge>
-            <p class="long-text">演示保单：{{ record.policy }}</p>
+            <p class="long-text">{{ h5 ? '保单号' : '演示保单' }}：{{ record.policy }}</p>
             <p>{{ record.start ?? '起保日未提供' }} 至 {{ record.end }}</p>
             <div class="row">
               <button class="text-button" :disabled="busy" @click="edit(record)">修改资料</button
@@ -284,7 +293,7 @@ const labels = { pending: '待审核', verified: '已审核（演示）', reject
             native-type="submit"
             :loading="busy"
             :disabled="busy || conflict || unresolved"
-            >保存资料（演示）</van-button
+            >{{ h5 ? '保存资料' : '保存资料（演示）' }}</van-button
           ></van-form
         >
         <p v-if="message && !editing" role="status" class="notice">{{ message }}</p>
