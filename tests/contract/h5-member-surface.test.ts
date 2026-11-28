@@ -157,11 +157,17 @@ describe('H5 已有契约的队员表面', () => {
         headers: { 'Content-Type': 'image/svg+xml' },
       }),
     );
-    const createObjectURL = vi.fn(() => 'blob:https://h5.example.test/synthetic-member');
-    Object.defineProperty(URL, 'createObjectURL', { configurable: true, value: createObjectURL });
+    const blobs: Blob[] = [];
+    Object.defineProperty(URL, 'createObjectURL', {
+      configurable: true,
+      value: (blob: Blob) => {
+        blobs.push(blob);
+        return 'blob:https://h5.example.test/synthetic-member';
+      },
+    });
     const url = await ports.attendance.getMemberCredential();
     expect(url).toBe('blob:https://h5.example.test/synthetic-member');
-    expect(createObjectURL.mock.calls[0]?.[0]).toBeInstanceOf(Blob);
+    expect(blobs[0]).toBeInstanceOf(Blob);
     const [target, init] = fetchFixture.mock.calls[0]!;
     expect(init.method).toBe('POST');
     expect(target.pathname).toBe('/api/app/v1/my/attendance-member-credential/render');
