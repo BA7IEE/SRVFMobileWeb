@@ -4,7 +4,7 @@ import { useRoute } from 'vue-router';
 import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import { useResource } from '../../../shared/composables/resource';
-import { appError } from '../../../shared/errors';
+import { ActivityNotFoundError, appError } from '../../../shared/errors';
 import { beijing } from '../../../shared/time';
 import { LocationAdapter } from '../../../platform/location';
 import type { LocationResult } from '../../../platform/location';
@@ -18,10 +18,23 @@ const mock = __MOCK__;
 const id = String(route.params.activityId);
 const sessionId = String(route.params.sessionId);
 const { data, loading, error, load } = useResource(async () => {
-  const activity = await getData().activities.getDetail(id);
+  const { activities, attendance } = getData();
+  let activity;
+  try {
+    activity = await activities.getDetail(id);
+  } catch (error) {
+    if (!(error instanceof ActivityNotFoundError) || !attendance.getMyHiddenSession) throw error;
+    const hidden = await attendance.getMyHiddenSession(id, sessionId);
+    if (!hidden) throw error;
+    return {
+      activity: { title: hidden.title },
+      session: { name: null, locationRequired: null },
+      state: hidden.state,
+    };
+  }
   const session = activity.sessions.find((s) => s.id === sessionId);
   if (!session) throw new Error('unknown session');
-  return { activity, session, state: await getData().attendance.getMyState(id, sessionId) };
+  return { activity, session, state: await attendance.getMyState(id, sessionId) };
 });
 const busy = ref(false);
 const message = ref('');
@@ -103,7 +116,7 @@ async function scan(credential: string) {
   try {
     await showConfirmDialog({
       title: `确认本场次${actionName.value}${mock ? '（演示）' : ''}`,
-      message: `${snapshot.activity.title}\n${snapshot.session.name}\n不会产生正式时长或贡献。`,
+      message: `${snapshot.activity.title}\n${snapshot.session.name ?? '场次名称暂不可读'}\n不会产生正式时长或贡献。`,
     });
   } catch {
     busy.value = false;
@@ -179,7 +192,7 @@ const example = __MOCK__
       ><template v-if="data"
         ><div class="page-intro">
           <h1>{{ data.activity.title }}</h1>
-          <p>{{ data.session.name }}</p>
+          <p>{{ data.session.name ?? '场次名称暂不可读' }}</p>
         </div>
         <section class="panel">
           <h2>

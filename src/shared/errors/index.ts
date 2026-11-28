@@ -1,4 +1,10 @@
 import type { AppError, ErrorKind } from '../../data/models';
+export class ActivityNotFoundError extends Error {
+  readonly kind = 'not-found';
+  constructor() {
+    super('活动不存在');
+  }
+}
 export class RegistrationFormVersionError extends Error {
   readonly kind = 'conflict';
   constructor() {

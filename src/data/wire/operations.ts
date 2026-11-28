@@ -19,7 +19,7 @@ import {
   type Transport,
   type WireRequest,
 } from './core';
-import { fail } from '../../shared/errors';
+import { ActivityNotFoundError, fail } from '../../shared/errors';
 import { fileError, insuranceErrors, safeField, validDate } from '../../shared/validation';
 import type { InsuranceInput, PunchIntent, SelfInsurance } from '../models';
 import { createKnownReads, ledgerTotals } from './reads';
@@ -206,9 +206,9 @@ export function createWire(
     string,
     { activity: string; token: string; expiresAt: string; used: boolean }
   >();
-  const json = async (request: Omit<WireRequest, 'accept'>) => {
+  const json = async (request: Omit<WireRequest, 'accept'>, decode = envelope) => {
     try {
-      return envelope(
+      return decode(
         await transport.send({ ...request, headers: headers(), accept: 'application/json' }),
       );
     } catch (e) {
@@ -254,7 +254,19 @@ export function createWire(
       return { required: bool(result.required), eligible: bool(result.eligible) };
     },
     async getActivity(id: string) {
-      const o = object(await json({ method: 'GET', path: base(id), retry: 'safe-read' }));
+      const o = object(
+        await json({ method: 'GET', path: base(id), retry: 'safe-read' }, (response) => {
+          if (
+            response.status === 404 &&
+            response.contentType.split(';')[0]?.trim().toLowerCase() === 'application/json'
+          ) {
+            const body = object(response.body);
+            if (body.code === 20001 && body.data === null && text(body.message))
+              throw new ActivityNotFoundError();
+          }
+          return envelope(response);
+        }),
+      );
       return {
         ...directoryItem(o),
         ...activityDetail(o),

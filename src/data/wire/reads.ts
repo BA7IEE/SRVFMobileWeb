@@ -158,11 +158,14 @@ export function createKnownReads(json: Json) {
           retry: 'safe-read',
         }),
       );
-      if (object(o.activity).id !== id) throw fail('contract-mismatch', '活动回执不一致');
+      const activity = object(o.activity);
+      if (activity.id !== id) throw fail('contract-mismatch', '活动回执不一致');
+      const title = text(activity.title);
       if (expected && o.myResponsibility === null)
         throw fail('forbidden', '本场职责已变化，请重新读取');
       if (o.myResponsibility === null)
         return {
+          title,
           registration: { state: 'unknown' as const },
           attendance: { state: 'unknown' as const },
         };
@@ -170,6 +173,7 @@ export function createKnownReads(json: Json) {
       const type = enumValue(r.responsibilityType, ['owner', 'collaborator']);
       if (expected && type !== expected) throw fail('contract-mismatch', '本场职责与列表不一致');
       return {
+        title,
         registration: {
           state: bool(r.canManageRegistrations) ? ('allowed' as const) : ('denied' as const),
         },
