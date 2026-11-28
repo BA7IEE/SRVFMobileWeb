@@ -117,6 +117,8 @@ export function createH5Ports(
       if (actor.session.id !== (await markerStore.read())) throw ended();
       if (
         response.status === 401 &&
+        typeof response.body === 'object' &&
+        response.body !== null &&
         object(response.body).code === 40100 &&
         access?.token === actor.token
       ) {
@@ -193,6 +195,7 @@ export function createH5Ports(
     },
   };
   ports.attendance.getMyState = wire.getPunchState;
+  ports.attendance.getMemberCredential = async () => URL.createObjectURL(await wire.renderMember());
   ports.attendance.submitPunch = async (intent) => {
     const r = await wire.punch(intent);
     if (r.eventTypeCode !== intent.action) throw fail('contract-mismatch', '签到回执动作不符');

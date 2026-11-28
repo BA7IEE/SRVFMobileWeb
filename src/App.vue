@@ -5,7 +5,7 @@ import { Icon as VanIcon, Tabbar as VanTabbar, TabbarItem as VanTabbarItem } fro
 import { useAuth } from './features/auth/store';
 import { router } from './app/router';
 import { cleanupDevices } from './shared/storage';
-import { parentTarget, safeTarget } from './app/router/safe-target';
+import { hasInAppHistory, parentTarget, safeTarget } from './app/router/safe-target';
 const auth = useAuth();
 const route = useRoute();
 const chunkError = ref(false);
@@ -16,6 +16,11 @@ const MockPanel = __MOCK__
   : undefined;
 const mock = __MOCK__;
 const tabs = computed(() => Boolean(route.meta.tab) && auth.ready);
+const showBack = computed(() => {
+  if (route.meta.tab || route.name === 'login') return false;
+  if (route.name === 'system') return hasInAppHistory(router.options.history.state.back);
+  return true;
+});
 const viewKey = computed(() =>
   route.name === 'login' ? 'login' : `${auth.epoch}:${auth.revision}:${route.fullPath}`,
 );
@@ -71,31 +76,28 @@ onUnmounted(() => {
 </script>
 <template>
   <div class="app-shell" :class="{ 'has-tabs': tabs }">
-    <div v-if="mock" class="mock-banner" role="status">
-      <span><van-icon name="info-o" /> 演示模式 · 数据不是真实记录</span>
-      <component :is="MockPanel" v-if="MockPanel" />
+    <div class="app-top">
+      <div v-if="mock" class="mock-banner" role="status">
+        <span><van-icon name="info-o" /> 演示模式 · 数据不是真实记录</span>
+        <component :is="MockPanel" v-if="MockPanel" />
+      </div>
+      <header class="app-header">
+        <button v-if="showBack" class="icon-button" aria-label="返回" @click="back">
+          <van-icon name="arrow-left" />
+        </button>
+        <span v-else class="brand-wordmark">SRVF<span>队员端</span></span>
+        <strong v-if="!route.meta.tab && route.name !== 'login'">{{ route.meta.title }}</strong>
+        <span class="header-right">{{ route.meta.tab ? '深圳公益救援队' : 'SRVF' }}</span>
+      </header>
     </div>
-    <header class="app-header">
-      <button
-        v-if="!route.meta.tab && route.name !== 'login'"
-        class="icon-button"
-        aria-label="返回"
-        @click="back"
-      >
-        <van-icon name="arrow-left" />
-      </button>
-      <span v-else class="brand-wordmark">SRVF<span>队员端</span></span>
-      <strong v-if="!route.meta.tab && route.name !== 'login'">{{ route.meta.title }}</strong>
-      <span class="header-right">{{ route.meta.tab ? '深圳公益救援队' : 'SRVF' }}</span>
-    </header>
-    <p v-if="recovering" class="panel" role="status">正在重新确认身份与页面状态…</p>
+    <p v-if="recovering" class="page-status" role="status">正在重新确认身份与页面状态…</p>
     <main v-show="!recovering" id="main" :aria-busy="auth.state === 'initializing'">
-      <div v-if="chunkError" class="panel">
+      <div v-if="chunkError" class="panel page-status-panel">
         <h1>页面资源已更新</h1>
         <p>请先核对未确认的操作与未保存内容，再刷新页面。不会自动重复提交。</p>
         <button class="text-button" @click="router.go(0)">重新加载</button>
       </div>
-      <div v-else-if="auth.state === 'initializing'" class="panel">正在确认身份…</div>
+      <div v-else-if="auth.state === 'initializing'" class="page-status">正在确认身份…</div>
       <router-view v-else-if="route.meta.public || auth.ready" :key="viewKey" />
     </main>
     <van-tabbar v-if="tabs" route safe-area-inset-bottom class="bottom-tabs">

@@ -117,6 +117,12 @@ const known: Record<number, { kind: ErrorKind; message: string }> = {
   10004: { kind: 'unauthenticated', message: '账号或密码错误' },
   10007: { kind: 'unauthenticated', message: '续期凭证失效，请重新登录' },
   26011: { kind: 'conflict', message: '保险版本已变化，请刷新核对' },
+  20152: { kind: 'conflict', message: '活动分配方式与既有分配批次不一致' },
+  21030: { kind: 'conflict', message: '报名记录当前状态不允许此操作' },
+  35002: { kind: 'conflict', message: '该活动评价已存在，请刷新后重试' },
+  35030: { kind: 'conflict', message: '活动尚未完结，暂不能评价' },
+  35031: { kind: 'conflict', message: '活动评价窗口已关闭' },
+  35032: { kind: 'conflict', message: '仅有审核通过到场记录的队员可以评价' },
 };
 export function envelope(response: WireResponse): unknown {
   if (!response.contentType.toLowerCase().startsWith('application/json'))

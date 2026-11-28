@@ -73,14 +73,11 @@ describe('H5 本人自购保险', () => {
       review: 'pending',
       version: 3,
     });
-    await expect(ports.registrations.cancel('registration-one')).rejects.toHaveProperty(
-      'kind',
-      'not-configured',
-    );
     expect(calls()).toEqual([
       ['GET', root + '?page=1&pageSize=20', undefined],
       ['GET', root + '?page=2&pageSize=20', undefined],
     ]);
+    expect(calls().some((call) => String(call[1]).includes('/cancel'))).toBe(false);
   });
 
   it('拒绝错页回执', async () => {

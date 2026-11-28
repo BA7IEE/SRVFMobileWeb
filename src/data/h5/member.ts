@@ -4,6 +4,26 @@ import { createWire } from '../wire/operations';
 import { activityRegistrationForm } from '../wire/activity';
 import { fail } from '../../shared/errors';
 
+async function readPage<T>(
+  page: number | undefined,
+  load: (page: number) => Promise<{ items: T[]; total: number; page: number; pageSize: number }>,
+) {
+  const pageNumber = page ?? 1;
+  const result = await load(pageNumber);
+  const expected = Math.max(
+    0,
+    Math.min(result.pageSize, result.total - (pageNumber - 1) * result.pageSize),
+  );
+  if (result.page !== pageNumber || result.pageSize !== 20 || result.items.length !== expected)
+    throw fail('contract-mismatch', '分页回执不一致');
+  return {
+    items: result.items,
+    total: result.total,
+    page: result.page,
+    hasMore: result.page * result.pageSize < result.total,
+  };
+}
+
 export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>) {
   type DirectoryRow = Awaited<ReturnType<typeof wire.listActivities>>['items'][number];
   function item(r: DirectoryRow): ActivityListItem {
@@ -15,13 +35,14 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
     };
   }
   ports.activities.list = async ({ keyword, type, page, available }) => {
-    if (available) throw fail('not-configured', '目录未提供可报名筛选');
-    const r = await wire.listActivities({
-      q: keyword || undefined,
-      type: type || undefined,
-      page,
-      pageSize: 20,
-    });
+    const r = available
+      ? await wire.listAvailable(page)
+      : await wire.listActivities({
+          q: keyword || undefined,
+          type: type || undefined,
+          page,
+          pageSize: 20,
+        });
     return { ...r, items: r.items.map(item), hasMore: r.page * r.pageSize < r.total };
   };
   ports.activities.getDetail = async (id) => {
@@ -86,7 +107,8 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
       serverStatus: r.statusCode,
       phase: Date.parse(r.endAt) <= Date.now() ? 'ended' : 'published',
       sessions: [],
-      canCancel: false,
+      canCancel:
+        r.statusCode === 'pending' || r.statusCode === 'pass' || r.statusCode === 'waitlisted',
       canEdit: false,
     };
   }
@@ -99,7 +121,53 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
       if (r.page * r.pageSize >= r.total || !r.items.length) return found;
     }
   };
-  ports.registrations.getMyActivities = () => own();
+  ports.registrations.getMyActivities = async () => {
+    const found: RegistrationResult[] = [];
+    for (let page = 1; ; page++) {
+      const r = await wire.listMyActivities(page);
+      if (r.page !== page || r.pageSize !== 20)
+        throw fail('contract-mismatch', '我的活动分页回执不一致');
+      found.push(
+        ...r.items.map((row) => ({
+          id: row.myRegistrationId,
+          activityId: row.activityId,
+          title: row.title,
+          status:
+            row.myRegistrationStatusCode === 'cancelled'
+              ? ('cancelled' as const)
+              : ('submitted' as const),
+          serverStatus: row.myRegistrationStatusCode,
+          activityStatusCode: row.statusCode,
+          phase:
+            row.statusCode === 'cancelled'
+              ? ('cancelled' as const)
+              : row.statusCode === 'completed' || Date.parse(row.endAt) <= Date.now()
+                ? ('ended' as const)
+                : ('published' as const),
+          sessions: [],
+          canCancel:
+            row.myRegistrationStatusCode === 'pending' ||
+            row.myRegistrationStatusCode === 'pass' ||
+            row.myRegistrationStatusCode === 'waitlisted',
+          canEdit: false,
+        })),
+      );
+      if (r.page * r.pageSize >= r.total || !r.items.length) return found;
+    }
+  };
+  ports.registrations.cancel = async (activityId) => {
+    const rows = await own(activityId);
+    const target = rows.find(
+      (row) =>
+        row.serverStatus === 'pending' ||
+        row.serverStatus === 'pass' ||
+        row.serverStatus === 'waitlisted',
+    );
+    if (!target) throw fail('business-rejected', '当前不能取消报名');
+    const updated = await wire.cancelOwnRegistration(target.id);
+    if (updated.statusCode !== 'cancelled' || updated.id !== target.id)
+      throw fail('contract-mismatch', '取消回执不是已取消');
+  };
   ports.registrations.getResult = async (id) => {
     const rows = await own(id);
     return rows.find((x) => x.status !== 'cancelled') ?? rows[0] ?? null;
@@ -128,6 +196,22 @@ export function connectMember(ports: Ports, wire: ReturnType<typeof createWire>)
       /* The write already has a receipt. Never retry it on a failed read. */
     }
     throw fail('result-unknown', '报名已收件，暂未取得本人记录，请查看我的活动');
+  };
+  ports.memberHome = {
+    listCertificates: (page) => readPage(page, wire.listCertificates),
+    listAttendanceRecords: (page) => readPage(page, wire.listAttendanceRecords),
+    listNotices: (page) => readPage(page, wire.listNotices),
+    getNotice: wire.getNotice,
+    markNoticeRead: wire.markNoticeRead,
+    unreadCount: wire.unreadCount,
+    listContents: (page) => readPage(page, wire.listContents),
+    getContent: wire.getContent,
+    getProfile: wire.getProfile,
+    updateNickname: wire.updateNickname,
+    getAvatar: wire.getAvatar,
+    getTeamJoin: wire.getTeamJoinCurrent,
+    getFeedback: wire.getFeedback,
+    submitFeedback: wire.submitFeedback,
   };
   ports.participation.listRecords = async () => {
     const rows = [];

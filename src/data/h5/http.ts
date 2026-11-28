@@ -31,6 +31,15 @@ export async function request(path: string, init: RequestInit): Promise<WireResp
     );
   }
   const contentType = response.headers.get('Content-Type') ?? '';
+  const accept = new Headers(init.headers).get('Accept')?.toLowerCase() ?? '';
+  if (accept.startsWith('image/svg+xml')) {
+    if (!contentType.toLowerCase().startsWith('image/svg+xml'))
+      throw fail(
+        init.method === 'GET' ? 'contract-mismatch' : 'result-unknown',
+        '二维码图像响应无效',
+      );
+    return { status: response.status, contentType, body: await response.text() };
+  }
   if (!contentType.toLowerCase().startsWith('application/json'))
     throw fail('contract-mismatch', '队员接口未返回 JSON');
   try {

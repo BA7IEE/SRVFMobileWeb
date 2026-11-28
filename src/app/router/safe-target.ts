@@ -10,10 +10,19 @@ export function safeTarget(value: unknown): string {
   const patterns = [
     /^\/activities$/,
     new RegExp(`^/activities/${id}(?:/register|/sessions/${id}/attendance)?$`),
-    /^\/my(?:\/activities|\/insurance|\/participation)?$/,
+    /^\/my(?:\/(?:activities|insurance|participation|notices|certificates|contents|team-join)(?:\/[a-zA-Z0-9_-]{1,64})?)?$/,
     new RegExp(`^/managed/activities(?:/${id}/(?:registrations|onsite(?:/people)?))?$`),
   ];
   return patterns.some((p) => p.test(value)) ? value : '/activities';
+}
+
+export function hasInAppHistory(back: unknown) {
+  return (
+    typeof back === 'string' &&
+    back.startsWith('/') &&
+    !back.startsWith('//') &&
+    !back.startsWith('/login')
+  );
 }
 
 export function parentTarget(path: string): string {

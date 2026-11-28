@@ -59,13 +59,22 @@ onMounted(() => void load());
             <option v-for="(label, code) in labels" :key="code" :value="code">{{ label }}</option>
           </select></label
         >
-        <p v-if="visible.length">当前显示 {{ visible.length }} 条报名记录</p>
-        <p v-else>没有符合条件的报名记录</p>
-        <div v-for="row in visible" :key="row.id" class="stack">
+        <p v-if="visible.length" class="list-count">当前显示 {{ visible.length }} 条报名记录</p>
+        <p v-else class="list-count">没有符合条件的报名记录</p>
+        <div v-for="row in visible" :key="row.id" class="list-row">
           <span>{{ row.name }}</span>
-          <status-badge :tone="row.status === 'pass' ? 'success' : 'neutral'">{{
-            labels[row.status] ?? '未知状态'
-          }}</status-badge>
+          <status-badge
+            :tone="
+              row.status === 'pass'
+                ? 'success'
+                : row.status === 'pending' || row.status === 'waitlisted'
+                  ? 'pending'
+                  : row.status === 'reject'
+                    ? 'error'
+                    : 'neutral'
+            "
+            >{{ labels[row.status] ?? '未知状态' }}</status-badge
+          >
         </div>
       </section>
     </page-state>

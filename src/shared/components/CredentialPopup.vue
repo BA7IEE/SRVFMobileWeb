@@ -8,14 +8,17 @@ const props = defineProps<{
   payload?: string;
   title: string;
   description: string;
+  official?: boolean;
 }>();
 const emit = defineEmits<{ 'update:show': [boolean] }>();
 const url = ref<string>();
 const error = ref('');
 let epoch = 0;
+let owned = false;
 function release() {
   epoch++;
-  if (url.value) URL.revokeObjectURL(url.value);
+  if (owned && url.value) URL.revokeObjectURL(url.value);
+  owned = false;
   url.value = undefined;
 }
 watch(
@@ -25,10 +28,18 @@ watch(
     if (!props.show || !props.payload) return;
     const id = epoch;
     error.value = '';
+    if (props.payload.startsWith('blob:')) {
+      owned = true;
+      url.value = props.payload;
+      return;
+    }
     try {
       const next = await renderCredential(props.payload);
       if (id !== epoch) URL.revokeObjectURL(next);
-      else url.value = next;
+      else {
+        owned = true;
+        url.value = next;
+      }
     } catch {
       if (id === epoch) error.value = '二维码暂时无法显示，请关闭后重试，或联系现场负责人。';
     }
@@ -58,8 +69,12 @@ onUnmounted(() => {
     @update:show="emit('update:show', $event)"
     ><section class="full-popup" role="dialog" aria-modal="true" :aria-label="title">
       <h1>{{ title }}</h1>
-      <p class="notice">仅用于演示，不可用于真实考勤</p>
-      <img v-if="url" :src="url" :alt="title + '（演示）'" class="qr-image" />
+      <p class="notice">
+        {{
+          official ? '此码由考勤服务签发，只交给本场负责人核验。' : '仅用于演示，不可用于真实考勤'
+        }}
+      </p>
+      <img v-if="url" :src="url" :alt="official ? title : title + '（演示）'" class="qr-image" />
       <p v-if="error" role="alert" class="error">{{ error }}</p>
       <p v-else-if="!url" role="status">正在生成二维码…</p>
       <p>{{ description }}</p>

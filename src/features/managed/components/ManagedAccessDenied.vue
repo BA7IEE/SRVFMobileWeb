@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { Button as VanButton } from 'vant';
+import { Button as VanButton, Icon as VanIcon } from 'vant';
 defineProps<{ message: string; loading: boolean }>();
 defineEmits<{ retry: [] }>();
 </script>
 <template>
-  <section class="panel" role="alert">
+  <section class="panel state-error state-denied" role="alert">
+    <van-icon name="lock" aria-hidden="true" />
     <h2>当前活动的操作权限已失效</h2>
     <p>{{ message }}</p>
     <p class="help">已清除本页名单和操作状态。重新读取只核对权限与数据，不会重复提交操作。</p>
