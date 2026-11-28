@@ -107,6 +107,8 @@ async function memberCode() {
     <section class="panel account-links">
       <router-link to="/my/insurance">我的保险</router-link
       ><router-link to="/my/participation">参与记录</router-link
+      ><router-link v-if="auth.member?.managed && getData().ordinaryActivities" to="/managed/work"
+        >活动办理</router-link
       ><router-link v-if="auth.member?.managed" to="/managed/activities">我负责的活动</router-link
       ><button class="text-button" :disabled="codeBusy" @click="memberCode">
         {{ codeBusy ? '正在读取成员码…' : '本人成员码' }}</button

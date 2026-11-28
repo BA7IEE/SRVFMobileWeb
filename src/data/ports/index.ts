@@ -1,5 +1,7 @@
 import type * as M from '../models';
+import type { OrdinaryActivityPort } from '../wire/ordinary-activity';
 export type Ports = {
+  ordinaryActivities?: OrdinaryActivityPort;
   auth: {
     restoreSession(): Promise<M.Session | null>;
     login(account: string, password: string): Promise<M.Session>;
