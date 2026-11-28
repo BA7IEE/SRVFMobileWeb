@@ -37,7 +37,9 @@ async function cancel() {
   try {
     await showConfirmDialog({
       title: '取消本次报名',
-      message: '取消后仍保留历史结果。请核对活动与场次，确定取消本次演示报名？',
+      message: h5
+        ? '取消后仍保留历史结果。请核对活动与场次，确定取消本次报名？'
+        : '取消后仍保留历史结果。请核对活动与场次，确定取消本次演示报名？',
     });
   } catch {
     pending.value = false;

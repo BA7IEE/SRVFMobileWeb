@@ -259,8 +259,13 @@ const example = __MOCK__
         <credential-popup
           v-model:show="show"
           :payload="memberCode"
+          :official="!mock"
           title="本人成员码"
-          description="请仅交给本活动现场负责人核验，这是本地合成凭证。" /></template
+          :description="
+            mock
+              ? '请仅交给本活动现场负责人核验，这是本地合成凭证。'
+              : '请只交给本场负责人核验，不要转发截图。'
+          " /></template
     ></page-state>
   </div>
 </template>

@@ -9,7 +9,7 @@ import {
   fileError,
   safeField,
 } from '../../src/shared/validation';
-import { safeTarget } from '../../src/app/router/safe-target';
+import { hasInAppHistory, safeTarget } from '../../src/app/router/safe-target';
 import { beijing, decimal } from '../../src/shared/time';
 import { IntentRegistry } from '../../src/shared/composables/intent';
 import { readMock, writeMock } from '../../src/shared/storage';
@@ -51,8 +51,18 @@ describe('输入、日期与返回目标', () => {
     '/activities\\x',
     '/login',
   ])('拒绝非法返回 %s', (value) => expect(safeTarget(value)).toBe('/activities'));
-  it('允许已知站内深链接；权限仍由守卫判断', () =>
-    expect(safeTarget('/activities/act-open/register')).toBe('/activities/act-open/register'));
+  it('允许已知站内深链接；权限仍由守卫判断', () => {
+    expect(safeTarget('/activities/act-open/register')).toBe('/activities/act-open/register');
+    expect(safeTarget('/my/contents/content-demo')).toBe('/my/contents/content-demo');
+    expect(safeTarget('/my/team-join')).toBe('/my/team-join');
+    expect(safeTarget('/my/notices')).toBe('/my/notices');
+  });
+  it('没有站内历史时不把登录页或外链当成可返回记录', () => {
+    expect(hasInAppHistory(undefined)).toBe(false);
+    expect(hasInAppHistory('/login')).toBe(false);
+    expect(hasInAppHistory('//evil.test')).toBe(false);
+    expect(hasInAppHistory('/my/activities')).toBe(true);
+  });
   it('北京时间与 null/zero 不混淆', () => {
     expect(beijing('2026-11-14T18:00:00Z')).toContain('15');
     expect(decimal(null, '小时')).toBe('待认定');

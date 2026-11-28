@@ -93,5 +93,25 @@ export type Ports = {
     listRecords(): Promise<M.ParticipationRecord[]>;
     getRecordDetail(id: string): Promise<M.ParticipationRecord>;
   };
+  memberHome?: {
+    listCertificates(page?: number): Promise<M.PageResult<M.CertificateRecord>>;
+    listAttendanceRecords(page?: number): Promise<M.PageResult<M.SheetAttendance>>;
+    listNotices(page?: number): Promise<M.PageResult<M.NoticeSummary>>;
+    getNotice(id: string): Promise<M.NoticeDetail>;
+    markNoticeRead(id: string): Promise<void>;
+    unreadCount(): Promise<number>;
+    listContents(page?: number): Promise<M.PageResult<M.ContentSummary>>;
+    getContent(id: string): Promise<M.ContentDetail>;
+    getProfile(): Promise<M.SelfProfile>;
+    updateNickname(nickname: string): Promise<M.SelfProfile>;
+    getAvatar(): Promise<M.AccountAvatar | null>;
+    getTeamJoin(): Promise<M.TeamJoinProgress | null>;
+    getFeedback(activityId: string): Promise<M.ActivityFeedbackState>;
+    submitFeedback(
+      activityId: string,
+      rating: number,
+      comment: string | null,
+    ): Promise<M.ActivityFeedbackState>;
+  };
   controls?: M.ScenarioControl;
 };

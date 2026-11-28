@@ -201,6 +201,11 @@ legend {
   font-size: var(--srvf-text-sm);
   overflow-wrap: anywhere;
 }
+.success {
+  color: var(--srvf-text-success);
+  font-size: var(--srvf-text-sm);
+  overflow-wrap: anywhere;
+}
 .field-error:not(:empty)::before,
 .error[role='alert']::before {
   content: '!';

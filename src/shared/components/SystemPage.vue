@@ -7,6 +7,7 @@ import { Button as VanButton, Icon as VanIcon } from 'vant';
 import { safeTarget } from '../../app/router/safe-target';
 const route = useRoute();
 const auth = useAuth();
+const demoPrivacy = !__H5__;
 const pending = ref(false);
 const reasons: Record<string, { title: string; message: string }> = {
   'not-configured': {
@@ -76,7 +77,9 @@ async function retry() {
           @click="auth.logout().then(() => router.replace('/login'))"
         >
           退出当前账号</button
-        ><router-link to="/privacy" class="state-footnote">隐私说明（演示稿）</router-link>
+        ><router-link to="/privacy" class="state-footnote"
+          >隐私说明{{ demoPrivacy ? '（演示稿）' : '' }}</router-link
+        >
       </div>
     </section>
   </div>

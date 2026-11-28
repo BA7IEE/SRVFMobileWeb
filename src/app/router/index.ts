@@ -50,6 +50,36 @@ export const router = createRouter({
       meta: { title: '我的参与记录' },
     },
     {
+      path: '/my/certificates',
+      name: 'certificates',
+      component: () => import('../../features/certificates/pages/CertificatesPage.vue'),
+      meta: { title: '我的证书' },
+    },
+    {
+      path: '/my/notices',
+      name: 'notices',
+      component: () => import('../../features/notices/pages/NoticesPage.vue'),
+      meta: { title: '通知' },
+    },
+    {
+      path: '/my/contents',
+      name: 'contents',
+      component: () => import('../../features/contents/pages/ContentsPage.vue'),
+      meta: { title: '队内内容' },
+    },
+    {
+      path: '/my/contents/:contentId',
+      name: 'content',
+      component: () => import('../../features/contents/pages/ContentDetailPage.vue'),
+      meta: { title: '内容详情' },
+    },
+    {
+      path: '/my/team-join',
+      name: 'team-join',
+      component: () => import('../../features/team-join/pages/TeamJoinPage.vue'),
+      meta: { title: '入队进度' },
+    },
+    {
       path: '/my/insurance',
       name: 'insurance',
       component: () => import('../../features/insurance/pages/InsurancePage.vue'),

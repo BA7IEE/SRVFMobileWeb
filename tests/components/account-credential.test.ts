@@ -3,15 +3,24 @@ import { flushPromises, mount } from '@vue/test-utils';
 import AccountPage from '../../src/features/account/pages/AccountPage.vue';
 import { cleanupDevices, cleanupSession } from '../../src/shared/storage';
 import { fail } from '../../src/shared/errors';
-const context = vi.hoisted(() => ({ getMemberCredential: vi.fn() }));
+const context = vi.hoisted(() => ({
+  getMemberCredential: vi.fn(),
+  changePassword: vi.fn(),
+}));
 vi.mock('../../src/data', () => ({
-  getData: () => ({ attendance: { getMemberCredential: context.getMemberCredential } }),
+  getData: () => ({
+    attendance: { getMemberCredential: context.getMemberCredential },
+    auth: { changePassword: context.changePassword },
+  }),
 }));
 vi.mock('../../src/features/auth/store', () => ({
   useAuth: () => ({ member: { name: '演示队员' } }),
 }));
 vi.mock('../../src/app/router', () => ({ router: { replace: vi.fn() } }));
-beforeEach(() => context.getMemberCredential.mockReset());
+beforeEach(() => {
+  context.getMemberCredential.mockReset();
+  context.changePassword.mockReset();
+});
 afterEach(() => vi.restoreAllMocks());
 const options = {
   global: {
@@ -61,3 +70,19 @@ it.each([cleanupDevices, cleanupSession])(
     w.unmount();
   },
 );
+it('修改密码成功后使用成功提示，不再套错误样式', async () => {
+  context.changePassword.mockResolvedValue(undefined);
+  const w = mount(AccountPage, options);
+  await w.get('button[aria-expanded]').trigger('click');
+  const inputs = w.findAll('input');
+  await inputs[0]!.setValue('old-demo');
+  await inputs[1]!.setValue('newpass1');
+  await inputs[2]!.setValue('newpass1');
+  await w.get('form').trigger('submit');
+  await flushPromises();
+  const status = w.get('[role="status"]');
+  expect(status.classes()).toContain('success');
+  expect(status.classes()).not.toContain('error');
+  expect(status.text()).toContain('密码修改流程已演示');
+  w.unmount();
+});

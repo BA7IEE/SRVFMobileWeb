@@ -125,6 +125,8 @@ export type RegistrationResult = {
   phase: ActivityListItem['phase'];
   status: 'submitted' | 'cancelled';
   serverStatus?: 'pending' | 'pass' | 'reject' | 'cancelled' | 'waitlisted';
+  /** 活动本身的状态。completed 与“结束时间已过”不是一回事。 */
+  activityStatusCode?: 'draft' | 'published' | 'cancelled' | 'completed';
   sessions: {
     id: string;
     name: string;
@@ -207,6 +209,75 @@ export type ParticipationRecord = {
   historical: boolean;
 };
 export type ParticipationSummary = { hours: string | null; points: string | null; source: string };
+export type CertificateRecord = {
+  id: string;
+  name: string;
+  issuer: string;
+  number: string | null;
+  issuedAt: string;
+  expiredAt: string | null;
+  status: 'pending' | 'verified' | 'expired' | 'rejected';
+  note: string | null;
+};
+export type SheetAttendance = {
+  id: string;
+  activityId: string;
+  title: string;
+  checkInAt: string;
+  checkOutAt: string;
+  hours: string;
+  points: string | null;
+  status: 'present' | 'late' | 'early_leave';
+  note: string | null;
+};
+export type NoticeSummary = {
+  id: string;
+  title: string;
+  kind: string;
+  pinned: boolean;
+  read: boolean;
+  publishedAt: string | null;
+};
+export type NoticeDetail = NoticeSummary & { body: string };
+export type ContentSummary = {
+  id: string;
+  title: string;
+  summary: string | null;
+  pinned: boolean;
+  publishedAt: string | null;
+};
+export type ContentDetail = ContentSummary & { body: string };
+export type SelfProfile = {
+  username: string;
+  nickname: string | null;
+  memberNo: string;
+  realName: string;
+  memberLabel: string;
+};
+export type AccountAvatar = {
+  attachmentId: string;
+  accessUrl: string | null;
+  expiresAt: string | null;
+};
+export type TeamJoinGate = { label: string; satisfied: boolean; professional: boolean };
+export type TeamJoinProgress = {
+  id: string;
+  cycleName: string;
+  year: number;
+  status: string;
+  points: string;
+  pointsMet: boolean;
+  gatesMet: boolean;
+  gates: TeamJoinGate[];
+};
+export type ActivityFeedbackState = {
+  rating: number | null;
+  comment: string | null;
+  updatedAt: string | null;
+  eligibilityCorrected: boolean;
+  canSubmit: boolean;
+  windowClosesAt: string;
+};
 export type PageResult<T> = { items: T[]; total: number; page: number; hasMore: boolean };
 export type LoginOption = { id: string; label: string; account: string; password?: string };
 export type Scenario = { id: string; label: string; description: string };

@@ -5,7 +5,7 @@ import { Icon as VanIcon, Tabbar as VanTabbar, TabbarItem as VanTabbarItem } fro
 import { useAuth } from './features/auth/store';
 import { router } from './app/router';
 import { cleanupDevices } from './shared/storage';
-import { parentTarget, safeTarget } from './app/router/safe-target';
+import { hasInAppHistory, parentTarget, safeTarget } from './app/router/safe-target';
 const auth = useAuth();
 const route = useRoute();
 const chunkError = ref(false);
@@ -16,6 +16,11 @@ const MockPanel = __MOCK__
   : undefined;
 const mock = __MOCK__;
 const tabs = computed(() => Boolean(route.meta.tab) && auth.ready);
+const showBack = computed(() => {
+  if (route.meta.tab || route.name === 'login') return false;
+  if (route.name === 'system') return hasInAppHistory(router.options.history.state.back);
+  return true;
+});
 const viewKey = computed(() =>
   route.name === 'login' ? 'login' : `${auth.epoch}:${auth.revision}:${route.fullPath}`,
 );
@@ -77,12 +82,7 @@ onUnmounted(() => {
         <component :is="MockPanel" v-if="MockPanel" />
       </div>
       <header class="app-header">
-        <button
-          v-if="!route.meta.tab && route.name !== 'login'"
-          class="icon-button"
-          aria-label="返回"
-          @click="back"
-        >
+        <button v-if="showBack" class="icon-button" aria-label="返回" @click="back">
           <van-icon name="arrow-left" />
         </button>
         <span v-else class="brand-wordmark">SRVF<span>队员端</span></span>

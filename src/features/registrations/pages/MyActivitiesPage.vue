@@ -5,6 +5,7 @@ import { useResource } from '../../../shared/composables/resource';
 import RegistrationResult from '../../../shared/components/RegistrationResult.vue';
 import PageState from '../../../shared/components/PageState.vue';
 import StatusBadge from '../../../shared/components/StatusBadge.vue';
+import ActivityFeedbackPanel from '../../activities/components/ActivityFeedbackPanel.vue';
 const view = ref('recent');
 const phaseLabels = {
   published: '已发布',
@@ -13,6 +14,11 @@ const phaseLabels = {
   ended: '历史活动',
   cancelled: '活动已取消',
 };
+function phaseLabel(status: string | undefined, phase: keyof typeof phaseLabels) {
+  if (status === 'completed') return '已完成';
+  if (status === 'cancelled') return '活动已取消';
+  return phaseLabels[phase];
+}
 const { data, loading, error, load } = useResource(() => getData().registrations.getMyActivities());
 const shown = computed(
   () => data.value?.filter((r) => view.value === 'all' || r.phase !== 'ended') ?? [],
@@ -39,9 +45,10 @@ onMounted(() => void load());
         <div class="panel-heading">
           <router-link :to="{ name: 'activity', params: { activityId: r.activityId } }"
             ><h2>{{ r.title }}</h2></router-link
-          ><status-badge>{{ phaseLabels[r.phase] }}</status-badge>
+          ><status-badge>{{ phaseLabel(r.activityStatusCode, r.phase) }}</status-badge>
         </div>
-        <registration-result :result="r" links /></div
+        <registration-result :result="r" links />
+        <activity-feedback-panel :activity-id="r.activityId" /></div
     ></page-state>
     <p class="safety-note">此列表展示报名关联，不代表完整出勤历史。临时参与请到参与记录核对。</p>
   </div>

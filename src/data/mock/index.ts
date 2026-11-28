@@ -191,6 +191,44 @@ export function createMockPorts(): Ports {
         typeof x.id === 'string',
     );
   }
+  async function demoNotice(id: string) {
+    requireActor();
+    await delay();
+    if (id !== 'notice-demo') throw fail('not-found', '通知不存在或当前不可读');
+    return {
+      id: 'notice-demo',
+      title: '合成通知',
+      kind: '一般通知',
+      pinned: false,
+      read: false,
+      publishedAt: timestamp(),
+      body: '这是合成通知正文，不是真实队内消息。',
+    };
+  }
+  async function demoContent(id: string) {
+    requireActor();
+    await delay();
+    if (id !== 'content-demo') throw fail('not-found', '内容不存在或当前不可读');
+    return {
+      id: 'content-demo',
+      title: '合成队内内容',
+      summary: '仅用于演示排版，不是正式公告。',
+      pinned: false,
+      publishedAt: timestamp(),
+      body: '合成正文。正式内容以服务端发布稿为准。',
+    };
+  }
+  async function demoProfile() {
+    const member = requireActor();
+    await delay();
+    return {
+      username: member.account,
+      nickname: null,
+      memberNo: member.number ?? '未提供',
+      realName: member.name ?? '未提供',
+      memberLabel: (member.number ?? '未提供') + ' · ' + (member.name ?? '未提供'),
+    };
+  }
   const ports: Ports = {
     auth: {
       async restoreSession() {
@@ -736,6 +774,136 @@ export function createMockPorts(): Ports {
             message: '受控现场操作已记录（演示），正式结果待认定',
           };
         });
+      },
+    },
+    memberHome: {
+      async listCertificates() {
+        requireActor();
+        await delay();
+        return {
+          items: [
+            {
+              id: 'cert-demo',
+              name: '合成急救培训证明',
+              issuer: '合成机构',
+              number: 'EXAMPLE-CERT-1',
+              issuedAt: timestamp(),
+              expiredAt: null,
+              status: 'verified' as const,
+              note: null,
+            },
+          ],
+          total: 1,
+          page: 1,
+          hasMore: false,
+        };
+      },
+      async listAttendanceRecords() {
+        requireActor();
+        await delay();
+        return {
+          items: [
+            {
+              id: 'sheet-demo',
+              activityId: 'act-history',
+              title: '合成历史活动',
+              checkInAt: timestamp(),
+              checkOutAt: timestamp(),
+              hours: '2.00',
+              points: '1.00',
+              status: 'present' as const,
+              note: null,
+            },
+          ],
+          total: 1,
+          page: 1,
+          hasMore: false,
+        };
+      },
+      async listNotices() {
+        requireActor();
+        await delay();
+        return {
+          items: [
+            {
+              id: 'notice-demo',
+              title: '合成通知',
+              kind: '一般通知',
+              pinned: false,
+              read: false,
+              publishedAt: timestamp(),
+            },
+          ],
+          total: 1,
+          page: 1,
+          hasMore: false,
+        };
+      },
+      async getNotice(id) {
+        return demoNotice(id);
+      },
+      async markNoticeRead(id) {
+        await demoNotice(id);
+      },
+      async unreadCount() {
+        requireActor();
+        await delay();
+        return 1;
+      },
+      async listContents() {
+        requireActor();
+        await delay();
+        return {
+          items: [
+            {
+              id: 'content-demo',
+              title: '合成队内内容',
+              summary: '仅用于演示排版，不是正式公告。',
+              pinned: false,
+              publishedAt: timestamp(),
+            },
+          ],
+          total: 1,
+          page: 1,
+          hasMore: false,
+        };
+      },
+      async getContent(id) {
+        return demoContent(id);
+      },
+      async getProfile() {
+        return demoProfile();
+      },
+      async updateNickname(nickname) {
+        const profile = await demoProfile();
+        const value = nickname.trim();
+        if (!value || value.length > 50) throw fail('validation', '昵称需为 1—50 字');
+        return { ...profile, nickname: value };
+      },
+      async getAvatar() {
+        requireActor();
+        await delay();
+        return null;
+      },
+      async getTeamJoin() {
+        requireActor();
+        await delay();
+        return null;
+      },
+      async getFeedback() {
+        requireActor();
+        await delay();
+        return {
+          rating: null,
+          comment: null,
+          updatedAt: null,
+          eligibilityCorrected: false,
+          canSubmit: false,
+          windowClosesAt: timestamp(),
+        };
+      },
+      async submitFeedback() {
+        throw fail('business-rejected', '演示数据未关账，不能提交评价');
       },
     },
     participation: {

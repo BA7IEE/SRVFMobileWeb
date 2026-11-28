@@ -27,8 +27,8 @@ try {
 }
 const keyword = ref(typeof saved.keyword === 'string' ? saved.keyword : '');
 const type = ref(['培训', '演练', '服务'].includes(saved.type ?? '') ? saved.type! : '');
-const mock = __MOCK__;
-const available = ref(mock && saved.available === true);
+const h5 = __H5__;
+const available = ref(saved.available === true);
 const items = ref<ActivityListItem[]>([]);
 const error = ref<AppError>();
 const loading = ref(false);
@@ -136,21 +136,27 @@ const phases = {
     </div>
     <div class="field">
       <label for="activity-search" class="section-label">搜索活动</label
-      ><input id="activity-search" v-model="keyword" type="search" placeholder="活动名称" />
+      ><input
+        id="activity-search"
+        v-model="keyword"
+        type="search"
+        placeholder="活动名称"
+        :disabled="h5 && available"
+      />
     </div>
     <div class="pill-filter" aria-label="活动类型">
       <button
         v-for="t in ['', '培训', '演练', '服务']"
         :key="t"
         :aria-pressed="type === t"
+        :disabled="h5 && available"
         @click="type = t"
       >
         {{ t || '全部' }}
       </button>
     </div>
-    <label v-if="mock" class="check-label"
-      ><input v-model="available" type="checkbox" />只看可报名活动</label
-    >
+    <label class="check-label"><input v-model="available" type="checkbox" />只看可报名活动</label>
+    <p v-if="h5 && available" class="help">按服务端可报名条件筛选，不叠加搜索和类型。</p>
     <page-state
       :loading="loading && !items.length"
       :error="items.length ? undefined : error"

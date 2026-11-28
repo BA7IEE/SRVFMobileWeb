@@ -4,6 +4,7 @@ import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import type { OrdinaryActivityPort } from '../../../data/wire/ordinary-activity';
 import { appError, fail } from '../../../shared/errors';
+import { activityWorkStatus, rosterStatusLabel } from '../../../shared/labels';
 
 const port = getData().ordinaryActivities;
 type Output<K extends keyof OrdinaryActivityPort> = Awaited<ReturnType<OrdinaryActivityPort[K]>>;
@@ -234,7 +235,7 @@ async function admit(r: Output<'registrations'>[number]) {
 onMounted(() => void reload());
 </script>
 <template>
-  <main class="page">
+  <div class="page">
     <div class="page-intro"><h1>活动办理</h1></div>
     <p v-if="!port" class="notice">当前客户端未配置活动办理。</p>
     <template v-else>
@@ -307,17 +308,7 @@ onMounted(() => void reload());
       </section>
       <section v-if="selected" class="panel stack">
         <h2>{{ selected.title }}</h2>
-        <p>
-          状态：{{
-            selected.review === 'pending'
-              ? '待发布审核'
-              : selected.status === 'draft'
-                ? '草稿'
-                : selected.status === 'published'
-                  ? '已发布'
-                  : selected.status
-          }}
-        </p>
+        <p>状态：{{ activityWorkStatus(selected.status, selected.review) }}</p>
         <template v-if="editable">
           <details>
             <summary>指标设置</summary>
@@ -408,12 +399,7 @@ onMounted(() => void reload());
           ><h3>报名名单</h3>
           <p v-if="!registrations.length">暂无报名</p>
           <div v-for="r in registrations" :key="r.id" class="row">
-            <span
-              >{{ r.name }} ·
-              {{
-                r.status === 'pass' ? '已通过' : r.status === 'pending' ? '待录取' : r.status
-              }}</span
-            >
+            <span>{{ r.name }} · {{ rosterStatusLabel(r.status) }}</span>
             <button
               v-if="selected.mode === 'qualification_rank' && r.status === 'pending'"
               class="text-button"
@@ -426,5 +412,5 @@ onMounted(() => void reload());
         </template>
       </section>
     </template>
-  </main>
+  </div>
 </template>
