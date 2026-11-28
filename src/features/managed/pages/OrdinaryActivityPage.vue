@@ -3,7 +3,7 @@ import { computed, onMounted, reactive, ref } from 'vue';
 import { Button as VanButton, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import type { OrdinaryActivityPort } from '../../../data/wire/ordinary-activity';
-import { appError } from '../../../shared/errors';
+import { appError, fail } from '../../../shared/errors';
 
 const port = getData().ordinaryActivities;
 type Output<K extends keyof OrdinaryActivityPort> = Awaited<ReturnType<OrdinaryActivityPort[K]>>;
@@ -14,6 +14,16 @@ const selected = ref<Output<'detail'>>(),
   sessions = ref<Output<'sessions'>>([]);
 const positions = ref<Record<string, Output<'positions'>>>({});
 const registrations = ref<Output<'registrations'>>([]);
+const currentActivityId = ref<string>();
+const unconfirmedAdmissions = ref<{ activityId: string; registrationId: string; name: string }[]>(
+  [],
+);
+const currentUnconfirmed = computed(() =>
+  unconfirmedAdmissions.value.filter((entry) => entry.activityId === currentActivityId.value),
+);
+function needsAdmissionReadback(registrationId: string) {
+  return currentUnconfirmed.value.some((entry) => entry.registrationId === registrationId);
+}
 const busy = ref(false),
   message = ref(''),
   needsReadback = ref(false),
@@ -61,8 +71,9 @@ function clearDetails() {
   registrations.value = [];
   job.sessionId = '';
 }
-async function read(id?: string) {
+async function read(id?: string, manualRefresh = false) {
   if (!port) return;
+  currentActivityId.value = id;
   clearDetails();
   const [list, opts] = await Promise.all([port.activities(), port.options()]);
   activities.value = list;
@@ -82,7 +93,17 @@ async function read(id?: string) {
     session.endAt = local(d.endAt);
     session.locationText = d.location;
   } else if (d.canManage) {
-    registrations.value = await port.registrations(id);
+    const rows = await port.registrations(id);
+    const statuses = new Map(rows.map((row) => [row.id, row.status]));
+    if (statuses.size !== rows.length)
+      throw fail('contract-mismatch', '名单中有重复的报名记录，请刷新核对');
+    registrations.value = rows;
+    const canRetry = manualRefresh && d.status === 'published' && d.mode === 'qualification_rank';
+    unconfirmedAdmissions.value = unconfirmedAdmissions.value.filter((entry) => {
+      if (entry.activityId !== id) return true;
+      const status = statuses.get(entry.registrationId);
+      return status !== 'pass' && !(canRetry && status === 'pending');
+    });
   }
   selected.value = d;
 }
@@ -91,7 +112,7 @@ async function reload(id?: string) {
   busy.value = true;
   message.value = '';
   try {
-    await read(id);
+    await read(id, true);
     needsReadback.value = false;
   } catch (e) {
     message.value = appError(e).message;
@@ -99,14 +120,14 @@ async function reload(id?: string) {
     busy.value = false;
   }
 }
-async function command(send: () => Promise<string>, success: string) {
+async function command(send: () => Promise<string>, success: string, confirmed?: () => boolean) {
   if (locked.value || !port) return;
   busy.value = true;
   message.value = '';
   try {
     const id = await send();
     await read(id);
-    message.value = success;
+    if (!confirmed || confirmed()) message.value = success;
   } catch (e) {
     needsReadback.value = true;
     message.value = appError(e).message + '。请刷新核对当前记录后再办理。';
@@ -185,17 +206,30 @@ async function submit() {
 }
 async function admit(r: Output<'registrations'>[number]) {
   const d = selected.value;
-  if (!port || !d || !d.canManage || d.mode !== 'qualification_rank' || r.status !== 'pending')
+  if (
+    locked.value ||
+    needsAdmissionReadback(r.id) ||
+    !port ||
+    !d?.canManage ||
+    d.mode !== 'qualification_rank' ||
+    r.status !== 'pending'
+  )
     return;
   try {
     await showConfirmDialog({ title: '确认录取', message: d.title + ' · ' + r.name });
   } catch {
     return;
   }
-  await command(async () => {
-    await port.admit(d.id, r.id);
-    return d.id;
-  }, '已录取');
+  if (selected.value !== d || !registrations.value.includes(r)) return;
+  await command(
+    async () => {
+      await port.admit(d.id, r.id);
+      unconfirmedAdmissions.value.push({ activityId: d.id, registrationId: r.id, name: r.name });
+      return d.id;
+    },
+    currentUnconfirmed.value.length ? r.name + '已录取' : '已录取',
+    () => !needsAdmissionReadback(r.id),
+  );
 }
 onMounted(() => void reload());
 </script>
@@ -205,8 +239,18 @@ onMounted(() => void reload());
     <p v-if="!port" class="notice">当前客户端未配置活动办理。</p>
     <template v-else>
       <p v-if="message" role="status" class="notice">{{ message }}</p>
+      <p
+        v-for="entry in currentUnconfirmed"
+        :key="entry.registrationId"
+        role="status"
+        class="notice"
+      >
+        {{ selected?.canManage ? entry.name + '的录取结果' : '录取结果' }}尚未确认，请刷新核对。
+      </p>
       <div class="row">
-        <button class="text-button" :disabled="busy" @click="reload(selected?.id)">刷新记录</button>
+        <button class="text-button" :disabled="busy" @click="reload(currentActivityId)">
+          刷新记录
+        </button>
         <button
           v-if="organizations.length"
           class="text-button"
@@ -373,7 +417,7 @@ onMounted(() => void reload());
             <button
               v-if="selected.mode === 'qualification_rank' && r.status === 'pending'"
               class="text-button"
-              :disabled="locked"
+              :disabled="locked || needsAdmissionReadback(r.id)"
               @click="admit(r)"
             >
               录取

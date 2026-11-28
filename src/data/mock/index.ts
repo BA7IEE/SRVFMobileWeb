@@ -2,7 +2,7 @@ import type { Ports } from '../ports';
 import type * as M from '../models';
 import { activities, members, DEMO_PASSWORD, questions, insuranceLayoutOverview } from './fixtures';
 import { scenarios } from './scenarios';
-import { fail } from '../../shared/errors';
+import { fail, RegistrationFormVersionError } from '../../shared/errors';
 import { readMock, writeMock, removeMock, cleanupSession } from '../../shared/storage';
 import { insuranceErrors, preferenceError, questionError } from '../../shared/validation';
 import { IntentRegistry } from '../../shared/composables/intent';
@@ -369,7 +369,7 @@ export function createMockPorts(): Ports {
           throw fail('business-rejected', '请先核对本次活动保险条件');
         const form = await ports.registrations.getForm(a.id);
         if ((scene === 'REG-04' ? 2 : form.version) !== intent.formVersion)
-          throw fail('conflict', '表单已更新，请刷新后重新核对');
+          throw new RegistrationFormVersionError();
         const invalid = form.questions.find((q) => questionError(q, intent.answers[q.code]));
         if (scene === 'FILE-FAIL')
           throw fail('service-unavailable', '演示附件接收失败，文件仍在本地，请重新核对后提交');

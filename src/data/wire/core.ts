@@ -1,4 +1,4 @@
-import { fail } from '../../shared/errors';
+import { fail, RegistrationFormVersionError } from '../../shared/errors';
 import type { ErrorKind } from '../models';
 export type WireRequest = {
   method: 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
@@ -125,6 +125,7 @@ export function envelope(response: WireResponse): unknown {
   const code = integer(o.code);
   text(o.message);
   if (code !== 0) {
+    if (code === 21036) throw new RegistrationFormVersionError();
     const entry = known[code];
     throw fail(
       entry?.kind ?? 'business-rejected',

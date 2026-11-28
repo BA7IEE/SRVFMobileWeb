@@ -1,14 +1,18 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
+import { computed, nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue';
 import { useRoute, onBeforeRouteLeave } from 'vue-router';
 import { Button as VanButton, Form as VanForm, showConfirmDialog } from 'vant';
 import { getData } from '../../../data';
 import { useAuth } from '../../auth/store';
 import { useResource } from '../../../shared/composables/resource';
-import type { Preferences, RegistrationResult as Result } from '../../../data/models';
+import type {
+  Preferences,
+  RegistrationFormDefinition,
+  RegistrationResult as Result,
+} from '../../../data/models';
 import { questionError, preferenceError, safeField } from '../../../shared/validation';
 import { qualificationAllowsSelection, qualificationMessage } from '../../../shared/qualification';
-import { appError } from '../../../shared/errors';
+import { appError, RegistrationFormVersionError } from '../../../shared/errors';
 import { beijing } from '../../../shared/time';
 import { getDraft, saveDraft, clearDraft } from '../drafts';
 import PageState from '../../../shared/components/PageState.vue';
@@ -26,6 +30,7 @@ const answers = ref<Record<string, unknown>>({});
 const preferences = ref<Preferences>([]);
 const errors = ref<Record<string, string>>({});
 const errorMessage = ref('');
+const rejectedForm = shallowRef<RegistrationFormDefinition>();
 const busy = ref(false);
 const unknown = ref(false);
 const result = ref<Result>();
@@ -42,13 +47,51 @@ const { data, loading, error, load } = useResource(async () => {
     getData().registrations.getResult(id),
   ]);
   if (generation !== formLoad) return { activity, form, insurance, existing };
+  if (existing?.status === 'submitted') result.value = existing;
+  const previous = rejectedForm.value;
+  if (previous) {
+    if (previous.version === form.version) {
+      errorMessage.value = '暂未读到新的报名表，请稍后刷新定义并核对。';
+      return { activity, form, insurance, existing };
+    }
+    // Only carry an answer across versions when the same question still accepts it.
+    answers.value = Object.fromEntries(
+      form.questions
+        .filter((q) => {
+          const old = previous.questions.find((item) => item.code === q.code);
+          return (
+            JSON.stringify(old) === JSON.stringify(q) &&
+            q.type !== 'file' &&
+            Object.hasOwn(answers.value, q.code) &&
+            !questionError(q, answers.value[q.code])
+          );
+        })
+        .map((q) => [q.code, answers.value[q.code]]),
+    );
+    preferences.value = preferences.value.filter((p) => {
+      const old = previous.sessions.find((s) => s.id === p.sessionId);
+      const current = form.sessions.find((s) => s.id === p.sessionId);
+      return (
+        current &&
+        JSON.stringify(old) === JSON.stringify(current) &&
+        !preferenceError([p], [current])
+      );
+    });
+    rejectedForm.value = undefined;
+    key.value = crypto.randomUUID();
+    errors.value = {};
+    errorMessage.value = '已获取当前定义，请核对题目与场次后再次确认。';
+  }
   draftKey = `${actorId}:${id}:${form.version}`;
-  const draft = getDraft(draftKey);
-  answers.value = draft.answers;
-  preferences.value = draft.preferences;
+  if (previous) {
+    saveDraft(draftKey, { answers: answers.value, preferences: preferences.value });
+  } else {
+    const draft = getDraft(draftKey);
+    answers.value = draft.answers;
+    preferences.value = draft.preferences;
+  }
   baseline = JSON.stringify({ answers: answers.value, preferences: preferences.value });
   dirty.value = false;
-  if (existing?.status === 'submitted') result.value = existing;
   return { activity, form, insurance, existing };
 });
 onMounted(() => void load());
@@ -57,6 +100,8 @@ const canSubmit = computed(
     data.value?.activity.registration.state === 'allowed' &&
     qualificationAllowsSelection(data.value?.form.qualification) &&
     data.value.insurance.status === 'eligible' &&
+    !rejectedForm.value &&
+    !loading.value &&
     !unknown.value &&
     !busy.value,
 );
@@ -118,6 +163,8 @@ async function submit() {
     return;
   }
   busy.value = true;
+  const generation = formLoad;
+  const form = data.value.form;
   try {
     await showConfirmDialog({
       title: '确认提交报名',
@@ -127,12 +174,15 @@ async function submit() {
     busy.value = false;
     return;
   }
-  if (!active || !auth.ready || auth.member?.id !== actorId) return;
+  if (!active || !auth.ready || auth.member?.id !== actorId || generation !== formLoad) {
+    busy.value = false;
+    return;
+  }
   try {
     const received = await getData().registrations.submit({
       activityId: id,
       key: key.value,
-      formVersion: data.value.form.version,
+      formVersion: form.version,
       answers: answers.value,
       preferences: preferences.value,
     });
@@ -144,6 +194,7 @@ async function submit() {
     if (!active) return;
     const err = appError(e);
     errorMessage.value = err.message;
+    if (e instanceof RegistrationFormVersionError) rejectedForm.value = form;
     if (err.fieldErrors) {
       const fields = new Set(data.value.form.questions.map((question) => question.code));
       errors.value = Object.fromEntries(
@@ -182,16 +233,6 @@ async function query() {
   } finally {
     busy.value = false;
   }
-}
-async function reload() {
-  const oldAnswers = answers.value;
-  const oldPreferences = preferences.value;
-  await load();
-  if (error.value || !data.value) return;
-  answers.value = oldAnswers;
-  preferences.value = oldPreferences;
-  errorMessage.value = '已获取当前定义，请核对题目与场次后再次确认。';
-  key.value = crypto.randomUUID();
 }
 function startEditing() {
   result.value = undefined;
@@ -298,9 +339,7 @@ onUnmounted(() => {
               <p>{{ errorMessage }}</p>
               <van-button v-if="unknown" plain :loading="busy" @click="query"
                 >查询原报名结果</van-button
-              ><van-button v-else-if="errorMessage.includes('更新')" plain @click="reload"
-                >刷新定义并核对</van-button
-              >
+              ><van-button v-else-if="rejectedForm" plain @click="load">刷新定义并核对</van-button>
             </div>
             <section v-if="summary.length" class="stack" aria-label="报名摘要">
               <h3>本次报名摘要</h3>
@@ -315,7 +354,7 @@ onUnmounted(() => {
               :loading="busy"
               >核对并提交报名</van-button
             >
-            <p v-if="!canSubmit && !busy && !unknown" class="help">
+            <p v-if="!canSubmit && !busy && !unknown && !rejectedForm" class="help">
               报名条件尚未满足，请先核对活动和保险。
             </p>
           </van-form></template
