@@ -151,8 +151,9 @@ describe('固定读取与命令补充切片', () => {
           },
         ]),
       ),
-      ok({ myResponsibility: null }),
+      ok({ activity: { id: 'activity-test' }, myResponsibility: null }),
       ok({
+        activity: { id: 'activity-test' },
         myResponsibility: {
           responsibilityType: 'collaborator',
           canManageRegistrations: true,

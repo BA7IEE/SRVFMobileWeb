@@ -203,6 +203,30 @@ export function createH5Ports(
     return { hours: r.totalServiceHours, points: r.contributionPoints, source: '本人参与汇总' };
   };
   connectMember(ports, wire);
+  ports.managed.listPage = async (pageNumber) => {
+    const session = current().session;
+    const page = await wire.listManagedActivities(pageNumber);
+    const expectedCount = Math.max(0, Math.min(20, page.total - (pageNumber - 1) * 20));
+    if (
+      page.page !== pageNumber ||
+      page.pageSize !== 20 ||
+      page.items.length !== expectedCount ||
+      new Set(page.items.map((row) => row.activityId)).size !== page.items.length
+    ) {
+      throw fail('contract-mismatch', '活动列表分页回执不一致');
+    }
+    const items = [];
+    for (const { activityId, title, relationship, statusCode } of page.items) {
+      current(session);
+      const canReadRoster =
+        relationship !== 'initiator' &&
+        (await wire.getManagedResponsibility(activityId, relationship)).registration.state ===
+          'allowed';
+      items.push({ activityId, title, relationship, statusCode, canReadRoster });
+    }
+    current(session);
+    return { ...page, items };
+  };
   ports.ordinaryActivities = ordinaryActivities(transport);
   return ports;
 }

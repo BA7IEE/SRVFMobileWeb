@@ -40,6 +40,18 @@ export type Ports = {
     getMemberCredential(): Promise<string>;
   };
   managed: {
+    listPage?(page: number): Promise<{
+      items: {
+        activityId: string;
+        title: string;
+        relationship: 'initiator' | 'owner' | 'collaborator';
+        statusCode: string;
+        canReadRoster: boolean;
+      }[];
+      page: number;
+      total: number;
+      pageSize: number;
+    }>;
     listActivities(): Promise<M.ActivityListItem[]>;
     getScope(id: string): Promise<M.ManagedActivityScope>;
     listRegistrations(id: string): Promise<M.ManagedRegistration[]>;
